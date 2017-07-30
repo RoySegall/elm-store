@@ -5,11 +5,17 @@ import Html.Attributes exposing (..)
 import String
 
 -- Cart component
-cart : String -> Html a
+cart : Int -> Html a
 cart items =
   div
     [ class "cart-component" ]
     [
       span [ class "glyphicon glyphicon-shopping-cart" ] [ ]
-      , span [ class "number-of-items" ] [ text items ]
+      , span [ class "number-of-items" ] [ text ( toString items ) ]
     ]
+
+-- User bar
+userBar : Html a
+userBar =
+  div [ class "user-bar" ]
+  [ text "Welcome Guest" ]

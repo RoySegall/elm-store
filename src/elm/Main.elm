@@ -1,10 +1,10 @@
 module Main exposing (..)
+import Components.Items exposing (items)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
 
 -- component import example
-import Components.Hello exposing ( hello )
 import Components.User exposing (..)
 
 
@@ -30,7 +30,6 @@ update msg model =
     NoOp -> model
     Increment -> model + 1
 
-
 -- VIEW
 view : Model -> Html Msg
 view model =
@@ -42,14 +41,18 @@ view model =
             span [ class "logo" ] [ text "GoStore" ]
           ]
           , div [ class "col-md-2" ] [
-            cart "0"
+            div [ class "row" ] [
+              div [class "col-md-6"] [ cart 0 ]
+              , div [class "col-md-6"] [ userBar ]
+            ]
           ]
         ]
       ]
     ]
-    , div [ class "row content" ][
-      div [ class "col-md-12" ][
-        div [ class "jumbotron" ][
+    , div [ class "row content" ] [
+      div [ class "col-md-12" ] [
+        div [ class "jumbotron" ] [
+          items
         ]
       ]
     ]
