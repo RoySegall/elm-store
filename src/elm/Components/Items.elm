@@ -32,15 +32,32 @@ getAllItems =
     div [ class "row" ]
     [
       ul []
-        (List.map (\l -> li [] [ singleItem l ]) listOfItems)
+        (List.map (\l -> li [] [ singleItem l True ]) listOfItems)
     ]
 
 -- Single item display
-singleItem : Item -> Html a
-singleItem item =
-  div [ class "item" ]
-  [
-    div [] [ text item.title ]
-    , div [] [ text ( toString item.price ) ]
-    , div [] [ img [ src item.image ] [] ]
-  ]
+singleItem : Item -> Bool -> Html a
+singleItem item showAddToCart =
+
+  let
+    addToCartButton =
+      if showAddToCart == True then
+        div [ class "row" ] [
+          div [ class "col-md-12" ] [
+            button [ class "btn" ] [ text "Add to cart" ]
+          ]
+        ]
+      else
+        Html.text "B"
+  in
+    div [ class "item" ]
+    [
+      div [ class "row" ] [
+        div [ class "col-md-1" ] [ img [ src item.image, class "img-responsive" ] [] ]
+        , div [ class "col-md-11" ] [
+          div [] [ text item.title ]
+          , div [] [ text ( toString item.price ) ]
+        ]
+      ],
+      addToCartButton
+    ]
