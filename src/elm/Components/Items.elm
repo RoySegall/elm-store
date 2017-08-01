@@ -9,6 +9,7 @@ type alias Item =
   {
     id : String
     , title : String
+    , description : String
     , price : Float
     , image : String
   }
@@ -23,8 +24,8 @@ getAllItems : Html a
 getAllItems =
 
   let
-    pizza = Item "sdasd2334431221" "Pizza" 10.45 "https://sep.yimg.com/ay/yhst-19802326331255/pizza-slice-pennant-3x5-9.jpg"
-    coke = Item "3343dcc334" "Coca Cola" 8.8 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Flasche_Coca-Cola_0%2C2_Liter.jpg/220px-Flasche_Coca-Cola_0%2C2_Liter.jpg"
+    pizza = Item "sdasd2334431221" "Pizza" "Yummy!" 10.45 "https://sep.yimg.com/ay/yhst-19802326331255/pizza-slice-pennant-3x5-9.jpg"
+    coke = Item "3343dcc334" "Coca Cola" "Tasty!" 8.8 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Flasche_Coca-Cola_0%2C2_Liter.jpg/220px-Flasche_Coca-Cola_0%2C2_Liter.jpg"
 
     allItems = [pizza, pizza, pizza, pizza, coke]
     -- Find a way to split all the array into chunks of 4.
@@ -57,6 +58,7 @@ singleItem item showAddToCart =
         div [ class "col-md-6" ] [ img [ src item.image, class "img-responsive" ] [] ]
         , div [ class "col-md-6" ] [
           div [] [ text item.title ]
+          , div [] [ text item.description ]
           , div [] [ text ( toString item.price ) ]
         ]
       ],
