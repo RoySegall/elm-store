@@ -14,7 +14,7 @@ import Components.User exposing (..)
 -- APP
 
 
-main : Program Never Int Msg
+main : Program Never Model Msg
 main =
     Html.beginnerProgram { model = model, view = view, update = update }
 
@@ -24,31 +24,28 @@ main =
 
 
 type alias Model =
-    Int
+  { cartItems : Int
+  }
 
-
-model : number
+model : Model
 model =
-    0
-
+  {
+    cartItems = 0
+  }
 
 
 -- UPDATE
 
 
 type Msg
-    = NoOp
-    | Increment
+    = Increment
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> Int
 update msg model =
     case msg of
-        NoOp ->
-            model
-
         Increment ->
-            model + 1
+            model.cartItems + 1
 
 
 
