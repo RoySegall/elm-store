@@ -1,12 +1,11 @@
 module Main exposing (..)
 
-import Components.Items exposing (items)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-
 -- component import example
 
+import Components.Items exposing (items)
 import Components.User exposing (..)
+import Html exposing (..)
+import Html.Attributes exposing (..)
 
 
 -- APP
@@ -22,30 +21,29 @@ main =
 
 
 type alias Model =
-  { cartItems : Int
-  }
-
+    { cartItems : Int
+    }
 
 
 model : Model
 model =
-  {
-    cartItems = 0
-  }
+    { cartItems = 0
+    }
+
 
 
 -- UPDATE
 
 
 type Msg
-    = Increment
+    = AddItems
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Increment ->
-            model.cartItems + 1
+        AddItems ->
+            { model | cartItems = model.cartItems + 1 }
 
 
 
