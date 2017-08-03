@@ -2,9 +2,9 @@ module Components.Items exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import List exposing (..)
 import Markdown exposing (toHtml)
 import String
-import List exposing (..)
 
 
 type alias Item =
@@ -44,14 +44,14 @@ getAllItems =
         listOfItems =
             split 4 allItems
     in
-        div []
-            (List.map
-                (\items ->
-                    div [ class "row" ]
-                        (List.map (\item -> div [ class "col-md-3" ] [ (singleItem item True) ]) items)
-                )
-                listOfItems
+    div []
+        (List.map
+            (\items ->
+                div [ class "row" ]
+                    (List.map (\item -> div [ class "col-md-3" ] [ singleItem item True ]) items)
             )
+            listOfItems
+        )
 
 
 split : Int -> List a -> List (List a)
@@ -81,14 +81,14 @@ singleItem item showAddToCart =
             else
                 Html.text ""
     in
-        div [ class "item" ]
-            [ div [ class "row" ]
-                [ div [ class "col-md-6" ] [ img [ src item.image, class "img-responsive" ] [] ]
-                , div [ class "col-md-6" ]
-                    [ div [] [ text item.title ]
-                    , div [] [ text item.description ]
-                    , div [] [ text (toString item.price) ]
-                    ]
+    div [ class "item" ]
+        [ div [ class "row" ]
+            [ div [ class "col-md-6" ] [ img [ src item.image, class "img-responsive" ] [] ]
+            , div [ class "col-md-6" ]
+                [ div [] [ text item.title ]
+                , div [] [ text item.description ]
+                , div [] [ text (toString item.price) ]
                 ]
-            , addToCartButton
             ]
+        , addToCartButton
+        ]
