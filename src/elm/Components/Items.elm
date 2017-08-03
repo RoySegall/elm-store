@@ -2,25 +2,16 @@ module Components.Items exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import List exposing (..)
-import Markdown exposing (toHtml)
-import String
-
-
-type alias Item =
-    { id : String
-    , title : String
-    , description : String
-    , price : Float
-    , image : String
-    }
-
+import Model exposing (..)
+import Update exposing (..)
 
 
 -- Cart Items
 
 
-items : Html a
+items : Html Msg
 items =
     div [] [ getAllItems ]
 
@@ -29,7 +20,7 @@ items =
 -- Get al the items in the store.
 
 
-getAllItems : Html a
+getAllItems : Html Msg
 getAllItems =
     let
         pizza =
@@ -68,14 +59,14 @@ split i list =
 -- Single item display
 
 
-singleItem : Item -> Bool -> Html a
+singleItem : Item -> Bool -> Html Msg
 singleItem item showAddToCart =
     let
         addToCartButton =
             if showAddToCart == True then
                 div [ class "row" ]
                     [ div [ class "col-md-12" ]
-                        [ button [ class "btn" ] [ text "Add to cart" ]
+                        [ button [ class "btn", onClick AddItems ] [ text "Add to cart" ]
                         ]
                     ]
             else

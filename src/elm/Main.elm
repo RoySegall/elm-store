@@ -6,6 +6,8 @@ import Components.Items exposing (items)
 import Components.User exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Model exposing (..)
+import Update exposing (..)
 
 
 -- APP
@@ -20,30 +22,10 @@ main =
 -- MODEL
 
 
-type alias Model =
-    { cartItems : Int
-    }
-
-
 model : Model
 model =
     { cartItems = 0
     }
-
-
-
--- UPDATE
-
-
-type Msg
-    = AddItems
-
-
-update : Msg -> Model -> Model
-update msg model =
-    case msg of
-        AddItems ->
-            { model | cartItems = model.cartItems + 1 }
 
 
 
@@ -61,7 +43,7 @@ view model =
                         ]
                     , div [ class "col-md-2" ]
                         [ div [ class "row" ]
-                            [ div [ class "col-md-6" ] [ cart 0 ]
+                            [ div [ class "col-md-6" ] [ cart model.cartItems ]
                             , div [ class "col-md-6" ] [ userBar ]
                             ]
                         ]
