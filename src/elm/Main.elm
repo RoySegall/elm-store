@@ -3,8 +3,6 @@ module Main exposing (..)
 import Components.Items exposing (items)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
-
 
 -- component import example
 
@@ -27,6 +25,8 @@ type alias Model =
   { cartItems : Int
   }
 
+
+
 model : Model
 model =
   {
@@ -41,7 +41,7 @@ type Msg
     = Increment
 
 
-update : Msg -> Model -> Int
+update : Msg -> Model -> Model
 update msg model =
     case msg of
         Increment ->
