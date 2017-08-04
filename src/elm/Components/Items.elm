@@ -8,7 +8,7 @@ import Model exposing (..)
 import Update exposing (..)
 
 
--- Cart Items
+-- Cart Items.
 
 
 items : Html Msg
@@ -56,7 +56,7 @@ split i list =
 
 
 
--- Single item display
+-- Single item display.
 
 
 singleItem : Item -> Bool -> Html Msg
@@ -83,3 +83,13 @@ singleItem item showAddToCart =
             ]
         , addToCartButton
         ]
+
+
+
+-- Display all the items in the cart.
+
+
+currentItems : List Item -> Html Msg
+currentItems items =
+    div []
+        (List.map (\item -> div [] [ singleItem item False ]) items)

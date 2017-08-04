@@ -2,7 +2,7 @@ module Main exposing (..)
 
 -- component import example
 
-import Components.Items exposing (items)
+import Components.Items exposing (..)
 import Components.User exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -44,7 +44,12 @@ view model =
                         ]
                     , div [ class "col-md-2" ]
                         [ div [ class "row" ]
-                            [ div [ class "col-md-6" ] [ cart model.cartItems ]
+                            [ div [ class "col-md-6" ]
+                                [ div [ class "row" ]
+                                    [ div [ class "col-md-12" ] [ cart model.cartItems ]
+                                    , div [ class "col-md-12" ] [ currentItems model.items ]
+                                    ]
+                                ]
                             , div [ class "col-md-6" ] [ userBar ]
                             ]
                         ]
