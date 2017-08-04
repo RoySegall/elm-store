@@ -66,7 +66,7 @@ singleItem item showAddToCart =
             if showAddToCart == True then
                 div [ class "row" ]
                     [ div [ class "col-md-12" ]
-                        [ button [ class "btn", onClick AddItems ] [ text "Add to cart" ]
+                        [ button [ class "btn", onClick <| AddItems item ] [ text "Add to cart" ]
                         ]
                     ]
             else

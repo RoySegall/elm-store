@@ -7,11 +7,11 @@ import Model exposing (..)
 
 
 type Msg
-    = AddItems
+    = AddItems Item
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        AddItems ->
+        AddItems item ->
             { model | cartItems = model.cartItems + 1 }

@@ -24,7 +24,8 @@ main =
 
 model : Model
 model =
-    { cartItems = 0
+    { cartItems = Int
+    , items = List Item
     }
 
 
