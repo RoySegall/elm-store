@@ -13,4 +13,5 @@ type alias Item =
 type alias Model =
     { cartItems : Int
     , items : List Item
+    , hideCart : Bool
     }

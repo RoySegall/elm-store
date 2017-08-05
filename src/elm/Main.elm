@@ -26,6 +26,7 @@ model : Model
 model =
     { cartItems = 0
     , items = []
+    , hideCart = True
     }
 
 
@@ -45,9 +46,9 @@ view model =
                     , div [ class "col-md-2" ]
                         [ div [ class "row" ]
                             [ div [ class "col-md-6" ]
-                                [ div [ class "row" ]
-                                    [ div [ class "col-md-12" ] [ cart model.cartItems ]
-                                    , div [ class "col-md-12" ] [ currentItems model.items ]
+                                [ div [ class "row cart-wrapper" ]
+                                    [ cart model.cartItems
+                                    , currentItems model
                                     ]
                                 ]
                             , div [ class "col-md-6" ] [ userBar ]

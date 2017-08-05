@@ -89,7 +89,23 @@ singleItem item showAddToCart =
 -- Display all the items in the cart.
 
 
-currentItems : List Item -> Html Msg
-currentItems items =
-    div []
-        (List.map (\item -> div [] [ singleItem item False ]) items)
+currentItems : Model -> Html Msg
+currentItems model =
+    let
+        classes =
+            [ ( "cart-items arrow", True ), ( "hidden", model.hideCart ) ]
+    in
+    div
+        [ classList classes ]
+        [ div [ class "close" ]
+            [ span [ class "glyphicon glyphicon-remove" ] []
+            ]
+        , div [ class "items-list" ]
+            (List.map (\item -> div [] [ singleItem item False ]) model.items)
+        , div [ class "actions" ]
+            [ button [ class "btn btn-success" ]
+                [ span [ class "glyphicon glyphicon-ok" ] []
+                , text "To checkout"
+                ]
+            ]
+        ]

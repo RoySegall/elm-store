@@ -26,6 +26,67 @@ body {
     .content-upper {
       margin: 0 auto;
       width: 95%;
+
+      .cart-wrapper {
+
+        .cart-component {
+
+          .glyphicon-shopping-cart {
+            font-size: 30px;
+          }
+
+          .number-of-items {
+            position: absolute;
+            left: 25px;
+            background: red;
+            padding: 1px 5px;
+            border-radius: 10px;
+            top: -5px;
+            color: white;
+            font-weight: bold;
+          }
+        }
+
+        .cart-items {
+          background: white;
+          border: solid 1px #000;
+          position: absolute;
+          z-index: 1;
+          top: 55px;
+          right: 20px;
+          width: 300px;
+
+          .close {
+            position: absolute;
+            z-index: 1;
+            top: -15px;
+            right: -15px;
+            opacity: 1;
+            background-color: red;
+            border-radius: 10px;
+
+            span {
+              color: white;
+              padding: 5px;
+            }
+          }
+
+          .item {
+            padding: 10px;
+          }
+
+          .actions {
+            text-align: center;
+            padding-bottom: 5px;
+            padding-top: 5px;
+
+            span {
+              padding-right: 5px;
+
+            }
+          }
+        }
+      }
     }
   }
 
@@ -34,22 +95,35 @@ body {
     padding-top: 20px;
     width: 95%;
   }
+
 }
 
-.cart-component {
 
-  .glyphicon-shopping-cart {
-    font-size: 30px;
-  }
+.arrow {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #000000;
+}
+.arrow:after, .arrow:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
 
-  .number-of-items {
-    position: absolute;
-    left: 40px;
-    background: red;
-    padding: 1px 5px;
-    border-radius: 10px;
-    top: -5px;
-    color: white;
-    font-weight: bold;
-  }
+.arrow:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: #ffffff;
+  border-width: 20px;
+  margin-left: -20px;
+}
+.arrow:before {
+  border-color: rgba(0, 0, 0, 0);
+  border-bottom-color: #000000;
+  border-width: 21px;
+  margin-left: -21px;
 }
