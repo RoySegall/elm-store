@@ -98,7 +98,7 @@ currentItems model =
     div
         [ classList classes ]
         [ div [ class "close" ]
-            [ span [ class "glyphicon glyphicon-remove" ] []
+            [ a [ onClick HideCart ] [ span [ class "glyphicon glyphicon-remove" ] [] ]
             ]
         , div [ class "items-list" ]
             (List.map (\item -> div [] [ singleItem item False ]) model.items)

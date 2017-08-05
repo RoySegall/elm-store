@@ -31,8 +31,19 @@ body {
 
         .cart-component {
 
-          .glyphicon-shopping-cart {
-            font-size: 30px;
+          a {
+            cursor: pointer;
+
+            .glyphicon-shopping-cart {
+              color: black;
+              font-size: 30px;
+            }
+
+            &:hover {
+              .glyphicon-shopping-cart {
+                color: #ff9900;
+              }
+            }
           }
 
           .number-of-items {

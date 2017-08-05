@@ -8,6 +8,7 @@ import Model exposing (..)
 
 type Msg
     = AddItems Item
+    | HideCart
     | ToggleCart
 
 
@@ -25,3 +26,6 @@ update msg model =
                 { model | hideCart = False }
             else
                 { model | hideCart = True }
+
+        HideCart ->
+            { model | hideCart = True }

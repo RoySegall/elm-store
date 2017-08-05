@@ -12,11 +12,11 @@ import Update exposing (..)
 -- Cart component
 
 
-cart : Int -> Html a
+cart : Int -> Html Msg
 cart items =
     div
         [ class "cart-component" ]
-        [ span [ class "glyphicon glyphicon-shopping-cart" ] []
+        [ a [ onClick ToggleCart ] [ span [ class "glyphicon glyphicon-shopping-cart" ] [] ]
         , span [ class "number-of-items" ] [ text (toString items) ]
         ]
 
