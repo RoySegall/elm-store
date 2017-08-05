@@ -1,8 +1,12 @@
 module Components.Items exposing (..)
 
+import Config exposing (..)
+import Debug exposing (log)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import Http
+import Json.Decode exposing (Decoder, andThen, dict, fail, field, float, int, list, map, map2, nullable, oneOf, string, succeed, value)
 import List exposing (..)
 import Model exposing (..)
 import Update exposing (..)
@@ -23,6 +27,9 @@ items =
 getAllItems : Html Msg
 getAllItems =
     let
+        request =
+            Http.get backend_address
+
         pizza =
             Item "sdasd2334431221" "Pizza" "Yummy!" 10.45 "https://sep.yimg.com/ay/yhst-19802326331255/pizza-slice-pennant-3x5-9.jpg"
 
