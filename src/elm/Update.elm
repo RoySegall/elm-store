@@ -1,5 +1,9 @@
 module Update exposing (..)
 
+import Config exposing (..)
+import Html.Events exposing (..)
+import Http
+import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 
 
@@ -10,6 +14,7 @@ type Msg
     = AddItems Item
     | HideCart
     | ToggleCart
+    | GetItems
 
 
 update : Msg -> Model -> Model
@@ -29,3 +34,11 @@ update msg model =
 
         HideCart ->
             { model | hideCart = True }
+
+        GetItems ->
+            Http.get (backend_address ++ "/api/items") decodeGifUrl
+
+
+decodeGifUrl : Decode.Decoder String
+decodeGifUrl =
+    Decode.at [ "data", "image_url" ] Decode.string
