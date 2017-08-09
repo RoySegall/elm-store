@@ -41,7 +41,7 @@ update msg model =
             ( { model | items = [] }, Cmd.none )
 
         GetItems (Err _) ->
-            ( { model | text = "a" }, Cmd.none )
+            Debug.log "error occured" (toString Err) |> always ( model, Cmd.none )
 
 
 getItems : Cmd Msg
