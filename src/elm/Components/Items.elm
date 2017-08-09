@@ -3,6 +3,7 @@ module Components.Items exposing (..)
 import Debug exposing (log)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Http
 import List exposing (..)
 import Model exposing (..)

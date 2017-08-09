@@ -14,29 +14,45 @@ type Msg
     = AddItems Item
     | HideCart
     | ToggleCart
-    | GetItems
+    | GetItems (Result Http.Error String)
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         AddItems item ->
-            { model
+            ( { model
                 | cartItems = model.cartItems + 1
                 , items = model.items ++ [ item ]
-            }
+              }
+            , Cmd.none
+            )
 
         ToggleCart ->
             if model.hideCart then
-                { model | hideCart = False }
+                ( { model | hideCart = False }, Cmd.none )
             else
-                { model | hideCart = True }
+                ( { model | hideCart = True }, Cmd.none )
 
         HideCart ->
-            { model | hideCart = True }
+            ( { model | hideCart = True }, Cmd.none )
 
-        GetItems ->
-            Http.get (backend_address ++ "/api/items") decodeGifUrl
+        GetItems (Ok newUrl) ->
+            ( { model | items = [] }, Cmd.none )
+
+        GetItems (Err _) ->
+            ( { model | text = "a" }, Cmd.none )
+
+
+getItems : Cmd Msg
+getItems =
+    let
+        url =
+            backend_address ++ "/api/items"
+    in
+    Http.send
+        GetItems
+        (Http.get url decodeGifUrl)
 
 
 decodeGifUrl : Decode.Decoder String

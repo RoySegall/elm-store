@@ -11,15 +11,6 @@ import Model exposing (..)
 import Update exposing (..)
 
 
--- APP
-
-
-main : Program Never Model Msg
-main =
-    Html.beginnerProgram { model = model, view = view, update = update }
-
-
-
 -- MODEL
 
 
@@ -28,7 +19,42 @@ model =
     { cartItems = 0
     , items = []
     , hideCart = True
+    , text = ""
     }
+
+
+
+-- APP
+
+
+main : Program Never Model Msg
+main =
+    Html.program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+
+
+
+-- INIT
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( model
+    , getItems
+    )
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
 
