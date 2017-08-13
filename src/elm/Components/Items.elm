@@ -13,29 +13,20 @@ import Update exposing (..)
 -- Cart Items.
 
 
-items : Html Msg
-items =
-    div [] [ getAllItems ]
+items : List Item -> Html Msg
+items itemList =
+    div [] [ getAllItems itemList ]
 
 
 
 -- Get al the items in the store.
 
 
-getAllItems : Html Msg
-getAllItems =
+getAllItems : List Item -> Html Msg
+getAllItems itemList =
     let
-        pizza =
-            Item "sdasd2334431221" "Pizza" "Yummy!" 10.45 "https://sep.yimg.com/ay/yhst-19802326331255/pizza-slice-pennant-3x5-9.jpg"
-
-        coke =
-            Item "3343dcc334" "Coca Cola" "Tasty!" 8.8 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Flasche_Coca-Cola_0%2C2_Liter.jpg/220px-Flasche_Coca-Cola_0%2C2_Liter.jpg"
-
-        allItems =
-            [ pizza, pizza, pizza, pizza, pizza, pizza, pizza, pizza, coke ]
-
         listOfItems =
-            split 4 allItems
+            split 4 itemList
     in
     div []
         (List.map
@@ -79,7 +70,6 @@ singleItem item showAddToCart =
             [ div [ class "col-md-6" ] [ img [ src item.image, class "img-responsive" ] [] ]
             , div [ class "col-md-6" ]
                 [ div [] [ text item.title ]
-                , div [] [ text item.description ]
                 , div [] [ text (toString item.price) ]
                 ]
             ]
@@ -103,7 +93,7 @@ currentItems model =
             [ a [ onClick HideCart ] [ span [ class "glyphicon glyphicon-remove" ] [] ]
             ]
         , div [ class "items-list" ]
-            (List.map (\item -> div [] [ singleItem item False ]) model.items)
+            (List.map (\item -> div [] [ singleItem item False ]) model.cartItemsList)
         , div [ class "actions" ]
             [ button [ class "btn btn-success" ]
                 [ span [ class "glyphicon glyphicon-ok" ] []

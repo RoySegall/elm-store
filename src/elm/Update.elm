@@ -14,7 +14,7 @@ type Msg
     = AddItems Item
     | HideCart
     | ToggleCart
-    | GetItems (Result Http.Error String)
+    | GetItems (Result Http.Error (List Item))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -23,7 +23,7 @@ update msg model =
         AddItems item ->
             ( { model
                 | cartItems = model.cartItems + 1
-                , items = model.items ++ [ item ]
+                , cartItemsList = model.cartItemsList ++ [ item ]
               }
             , Cmd.none
             )
@@ -37,11 +37,12 @@ update msg model =
         HideCart ->
             ( { model | hideCart = True }, Cmd.none )
 
-        GetItems (Ok newUrl) ->
-            ( { model | items = [] }, Cmd.none )
+        GetItems (Ok backendItems) ->
+            ( { model | items = backendItems }, Cmd.none )
 
-        GetItems (Err _) ->
-            Debug.log "error occured" (toString Err) |> always ( model, Cmd.none )
+        GetItems (Err error) ->
+            Debug.log "error occured" (toString error)
+                |> always ( model, Cmd.none )
 
 
 getItems : Cmd Msg
@@ -52,9 +53,18 @@ getItems =
     in
     Http.send
         GetItems
-        (Http.get url decodeGifUrl)
+        (Http.get url collectionDecoder)
 
 
-decodeGifUrl : Decode.Decoder String
-decodeGifUrl =
-    Decode.at [ "data", "image_url" ] Decode.string
+collectionDecoder : Decode.Decoder (List Item)
+collectionDecoder =
+    Decode.at [ "data" ] <| Decode.list <| memberDecoder
+
+
+memberDecoder : Decode.Decoder Item
+memberDecoder =
+    Decode.map4 Item
+        (field "Id" Decode.string)
+        (field "Title" Decode.string)
+        (field "Price" Decode.float)
+        (field "Image" Decode.string)

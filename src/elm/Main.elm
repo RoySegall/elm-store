@@ -17,6 +17,7 @@ import Update exposing (..)
 model : Model
 model =
     { cartItems = 0
+    , cartItemsList = []
     , items = []
     , hideCart = True
     , text = ""
@@ -87,7 +88,7 @@ view model =
         , div [ class "row content", onClick HideCart ]
             [ div [ class "col-md-12" ]
                 [ div [ class "jumbotron" ]
-                    [ items
+                    [ items model.items
                     ]
                 ]
             ]
