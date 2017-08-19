@@ -1,10 +1,9 @@
 module Components.Items exposing (..)
 
-import Debug exposing (log)
+import Config exposing (backend_address)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
-import Http
 import List exposing (..)
 import Model exposing (..)
 import Update exposing (..)
@@ -64,12 +63,16 @@ singleItem item showAddToCart =
                     ]
             else
                 Html.text ""
+
+        imageAddress =
+            backend_address ++ "/" ++ item.image
     in
     div [ class "item" ]
         [ div [ class "row" ]
-            [ div [ class "col-md-6" ] [ img [ src item.image, class "img-responsive" ] [] ]
+            [ div [ class "col-md-6" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
             , div [ class "col-md-6" ]
                 [ div [] [ text item.title ]
+                , div [] [ text item.description ]
                 , div [] [ text (toString item.price) ]
                 ]
             ]

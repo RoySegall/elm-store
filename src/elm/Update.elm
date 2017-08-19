@@ -63,8 +63,9 @@ collectionDecoder =
 
 memberDecoder : Decode.Decoder Item
 memberDecoder =
-    Decode.map4 Item
+    Decode.map5 Item
         (field "Id" Decode.string)
         (field "Title" Decode.string)
+        (field "Description" Decode.string)
         (field "Price" Decode.float)
         (field "Image" Decode.string)
