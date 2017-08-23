@@ -25,13 +25,13 @@ getAllItems : List Item -> Html Msg
 getAllItems itemList =
     let
         listOfItems =
-            split 4 itemList
+            split 3 itemList
     in
     div []
         (List.map
             (\items ->
-                div [ class "row" ]
-                    (List.map (\item -> div [ class "col-md-3" ] [ singleItem item True ]) items)
+                div [ class "row items-wrapper" ]
+                    (List.map (\item -> div [ class "col-md-4" ] [ singleItem item True ]) items)
             )
             listOfItems
         )
@@ -69,14 +69,16 @@ singleItem item showAddToCart =
     in
     div [ class "item" ]
         [ div [ class "row" ]
-            [ div [ class "col-md-6" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
-            , div [ class "col-md-6" ]
-                [ div [] [ text item.title ]
-                , div [] [ text item.description ]
-                , div [] [ text (toString item.price) ]
+            [ div [ class "col-md-6 first" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
+            , div [ class "col-md-6 second" ]
+                [ div []
+                    [ div [ class "title" ] [ text item.title ]
+                    , div [ class "description" ] [ text item.description ]
+                    , div [ class "price" ] [ text (toString item.price ++ " $") ]
+                    ]
+                , div [] [ addToCartButton ]
                 ]
             ]
-        , addToCartButton
         ]
 
 

@@ -105,6 +105,23 @@ body {
     margin: 0 auto;
     padding-top: 20px;
     width: 95%;
+
+    .jumbotron {
+
+      .items-wrapper {
+        padding-bottom: 10px;
+
+        .item {
+
+          .second {
+
+            .title {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
   }
 
 }
