@@ -49,7 +49,11 @@ singleItem item showAddToCart =
             if showAddToCart == True then
                 div [ class "row" ]
                     [ div [ class "col-md-12" ]
-                        [ button [ class "btn", onClick <| AddItems item ] [ text "Add to cart" ]
+                        [ button [ class "btn btn-info", onClick <| AddItems item ]
+                            [ i [ class "fa fa-plus" ]
+                                []
+                            , span [] [ text "Add to cart" ]
+                            ]
                         ]
                     ]
             else
@@ -66,8 +70,8 @@ singleItem item showAddToCart =
                     [ div [ class "title" ] [ text item.title ]
                     , div [ class "description" ] [ text item.description ]
                     , div [ class "price" ] [ text (toString item.price ++ " $") ]
-                    , div [] [ addToCartButton ]
                     ]
+                , div [ class "add-to-cart" ] [ addToCartButton ]
                 ]
             ]
         ]
@@ -89,7 +93,7 @@ currentItems model =
             (List.map (\item -> div [] [ singleItem item False ]) model.cartItemsList)
         , div [ class "actions" ]
             [ button [ class "btn btn-success" ]
-                [ span [ class "glyphicon glyphicon-ok" ] []
+                [ span [ class "fa fa-sign-in" ] []
                 , text "To checkout"
                 ]
             ]

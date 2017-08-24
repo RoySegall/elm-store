@@ -1,21 +1,24 @@
 module Components.User exposing (..)
 
+import Components.Items exposing (currentItems)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import Model exposing (Model)
 import Update exposing (..)
 
 
 -- Cart component
 
 
-cart : Int -> Html Msg
-cart items =
+cart : Model -> Html Msg
+cart model =
     div
         [ class "cart-component" ]
         [ a [ onClick ToggleCart ]
-            [ span [] [ text "Shopping cart" ]
-            , span [ class "shopping-cart" ] [ text (toString items) ]
+            [ span [ class "shopping-cart" ] [ text "Shopping cart" ]
+            , span [ class "shopping-cart-counter" ] [ text (toString model.cartItems) ]
+            , currentItems model
             ]
         ]
 
@@ -27,4 +30,4 @@ cart items =
 userBar : Html a
 userBar =
     div [ class "user-bar" ]
-        [ text "Welcome Guest" ]
+        [ a [] [ text "Welcome Guest" ] ]

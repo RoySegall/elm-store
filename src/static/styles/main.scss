@@ -18,10 +18,35 @@ img {
 .container {
   width: 75%;
   max-width: 75%;
+
+  .items-wrapper {
+
+    .item {
+
+      .second {
+
+        .title {
+          font-weight: bold;
+          font-size: 20px;
+          color: $brand-facebook;
+        }
+
+        .description, .price {
+          font-size: 14px;
+        }
+
+        .add-to-cart {
+          padding-top: 20px;
+        }
+      }
+    }
+  }
 }
 
 footer {
+
   .list-inline {
+
     a {
       margin-left: 5px;
       margin-right: 5px;
@@ -33,107 +58,128 @@ footer {
   display: none;
 }
 
-.cart-wrapper {
-  position: relative;
+.navbar-nav.ml-auto {
 
-  .cart-component {
+  li {
+    padding-right: 5px;
 
-    a {
-      cursor: pointer;
+    .arrow {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid #000000;
 
-      .fa-shopping-cart {
-        color: black;
-        font-size: 30px;
+      &:after, &:before {
+        bottom: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
       }
 
-      &:hover {
-        .fa-shopping-cart {
+      &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 20px;
+        margin-left: -20px;
+      }
+
+      &:before {
+        border-color: rgba(0, 0, 0, 0);
+        border-bottom-color: #000000;
+        border-width: 21px;
+        margin-left: -21px;
+      }
+
+    }
+
+    .user-bar {
+      color: white;
+    }
+
+    &.cart-wrapper {
+      position: relative;
+
+      .shopping-cart {
+        color: $theme-primary;
+        margin-right: 5px;
+      }
+
+      .shopping-cart-counter {
+        color: $theme-primary;
+      }
+
+      .cart-component {
+
+        a {
+          cursor: pointer;
+
+          .fa-shopping-cart {
+            color: black;
+            font-size: 30px;
+          }
+
+          &:hover {
+            .fa-shopping-cart {
+              color: white;
+            }
+          }
+        }
+
+        .number-of-items {
+          position: absolute;
+          left: 25px;
+          background: red;
+          padding: 1px 5px;
+          border-radius: 10px;
+          top: -5px;
           color: white;
+          font-weight: bold;
+        }
+      }
+
+      .cart-items {
+        background: white;
+        border: solid 1px #000;
+        position: absolute;
+        z-index: 1;
+        top: 55px;
+        right: -90px;
+        width: 300px;
+
+        .items-list {
+
+          overflow: scroll;
+          max-height: 500px;
+          overflow-x: hidden;
+
+          .item {
+            padding: 10px;
+
+            img {
+              height: 100px;
+            }
+          }
+        }
+
+        .actions {
+          text-align: center;
+          padding-bottom: 5px;
+          padding-top: 5px;
+
+          span {
+            padding-right: 5px;
+
+          }
         }
       }
     }
-
-    .number-of-items {
-      position: absolute;
-      left: 25px;
-      background: red;
-      padding: 1px 5px;
-      border-radius: 10px;
-      top: -5px;
-      color: white;
-      font-weight: bold;
-    }
-  }
-
-  .cart-items {
-    background: white;
-    border: solid 1px #000;
-    position: absolute;
-    z-index: 1;
-    top: 55px;
-    right: 20px;
-    width: 300px;
-
-    .close {
-      position: absolute;
-      z-index: 1;
-      top: -15px;
-      right: -15px;
-      opacity: 1;
-      border-radius: 10px;
-
-      .fa {
-        color: red;
-      }
-
-      span {
-        color: white;
-        padding: 5px;
-      }
-    }
-
-    .item {
-      padding: 10px;
-    }
-
-    .actions {
-      text-align: center;
-      padding-bottom: 5px;
-      padding-top: 5px;
-
-      span {
-        padding-right: 5px;
-
-      }
-    }
   }
 }
 
-.arrow {
-  position: relative;
-  background: #ffffff;
-  border: 1px solid #000000;
-}
-.arrow:after, .arrow:before {
-  bottom: 100%;
-  left: 50%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
 
-.arrow:after {
-  border-color: rgba(255, 255, 255, 0);
-  border-bottom-color: #ffffff;
-  border-width: 20px;
-  margin-left: -20px;
-}
-.arrow:before {
-  border-color: rgba(0, 0, 0, 0);
-  border-bottom-color: #000000;
-  border-width: 21px;
-  margin-left: -21px;
+.btn {
+  border-radius: 0;
 }
