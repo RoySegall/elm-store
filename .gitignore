@@ -4,4 +4,4 @@ tmp/
 dist/
 yarn.lock
 .idea
-
+/temp-theme/startbootstrap-new-age-gh-pages/vendor

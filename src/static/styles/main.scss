@@ -12,6 +12,7 @@ $aqua_blue: #BAD1F4;
 
 body {
   background-color: $white;
+  font-family: 'Muli', 'Helvetica', 'Arial', 'sans-serif';
 }
 
 .main {
@@ -22,6 +23,9 @@ body {
     background: $aqua_blue;
     height: 50px;
     padding-top: 10px;
+    font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+    font-weight: 200;
+    letter-spacing: 1px;
 
     .content-upper {
       margin: 0 auto;
