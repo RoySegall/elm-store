@@ -11,6 +11,15 @@
 @import "footer.scss";
 @import "bootstrap-overrides.scss";
 
+img {
+  height: 200px;
+}
+
+.container {
+  width: 75%;
+  max-width: 75%;
+}
+
 // can add Boostrap overrides, additional Sass/CSS below...
 
 //$white: #F9FBFF;

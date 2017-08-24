@@ -37,4 +37,13 @@ section.features {
             -webkit-text-fill-color: transparent;
         }
     }
+
+    .main {
+
+      .item {
+        margin-bottom: 20px;
+        padding-bottom: 5px;
+        border-bottom: $brand-google-plus solid 1px;
+      }
+    }
 }

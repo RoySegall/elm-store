@@ -9,15 +9,6 @@ import Model exposing (..)
 import Update exposing (..)
 
 
--- Cart Items.
-
-
-items : List Item -> Html Msg
-items itemList =
-    div [] [ getAllItems itemList ]
-
-
-
 -- Get al the items in the store.
 
 
@@ -69,14 +60,14 @@ singleItem item showAddToCart =
     in
     div [ class "item" ]
         [ div [ class "row" ]
-            [ div [ class "col-md-6 first" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
-            , div [ class "col-md-6 second" ]
+            [ div [ class "col-md-4 first" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
+            , div [ class "col-md-8 second" ]
                 [ div []
                     [ div [ class "title" ] [ text item.title ]
                     , div [ class "description" ] [ text item.description ]
                     , div [ class "price" ] [ text (toString item.price ++ " $") ]
+                    , div [] [ addToCartButton ]
                     ]
-                , div [] [ addToCartButton ]
                 ]
             ]
         ]
