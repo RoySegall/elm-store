@@ -85,10 +85,7 @@ currentItems model =
     in
     div
         [ classList classes ]
-        [ div [ class "close" ]
-            [ a [ onClick HideCart ] [ span [ class "glyphicon glyphicon-remove" ] [] ]
-            ]
-        , div [ class "items-list" ]
+        [ div [ class "items-list" ]
             (List.map (\item -> div [] [ singleItem item False ]) model.cartItemsList)
         , div [ class "actions" ]
             [ button [ class "btn btn-success" ]

@@ -13,8 +13,10 @@ cart : Int -> Html Msg
 cart items =
     div
         [ class "cart-component" ]
-        [ a [ onClick ToggleCart ] [ span [ class "glyphicon glyphicon-shopping-cart" ] [] ]
-        , span [ class "number-of-items" ] [ text (toString items) ]
+        [ a [ onClick ToggleCart ]
+            [ span [] [ text "Shopping cart" ]
+            , span [ class "shopping-cart" ] [ text (toString items) ]
+            ]
         ]
 
 
