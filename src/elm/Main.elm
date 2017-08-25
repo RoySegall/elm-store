@@ -8,6 +8,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model exposing (..)
+import Ports exposing (getItemsFromStorage)
 import Update exposing (..)
 
 
@@ -55,7 +56,7 @@ init =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    getItemsFromStorage InitItems
 
 
 

@@ -16,6 +16,7 @@ type Msg
     | HideCart
     | ToggleCart
     | GetItems (Result Http.Error (List Item))
+    | InitItems (List Item)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -44,6 +45,9 @@ update msg model =
         GetItems (Err error) ->
             Debug.log "error occured" (toString error)
                 |> always ( model, Cmd.none )
+
+        InitItems items ->
+            ( { model | cartItemsList = items }, Cmd.none )
 
 
 getItems : Cmd Msg

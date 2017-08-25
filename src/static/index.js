@@ -15,5 +15,8 @@ app.ports.addItemToStorage.subscribe(function(item) {
   localStorage.setItem('items', JSON.stringify(decoded_items))
 });
 
-app.ports.getItemsFromStorage.subscribe(function(item) {
+app.ports.getItemsFromStorage.subscribe(function() {
+  var items = localStorage.getItem('items');
+  var decoded_items = items == "" ? [] : JSON.parse(items);
+  app.ports.suggestions.send(decoded_items);
 });
