@@ -21,3 +21,11 @@ app.ports.addItemToStorage.subscribe(function(item) {
 
   localStorage.setItem('items', JSON.stringify(decoded_items))
 });
+
+app.ports.removeItemsFromStorage.subscribe(function() {
+  localStorage.setItem('items', "")
+});
+
+app.ports.removeItemsFromCart.subscribe(function(item) {
+  console.log("Removed " + item.title)
+});

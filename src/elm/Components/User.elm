@@ -19,8 +19,8 @@ cart model =
         [ a [ onClick ToggleCart ]
             [ span [ class "shopping-cart" ] [ text "Shopping cart" ]
             , span [ class "shopping-cart-counter" ] [ text (toString (length model.cartItems)) ]
-            , currentItems model
             ]
+        , currentItems model
         ]
 
 

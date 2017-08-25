@@ -57,7 +57,11 @@ singleItem item showAddToCart =
                         ]
                     ]
             else
-                Html.text ""
+                button
+                    [ class "btn btn-danger", onClick (RemoveItemFromCart item) ]
+                    [ span [ class "fa fa-trash-o" ] []
+                    , text "Remove from cart"
+                    ]
 
         imageAddress =
             backend_address ++ "/" ++ item.image
@@ -86,15 +90,28 @@ currentItems model =
     let
         classes =
             [ ( "cart-items arrow", True ), ( "hidden", model.hideCart ) ]
+
+        cart_items =
+            if length model.cartItems == 0 then
+                div
+                    [ classList classes ]
+                    [ div [ class "no-items" ] [ text "Whoops... Your cart is empty." ]
+                    ]
+            else
+                div
+                    [ classList classes ]
+                    [ div [ class "items-list" ]
+                        (List.map (\item -> div [] [ singleItem item False ]) model.cartItems)
+                    , div [ class "actions" ]
+                        [ button [ class "btn btn-success" ]
+                            [ span [ class "fa fa-sign-in" ] []
+                            , text "To checkout"
+                            ]
+                        , button [ class "btn btn-danger", onClick (ClearCart model) ]
+                            [ span [ class "fa fa-trash-o" ] []
+                            , text "Clear cart"
+                            ]
+                        ]
+                    ]
     in
-    div
-        [ classList classes ]
-        [ div [ class "items-list" ]
-            (List.map (\item -> div [] [ singleItem item False ]) model.cartItems)
-        , div [ class "actions" ]
-            [ button [ class "btn btn-success" ]
-                [ span [ class "fa fa-sign-in" ] []
-                , text "To checkout"
-                ]
-            ]
-        ]
+    cart_items

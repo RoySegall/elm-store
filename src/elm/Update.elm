@@ -5,7 +5,7 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
-import Ports exposing (addItemToStorage)
+import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
 
 
 -- UPDATE
@@ -14,9 +14,11 @@ import Ports exposing (addItemToStorage)
 type Msg
     = AddItems Item
     | HideCart
+    | ClearCart Model
     | ToggleCart
     | GetItems (Result Http.Error (List Item))
     | InitItems (List Item)
+    | RemoveItemFromCart Item
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -28,6 +30,9 @@ update msg model =
               }
             , addItemToStorage item
             )
+
+        ClearCart model ->
+            ( { model | cartItems = [] }, removeItemsFromStorage () )
 
         ToggleCart ->
             if model.hideCart then
@@ -47,6 +52,9 @@ update msg model =
 
         InitItems items ->
             ( { model | cartItems = items }, Cmd.none )
+
+        RemoveItemFromCart item ->
+            ( removeItemFromCart item model, removeItemsFromCart item )
 
 
 getItems : Cmd Msg
@@ -73,3 +81,8 @@ memberDecoder =
         (field "Description" Decode.string)
         (field "Price" Decode.float)
         (field "Image" Decode.string)
+
+
+removeItemFromCart : Item -> Model -> Model
+removeItemFromCart item model =
+    { model | cartItems = [] }
