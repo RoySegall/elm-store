@@ -7,6 +7,7 @@ import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 
 
+--import Ports exposing (addItemToStorage)
 -- UPDATE
 
 

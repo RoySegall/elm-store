@@ -5,4 +5,9 @@ require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' ); 
 
 // inject bundled Elm app into div#main
 var Elm = require( '../elm/Main' );
+var app = Elm.Main.fullscreen();
 Elm.Main.embed( document.getElementById( 'main' ) );
+
+// app.ports.addItemToStorage.subscribe(function(text) {
+//   alert('a');
+// });
