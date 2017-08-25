@@ -5,4 +5,19 @@ require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' ); 
 
 // inject bundled Elm app into div#main
 var Elm = require( '../elm/Main' );
-Elm.Main.embed( document.getElementById( 'main' ) );
+var app = Elm.Main.fullscreen({
+  'items': getItemsFromStorage()
+});
+
+function getItemsFromStorage() {
+  var items = localStorage.getItem('items');
+  return items == "" ? [] : JSON.parse(items);
+}
+
+app.ports.addItemToStorage.subscribe(function(item) {
+  var items = localStorage.getItem('items');
+  var decoded_items = items == "" ? [] : JSON.parse(items);
+  decoded_items.push(item);
+
+  localStorage.setItem('items', JSON.stringify(decoded_items))
+});

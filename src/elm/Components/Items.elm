@@ -90,7 +90,7 @@ currentItems model =
     div
         [ classList classes ]
         [ div [ class "items-list" ]
-            (List.map (\item -> div [] [ singleItem item False ]) model.cartItemsList)
+            (List.map (\item -> div [] [ singleItem item False ]) model.cartItems)
         , div [ class "actions" ]
             [ button [ class "btn btn-success" ]
                 [ span [ class "fa fa-sign-in" ] []

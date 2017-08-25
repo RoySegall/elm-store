@@ -4,6 +4,7 @@ import Components.Items exposing (currentItems)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import List exposing (length)
 import Model exposing (Model)
 import Update exposing (..)
 
@@ -17,7 +18,7 @@ cart model =
         [ class "cart-component" ]
         [ a [ onClick ToggleCart ]
             [ span [ class "shopping-cart" ] [ text "Shopping cart" ]
-            , span [ class "shopping-cart-counter" ] [ text (toString model.cartItems) ]
+            , span [ class "shopping-cart-counter" ] [ text (toString (length model.cartItems)) ]
             , currentItems model
             ]
         ]

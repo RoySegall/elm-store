@@ -5,6 +5,7 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
+import Ports exposing (addItemToStorage)
 
 
 -- UPDATE
@@ -15,6 +16,7 @@ type Msg
     | HideCart
     | ToggleCart
     | GetItems (Result Http.Error (List Item))
+    | InitItems (List Item)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -22,10 +24,9 @@ update msg model =
     case msg of
         AddItems item ->
             ( { model
-                | cartItems = model.cartItems + 1
-                , cartItemsList = model.cartItemsList ++ [ item ]
+                | cartItems = model.cartItems ++ [ item ]
               }
-            , Cmd.none
+            , addItemToStorage item
             )
 
         ToggleCart ->
@@ -43,6 +44,9 @@ update msg model =
         GetItems (Err error) ->
             Debug.log "error occured" (toString error)
                 |> always ( model, Cmd.none )
+
+        InitItems items ->
+            ( { model | cartItems = items }, Cmd.none )
 
 
 getItems : Cmd Msg
