@@ -5,9 +5,9 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
+import Ports exposing (addItemToStorage)
 
 
---import Ports exposing (addItemToStorage)
 -- UPDATE
 
 
@@ -26,7 +26,7 @@ update msg model =
                 | cartItems = model.cartItems + 1
                 , cartItemsList = model.cartItemsList ++ [ item ]
               }
-            , Cmd.none
+            , addItemToStorage item
             )
 
         ToggleCart ->
