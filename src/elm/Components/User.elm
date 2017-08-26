@@ -31,4 +31,7 @@ cart model =
 userBar : Html a
 userBar =
     div [ class "user-bar" ]
-        [ a [] [ text "Welcome Guest" ] ]
+        [ span [ class "welcome-guest" ] [ text "Welcome Guest" ]
+        , a [ href "/user/login", class "login" ] [ text "Login" ]
+        , a [ href "/user/register", class "register" ] [ text "Register" ]
+        ]

@@ -15,6 +15,10 @@ img {
   height: 200px;
 }
 
+.btn {
+  border-radius: 0;
+}
+
 .container {
   width: 75%;
   max-width: 75%;
@@ -97,6 +101,16 @@ footer {
 
     .user-bar {
       color: white;
+      border-right: solid 1px white;
+      padding-right: 5px;
+
+      .welcome-guest {
+        margin-right: 5px;
+      }
+
+      .login {
+        margin-right: 5px;
+      }
     }
 
     &.cart-wrapper {
@@ -195,9 +209,4 @@ footer {
       }
     }
   }
-}
-
-
-.btn {
-  border-radius: 0;
 }
