@@ -1,7 +1,6 @@
 module Update exposing (..)
 
 import Config exposing (..)
-import Html.Events exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
@@ -85,4 +84,7 @@ memberDecoder =
 
 removeItemFromCart : Item -> Model -> Model
 removeItemFromCart item model =
-    { model | cartItems = [] }
+    { model
+        | cartItems =
+            List.filter (\i -> not (i.id == item.id)) model.cartItems
+    }
