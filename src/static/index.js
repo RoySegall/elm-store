@@ -27,5 +27,18 @@ app.ports.removeItemsFromStorage.subscribe(function() {
 });
 
 app.ports.removeItemsFromCart.subscribe(function(item) {
-  console.log("Removed " + item.title)
+
+  var decoded_items = JSON.parse(localStorage.getItem('items'));
+  var new_items = [];
+
+  var arrayLength = decoded_items.length;
+  for (var i = 0; i < arrayLength; i++) {
+    if (decoded_items[i].id == item.id) {
+      continue;
+    }
+
+    new_items.push(decoded_items[i])
+  }
+
+  localStorage.setItem('items', JSON.stringify(new_items))
 });
