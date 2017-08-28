@@ -10,12 +10,19 @@ import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromSto
 -- UPDATE
 
 
+type alias Data =
+    { data : List Item
+    , items : Int
+    , perpage : Int
+    }
+
+
 type Msg
     = AddItems Item
     | HideCart
     | ClearCart Model
     | ToggleCart
-    | GetItems (Result Http.Error (List Item))
+    | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item
 
@@ -42,8 +49,14 @@ update msg model =
         HideCart ->
             ( { model | hideCart = True }, Cmd.none )
 
-        GetItems (Ok backendItems) ->
-            ( { model | items = backendItems }, Cmd.none )
+        GetItems (Ok backendData) ->
+            ( { model
+                | items = backendData.data
+                , itemsNumber = backendData.items
+                , perpage = backendData.perpage
+              }
+            , Cmd.none
+            )
 
         GetItems (Err error) ->
             Debug.log "error occured" (toString error)
@@ -64,12 +77,15 @@ getItems =
     in
     Http.send
         GetItems
-        (Http.get url collectionDecoder)
+        (Http.get url itemsDecoder)
 
 
-collectionDecoder : Decode.Decoder (List Item)
-collectionDecoder =
-    Decode.at [ "data" ] <| Decode.list <| memberDecoder
+itemsDecoder : Decode.Decoder Data
+itemsDecoder =
+    Decode.map3 Data
+        (field "data" <| Decode.list <| memberDecoder)
+        (field "items" Decode.int)
+        (field "perpage" Decode.int)
 
 
 memberDecoder : Decode.Decoder Item

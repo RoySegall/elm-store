@@ -15,4 +15,6 @@ type alias Model =
     , items : List Item
     , hideCart : Bool
     , text : String
+    , itemsNumber : Int
+    , perpage : Int
     }

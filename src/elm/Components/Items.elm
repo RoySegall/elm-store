@@ -39,6 +39,21 @@ split i list =
 
 
 
+-- Items pager
+
+
+itemsPager : Int -> Int -> Html Msg
+itemsPager items_number perpage =
+    let
+        pages =
+            round (toFloat items_number / toFloat perpage)
+    in
+    div
+        []
+        []
+
+
+
 -- Single item display.
 
 
