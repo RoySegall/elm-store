@@ -46,7 +46,7 @@ itemsPager : Int -> Int -> Html Msg
 itemsPager items_number perpage =
     let
         pages =
-            round (toFloat items_number / toFloat perpage)
+            floor (toFloat items_number / toFloat perpage)
     in
     div
         []
@@ -60,7 +60,7 @@ pager page max_items =
             if page > max_items then
                 Html.text ""
             else
-                span [] [ a [ onClick <| GetItemsAtPage page ] [ text (toString page) ], pager (page + 1) max_items ]
+                span [] [ a [ onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ], pager (page + 1) max_items ]
     in
     div [] [ items ]
 

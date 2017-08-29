@@ -63,8 +63,8 @@ update msg model =
             Debug.log "error occured" (toString error)
                 |> always ( model, Cmd.none )
 
-        GetItemsAtPage int ->
-            ( { model | cartItems = [] }, Cmd.none )
+        GetItemsAtPage page ->
+            ( model, getItemsAtPage page )
 
         InitItems items ->
             ( { model | cartItems = items }, Cmd.none )
