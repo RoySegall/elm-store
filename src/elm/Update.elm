@@ -25,6 +25,7 @@ type Msg
     | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item
+    | GetItemsAtPage Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -62,6 +63,9 @@ update msg model =
             Debug.log "error occured" (toString error)
                 |> always ( model, Cmd.none )
 
+        GetItemsAtPage int ->
+            ( { model | cartItems = [] }, Cmd.none )
+
         InitItems items ->
             ( { model | cartItems = items }, Cmd.none )
 
@@ -74,6 +78,17 @@ getItems =
     let
         url =
             backend_address ++ "/api/items"
+    in
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
+
+
+getItemsAtPage : Int -> Cmd Msg
+getItemsAtPage page =
+    let
+        url =
+            backend_address ++ "/api/items?page=" ++ toString page
     in
     Http.send
         GetItems

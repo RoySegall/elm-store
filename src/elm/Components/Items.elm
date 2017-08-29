@@ -50,7 +50,19 @@ itemsPager items_number perpage =
     in
     div
         []
-        [ text "a" ]
+        [ a [ onClick (GetItemsAtPage 0) ] [ text "First" ], pager 0 pages, a [ onClick (GetItemsAtPage pages) ] [ text "Last" ] ]
+
+
+pager : Int -> Int -> Html Msg
+pager page max_items =
+    let
+        items =
+            if page > max_items then
+                Html.text ""
+            else
+                span [] [ a [ onClick <| GetItemsAtPage page ] [ text (toString page) ], pager (page + 1) max_items ]
+    in
+    div [] [ items ]
 
 
 
