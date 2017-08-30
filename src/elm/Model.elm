@@ -39,5 +39,6 @@ type alias Model =
 type Action
     = Example1Action Example1.Action
     | Example2Action Example2.Action
+    | HideCart
     | ShowExample Example
     | NoOp

@@ -19,7 +19,6 @@ type alias Data =
 
 type Msg
     = AddItems Item
-    | HideCart
     | ClearCart Model
     | ToggleCart
     | GetItems (Result Http.Error Data)
@@ -46,9 +45,6 @@ update msg model =
                 ( { model | hideCart = False }, Cmd.none )
             else
                 ( { model | hideCart = True }, Cmd.none )
-
-        HideCart ->
-            ( { model | hideCart = True }, Cmd.none )
 
         GetItems (Ok backendData) ->
             ( { model

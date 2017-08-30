@@ -2,10 +2,11 @@ module ExampleViewer exposing (..)
 
 -- Note that I'm renaming these locally for simplicity.
 
+import Components.User exposing (cart, userBar)
 import Example1.Counter as Example1
 import Example2.CounterPair as Example2
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model exposing (..)
 import Navigation exposing (..)
@@ -63,6 +64,9 @@ update action model =
             , Cmd.none
             )
 
+        HideCart ->
+            ( { model | hideCart = True }, Cmd.none )
+
         Example1Action subaction ->
             ( { model | example1 = Example1.update subaction model.example1 }
             , Cmd.none
@@ -88,19 +92,55 @@ view model =
         viewExample =
             case model.currentExample of
                 Example1 ->
-                    map Example1Action (Example1.view model.example1)
+                    Html.map Example1Action (Example1.view model.example1)
 
                 Example2 ->
-                    map Example2Action (Example2.view model.example2)
+                    Html.map Example2Action (Example2.view model.example2)
     in
     div []
-        [ div []
+        [ nav [ class "navbar navbar-expand-lg navbar-light fixed-top", id "mainNav" ]
+            [ div [ class "container" ]
+                [ a [ class "navbar-brand js-scroll-trigger" ] [ text "Go store" ]
+                , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
+                    [ ul [ class "navbar-nav ml-auto" ]
+                        [ li [ class "nav-item" ] [ userBar ]
+                        , li [ class "nav-item cart-wrapper" ] [ text "a" ]
+                        ]
+                    ]
+                ]
+            ]
+        , section [ class "download bg-primary text-center", id "download", onClick HideCart ]
+            [ div [ class "container" ]
+                [ div [ class "row" ]
+                    [ div [ class "col-md-8 mx-auto" ]
+                        [ h2 [ class "section-heading" ] [ text "Discover what all the buzz is about!" ]
+                        , p [] [ text "Our app is available on any mobile device! Download now to get started!" ]
+                        , div [ class "badges" ]
+                            [ a [ class "badge-link" ] [ img [ src "static/img/google-play-badge.svg" ] [] ]
+                            , a [ class "badge-link" ] [ img [ src "static/img/app-store-badge.svg" ] [] ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        , div []
             [ ul []
                 [ li [ onClick (ShowExample Example1) ] [ text "Count 1" ]
                 , li [ onClick (ShowExample Example2) ] [ text "counter 2" ]
                 ]
             ]
         , div [] [ viewExample ]
+        , footer []
+            [ div [ class "container", onClick HideCart ]
+                [ p [] [ text "Created by Roy Segall" ]
+                , ul [ class "list-inline" ]
+                    [ li [ class "fa fa-github" ] []
+                    , a [ href "https://github.com/roysegall/go-store" ] [ text "Fork the backend" ]
+                    , li [ class "fa fa-github" ] []
+                    , a [ href "https://github.com/roysegall/elm-store" ] [ text "Fork this frontend" ]
+                    ]
+                ]
+            ]
         ]
 
 
