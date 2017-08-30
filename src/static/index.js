@@ -16,7 +16,7 @@ function getItemsFromStorage() {
 
 app.ports.addItemToStorage.subscribe(function(item) {
   var items = localStorage.getItem('items');
-  var decoded_items = items == null ? [] : JSON.parse(items);
+  var decoded_items = items == null || items == "" ? [] : JSON.parse(items);
   decoded_items.push(item);
 
   localStorage.setItem('items', JSON.stringify(decoded_items))
