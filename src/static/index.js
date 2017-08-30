@@ -5,7 +5,9 @@ require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' ); 
 
 // inject bundled Elm app into div#main
 var Elm = require( '../elm/Main' );
-var app = Elm.Main.fullscreen();
+var app = Elm.Main.fullscreen({
+  'items': getItemsFromStorage() || []
+});
 
 function getItemsFromStorage() {
   var items = localStorage.getItem('items');

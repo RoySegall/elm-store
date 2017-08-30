@@ -11,50 +11,27 @@ import Navigation exposing (..)
 import RouteHash exposing (HashUpdate)
 import RouteUrl exposing (UrlChange)
 import RouteUrl.Builder as Builder exposing (Builder)
+import Model exposing (..)
 
 
 -- MODEL
 
 
-{-| We'll need to know which example we're showing at the moment.
--}
-type Example
-    = Example1
-    | Example2
-
-
-{-| We need to collect all the data that each example wants to track. Now, we
-could do this in a couple of ways. If we want to remember all the data as we
-display one thing or another, we would do this as a record. If we wanted to
-only remember the data that we're currently looking at, we might do this as
-a union type. I'll do it the record way for now.
-
-In a real app, you are likely to divide the model into parts which are
-"permanent" (in the sense that the app needs to remember them, no matter
-what the user is looking at now), and parts that are "transient" (which need
-to be remembered, but only while the user is looking at a particular thing).
-So, in that cae, some things would be in a record, whereas other things would
-be in a union type.
-
--}
-type alias Model =
-    { example1 : Example1.Model
-    , example2 : Example2.Model
-
-    -- And, we need to track which example we're actually showing
-    , currentExample : Example
-    }
-
-
 {-| Now, to init our model, we have to collect each examples init
 -}
-init : ( Model, Cmd Action )
-init =
+init : Flags -> ( Model, Cmd Action )
+init flags =
     let
         model =
             { example1 = Example1.init
             , example2 = Example2.init
             , currentExample = Example1
+            , cartItems = []
+            , items = []
+            , hideCart = True
+            , text = ""
+            , itemsNumber = 0
+            , perpage = 0
             }
     in
         ( model, Cmd.none )

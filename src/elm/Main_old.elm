@@ -12,12 +12,6 @@ import Ports exposing (getItemsFromStorage)
 import Update exposing (..)
 
 
-type alias Flags =
-    { items : List Item
-    }
-
-
-
 -- MODEL
 
 

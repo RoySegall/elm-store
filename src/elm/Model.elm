@@ -1,5 +1,13 @@
 module Model exposing (..)
 
+import Example1.Counter as Example1
+import Example2.CounterPair as Example2
+
+
+type Example
+    = Example1
+    | Example2
+
 
 type alias Item =
     { id : String
@@ -22,4 +30,7 @@ type alias Model =
     , text : String
     , itemsNumber : Int
     , perpage : Int
+    , example1 : Example1.Model
+    , example2 : Example2.Model
+    , currentExample : Example
     }
