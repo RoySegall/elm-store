@@ -18,34 +18,14 @@ type alias Data =
 
 
 type Msg
-    = AddItems Item
-    | ClearCart Model
-    | ToggleCart
-    | GetItems (Result Http.Error Data)
+    = GetItems (Result Http.Error Data)
     | InitItems (List Item)
-    | RemoveItemFromCart Item
     | GetItemsAtPage Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        AddItems item ->
-            ( { model
-                | cartItems = model.cartItems ++ [ item ]
-              }
-            , addItemToStorage item
-            )
-
-        ClearCart model ->
-            ( { model | cartItems = [] }, removeItemsFromStorage () )
-
-        ToggleCart ->
-            if model.hideCart then
-                ( { model | hideCart = False }, Cmd.none )
-            else
-                ( { model | hideCart = True }, Cmd.none )
-
         GetItems (Ok backendData) ->
             ( { model
                 | items = backendData.data
@@ -64,9 +44,6 @@ update msg model =
 
         InitItems items ->
             ( { model | cartItems = items }, Cmd.none )
-
-        RemoveItemFromCart item ->
-            ( removeItemFromCart item model, removeItemsFromCart item )
 
 
 getItems : Cmd Msg

@@ -2,17 +2,21 @@ module ExampleViewer exposing (..)
 
 -- Note that I'm renaming these locally for simplicity.
 
-import Components.User exposing (cart, userBar)
+import Components.Items exposing (currentItems)
+import Components.User exposing (userBar)
 import Example1.Counter as Example1
 import Example2.CounterPair as Example2
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import List exposing (length)
 import Model exposing (..)
 import Navigation exposing (..)
+import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
 import RouteHash exposing (HashUpdate)
 import RouteUrl exposing (UrlChange)
 import RouteUrl.Builder as Builder exposing (Builder)
+import Update exposing (removeItemFromCart)
 
 
 -- MODEL
@@ -77,6 +81,25 @@ update action model =
             , Cmd.none
             )
 
+        ToggleCart ->
+            if model.hideCart then
+                ( { model | hideCart = False }, Cmd.none )
+            else
+                ( { model | hideCart = True }, Cmd.none )
+
+        ClearCart model ->
+            ( { model | cartItems = [] }, removeItemsFromStorage () )
+
+        AddItems item ->
+            ( { model
+                | cartItems = model.cartItems ++ [ item ]
+              }
+            , addItemToStorage item
+            )
+
+        RemoveItemFromCart item ->
+            ( removeItemFromCart item model, removeItemsFromCart item )
+
 
 
 -- VIEW
@@ -84,6 +107,18 @@ update action model =
 
 (=>) =
     (,)
+
+
+cart : Model -> Html Action
+cart model =
+    div
+        [ class "cart-component" ]
+        [ a [ onClick ToggleCart ]
+            [ span [ class "shopping-cart" ] [ text "Shopping cart" ]
+            , span [ class "shopping-cart-counter" ] [ text (toString (length model.cartItems)) ]
+            ]
+        , currentItems model
+        ]
 
 
 view : Model -> Html Action
@@ -104,7 +139,7 @@ view model =
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
                         [ li [ class "nav-item" ] [ userBar ]
-                        , li [ class "nav-item cart-wrapper" ] [ text "a" ]
+                        , li [ class "nav-item cart-wrapper" ] [ cart model ]
                         ]
                     ]
                 ]

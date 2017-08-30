@@ -12,7 +12,7 @@ import Update exposing (..)
 -- Get al the items in the store.
 
 
-getAllItems : List Item -> Html Msg
+getAllItems : List Item -> Html Action
 getAllItems itemList =
     let
         listOfItems =
@@ -69,7 +69,7 @@ pager page max_items =
 -- Single item display.
 
 
-singleItem : Item -> Bool -> Html Msg
+singleItem : Item -> Bool -> Html Action
 singleItem item showAddToCart =
     let
         addToCartButton =
@@ -112,7 +112,7 @@ singleItem item showAddToCart =
 -- Display all the items in the cart.
 
 
-currentItems : Model -> Html Msg
+currentItems : Model -> Html Action
 currentItems model =
     let
         classes =

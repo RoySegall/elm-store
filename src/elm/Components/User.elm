@@ -5,24 +5,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import List exposing (length)
-import Model exposing (Model)
+import Model exposing (Action, Model)
 import Update exposing (..)
-
-
--- Cart component
-
-
-cart : Model -> Html Msg
-cart model =
-    div
-        [ class "cart-component" ]
-        [ a [ onClick ToggleCart ]
-            [ span [ class "shopping-cart" ] [ text "Shopping cart" ]
-            , span [ class "shopping-cart-counter" ] [ text (toString (length model.cartItems)) ]
-            ]
-        , currentItems model
-        ]
-
 
 
 -- User bar

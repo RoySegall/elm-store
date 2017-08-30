@@ -42,3 +42,7 @@ type Action
     | HideCart
     | ShowExample Example
     | NoOp
+    | ToggleCart
+    | ClearCart Model
+    | AddItems Item
+    | RemoveItemFromCart Item
