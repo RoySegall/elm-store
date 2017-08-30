@@ -1,8 +1,8 @@
 module Main exposing (..)
 
 import ExampleViewer exposing (..)
-import RouteUrl exposing (RouteUrlProgram)
 import Model exposing (..)
+import RouteUrl exposing (RouteUrlProgram)
 
 
 main : RouteUrlProgram Flags Model Action

@@ -7,11 +7,11 @@ import Example2.CounterPair as Example2
 import Html exposing (..)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
+import Model exposing (..)
 import Navigation exposing (..)
 import RouteHash exposing (HashUpdate)
 import RouteUrl exposing (UrlChange)
 import RouteUrl.Builder as Builder exposing (Builder)
-import Model exposing (..)
 
 
 -- MODEL
@@ -34,7 +34,7 @@ init flags =
             , perpage = 0
             }
     in
-        ( model, Cmd.none )
+    ( model, Cmd.none )
 
 
 
@@ -93,15 +93,15 @@ view model =
                 Example2 ->
                     map Example2Action (Example2.view model.example2)
     in
-        div []
-            [ div []
-                [ ul []
-                    [ li [ onClick (ShowExample Example1) ] [ text "Count 1" ]
-                    , li [ onClick (ShowExample Example2) ] [ text "counter 2" ]
-                    ]
+    div []
+        [ div []
+            [ ul []
+                [ li [ onClick (ShowExample Example1) ] [ text "Count 1" ]
+                , li [ onClick (ShowExample Example2) ] [ text "counter 2" ]
                 ]
-            , div [] [ viewExample ]
             ]
+        , div [] [ viewExample ]
+        ]
 
 
 
@@ -238,20 +238,20 @@ builder2messages builder =
                 subBuilder =
                     Builder.replacePath rest builder
             in
-                case first of
-                    "example-1" ->
-                        -- We give the Example1 module a chance to interpret
-                        -- the rest of the location, and then we prepend an
-                        -- action for the part we interpreted.
-                        ShowExample Example1 :: List.map Example1Action (Example1.builder2messages subBuilder)
+            case first of
+                "example-1" ->
+                    -- We give the Example1 module a chance to interpret
+                    -- the rest of the location, and then we prepend an
+                    -- action for the part we interpreted.
+                    ShowExample Example1 :: List.map Example1Action (Example1.builder2messages subBuilder)
 
-                    "example-2" ->
-                        ShowExample Example2 :: List.map Example2Action (Example2.builder2messages subBuilder)
+                "example-2" ->
+                    ShowExample Example2 :: List.map Example2Action (Example2.builder2messages subBuilder)
 
-                    _ ->
-                        -- Normally, you'd want to show an error of some kind here.
-                        -- But, for the moment, I'll just default to example1
-                        [ ShowExample Example1 ]
+                _ ->
+                    -- Normally, you'd want to show an error of some kind here.
+                    -- But, for the moment, I'll just default to example1
+                    [ ShowExample Example1 ]
 
         _ ->
             -- Normally, you'd want to show an error of some kind here.
