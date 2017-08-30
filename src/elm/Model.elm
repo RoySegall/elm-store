@@ -10,6 +10,11 @@ type alias Item =
     }
 
 
+type alias Flags =
+    { items : List Item
+    }
+
+
 type alias Model =
     { cartItems : List Item
     , items : List Item

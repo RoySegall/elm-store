@@ -7,7 +7,7 @@ import Example2.CounterPair as Example2
 import Html exposing (Html, div, map, p, table, td, text, tr)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
-import Navigation exposing (Location)
+import Navigation exposing (..)
 import RouteHash exposing (HashUpdate)
 import RouteUrl exposing (UrlChange)
 import RouteUrl.Builder as Builder exposing (Builder)
@@ -54,9 +54,10 @@ init =
         model =
             { example1 = Example1.init
             , example2 = Example2.init
+            , currentExample = Example1
             }
     in
-    ( model, Cmd.batch )
+        ( model, Cmd.none )
 
 
 
@@ -67,7 +68,7 @@ init =
 -}
 subscriptions : Model -> Sub Action
 subscriptions model =
-    Cmd.none
+    Sub.none
 
 
 
@@ -151,8 +152,8 @@ view model =
                     else
                         [ onClick (ShowExample example) ]
             in
-            p (style styleList :: clickAction)
-                [ fullTitle ]
+                p (style styleList :: clickAction)
+                    [ fullTitle ]
 
         toc =
             div [] <|
@@ -161,29 +162,29 @@ view model =
                     , ( 2, Example2, Example2.title )
                     ]
     in
-    table []
-        [ tr []
-            [ td
-                [ style
-                    [ "vertical-align" => "top"
-                    , "width" => "25%"
-                    , "padding" => "8px"
-                    , "margin" => "8px"
+        table []
+            [ tr []
+                [ td
+                    [ style
+                        [ "vertical-align" => "top"
+                        , "width" => "25%"
+                        , "padding" => "8px"
+                        , "margin" => "8px"
+                        ]
                     ]
-                ]
-                [ toc ]
-            , td
-                [ style
-                    [ "vertical-align" => "top"
-                    , "width" => "75%"
-                    , "padding" => "8px"
-                    , "margin" => "8px"
-                    , "border" => "1px dotted black"
+                    [ toc ]
+                , td
+                    [ style
+                        [ "vertical-align" => "top"
+                        , "width" => "75%"
+                        , "padding" => "8px"
+                        , "margin" => "8px"
+                        , "border" => "1px dotted black"
+                        ]
                     ]
+                    [ viewExample ]
                 ]
-                [ viewExample ]
             ]
-        ]
 
 
 
@@ -320,20 +321,20 @@ builder2messages builder =
                 subBuilder =
                     Builder.replacePath rest builder
             in
-            case first of
-                "example-1" ->
-                    -- We give the Example1 module a chance to interpret
-                    -- the rest of the location, and then we prepend an
-                    -- action for the part we interpreted.
-                    ShowExample Example1 :: List.map Example1Action (Example1.builder2messages subBuilder)
+                case first of
+                    "example-1" ->
+                        -- We give the Example1 module a chance to interpret
+                        -- the rest of the location, and then we prepend an
+                        -- action for the part we interpreted.
+                        ShowExample Example1 :: List.map Example1Action (Example1.builder2messages subBuilder)
 
-                "example-2" ->
-                    ShowExample Example2 :: List.map Example2Action (Example2.builder2messages subBuilder)
+                    "example-2" ->
+                        ShowExample Example2 :: List.map Example2Action (Example2.builder2messages subBuilder)
 
-                _ ->
-                    -- Normally, you'd want to show an error of some kind here.
-                    -- But, for the moment, I'll just default to example1
-                    [ ShowExample Example1 ]
+                    _ ->
+                        -- Normally, you'd want to show an error of some kind here.
+                        -- But, for the moment, I'll just default to example1
+                        [ ShowExample Example1 ]
 
         _ ->
             -- Normally, you'd want to show an error of some kind here.
