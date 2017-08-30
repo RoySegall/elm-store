@@ -34,3 +34,10 @@ type alias Model =
     , example2 : Example2.Model
     , currentExample : Example
     }
+
+
+type Action
+    = Example1Action Example1.Action
+    | Example2Action Example2.Action
+    | ShowExample Example
+    | NoOp

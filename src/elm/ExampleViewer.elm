@@ -4,7 +4,7 @@ module ExampleViewer exposing (..)
 
 import Example1.Counter as Example1
 import Example2.CounterPair as Example2
-import Html exposing (Html, div, map, p, table, td, text, tr)
+import Html exposing (..)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Navigation exposing (..)
@@ -26,7 +26,7 @@ init flags =
             { example1 = Example1.init
             , example2 = Example2.init
             , currentExample = Example1
-            , cartItems = []
+            , cartItems = flags.items
             , items = []
             , hideCart = True
             , text = ""
@@ -50,13 +50,6 @@ subscriptions model =
 
 
 -- UPDATE
-
-
-type Action
-    = Example1Action Example1.Action
-    | Example2Action Example2.Action
-    | ShowExample Example
-    | NoOp
 
 
 update : Action -> Model -> ( Model, Cmd Action )
@@ -99,68 +92,15 @@ view model =
 
                 Example2 ->
                     map Example2Action (Example2.view model.example2)
-
-        makeTitle ( index, example, title ) =
-            let
-                styleList =
-                    if example == model.currentExample then
-                        [ "font-weight" => "bold"
-                        ]
-                    else
-                        [ "font-weight" => "normal"
-                        , "color" => "blue"
-                        , "cursor" => "pointer"
-                        ]
-
-                -- Note that we compose the full title out of some information the
-                -- super-module knows about (the index) and some information the
-                -- sub-module knows about (the title)
-                fullTitle =
-                    text <|
-                        "Example "
-                            ++ toString index
-                            ++ ": "
-                            ++ title
-
-                -- If we're already on a page, we don't have a click action
-                clickAction =
-                    if example == model.currentExample then
-                        []
-                    else
-                        [ onClick (ShowExample example) ]
-            in
-                p (style styleList :: clickAction)
-                    [ fullTitle ]
-
-        toc =
-            div [] <|
-                List.map makeTitle
-                    [ ( 1, Example1, Example1.title )
-                    , ( 2, Example2, Example2.title )
-                    ]
     in
-        table []
-            [ tr []
-                [ td
-                    [ style
-                        [ "vertical-align" => "top"
-                        , "width" => "25%"
-                        , "padding" => "8px"
-                        , "margin" => "8px"
-                        ]
+        div []
+            [ div []
+                [ ul []
+                    [ li [ onClick (ShowExample Example1) ] [ text "Count 1" ]
+                    , li [ onClick (ShowExample Example2) ] [ text "counter 2" ]
                     ]
-                    [ toc ]
-                , td
-                    [ style
-                        [ "vertical-align" => "top"
-                        , "width" => "75%"
-                        , "padding" => "8px"
-                        , "margin" => "8px"
-                        , "border" => "1px dotted black"
-                        ]
-                    ]
-                    [ viewExample ]
                 ]
+            , div [] [ viewExample ]
             ]
 
 
