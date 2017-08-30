@@ -48,9 +48,12 @@ itemsPager itemsNumber perPage =
         pages =
             floor (toFloat itemsNumber / toFloat perPage)
     in
-        div
-            []
-            [ a [ onClick (GetItemsAtPage 0) ] [ text "First" ], pager 0 pages, a [ onClick (GetItemsAtPage pages) ] [ text "Last" ] ]
+        ul
+            [ class "pagination" ]
+            [ li [ class "", onClick (GetItemsAtPage 0) ] [ text "First" ]
+            , pager 0 pages
+            , li [ class "", onClick (GetItemsAtPage pages) ] [ text "Last" ]
+            ]
 
 
 pager : Int -> Int -> Html Msg
@@ -60,7 +63,7 @@ pager page maxItems =
             List.range 0 maxItems
 
         itemsList =
-            List.map (\page -> a [ onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ]) items
+            List.map (\page -> li [ class "", onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ]) items
     in
         div [] itemsList
 
