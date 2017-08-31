@@ -179,63 +179,6 @@ view model =
         ]
 
 
-
--- ROUTING
---
--- I've include demo code here for the old API, as well as the new API
--- using the full URL or just using the hash. Just to be completely clear,
--- you don't need all of these in practice ... you just pick one!
---
---------------------
--- Old RouteHash API
---------------------
-
-
-{-| If you have existing code using elm-route-hash, your `delta2update` function
-should not require any changes.
--}
-delta2update : Model -> Model -> Maybe HashUpdate
-delta2update previous current =
-    case current.currentExample of
-        Example1 ->
-            -- First, we ask the submodule for a HashUpdate. Then, we use
-            -- `map` to prepend something to the URL.
-            RouteHash.map ((::) "example-1") <|
-                Example1.delta2update previous.example1 current.example1
-
-        Example2 ->
-            RouteHash.map ((::) "example-2") <|
-                Example2.delta2update previous.example2 current.example2
-
-
-{-| Here, we basically do the reverse of what delta2update does. If you
-have existing code using elm-route-hash, your `location2action` function
-should not require any changes.
--}
-location2action : List String -> List Action
-location2action list =
-    case list of
-        "example-1" :: rest ->
-            -- We give the Example1 module a chance to interpret the rest of
-            -- the URL, and then we prepend an action for the part we
-            -- interpreted.
-            ShowExample Example1 :: List.map Example1Action (Example1.location2action rest)
-
-        "example-2" :: rest ->
-            ShowExample Example2 :: List.map Example2Action (Example2.location2action rest)
-
-        _ ->
-            -- Normally, you'd want to show an error of some kind here.
-            -- But, for the moment, I'll just default to example1
-            [ ShowExample Example1 ]
-
-
-
--------------------
--- New RouteUrl API
--------------------
-
-
 {-| This is an example of the new API, if using the whole URL
 -}
 delta2url : Model -> Model -> Maybe UrlChange
@@ -268,11 +211,11 @@ delta2builder previous current =
             -- First, we ask the submodule for a `Maybe Builder`. Then, we use
             -- `map` to prepend something to the path.
             Example1.delta2builder previous.example1 current.example1
-                |> Maybe.map (Builder.prependToPath [ "example-1" ])
+                |> Maybe.map (Builder.prependToPath [ "home" ])
 
         Example2 ->
             Example2.delta2builder previous.example2 current.example2
-                |> Maybe.map (Builder.prependToPath [ "example-2" ])
+                |> Maybe.map (Builder.prependToPath [ "login" ])
 
 
 {-| This is an example of a `location2messages` function ... I'm calling it
@@ -314,13 +257,13 @@ builder2messages builder =
                     Builder.replacePath rest builder
             in
             case first of
-                "example-1" ->
+                "home" ->
                     -- We give the Example1 module a chance to interpret
                     -- the rest of the location, and then we prepend an
                     -- action for the part we interpreted.
                     ShowExample Example1 :: List.map Example1Action (Example1.builder2messages subBuilder)
 
-                "example-2" ->
+                "login" ->
                     ShowExample Example2 :: List.map Example2Action (Example2.builder2messages subBuilder)
 
                 _ ->
