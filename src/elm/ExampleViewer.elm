@@ -37,8 +37,15 @@ init flags =
             , itemsNumber = 0
             , perpage = 0
             }
+
+        effects =
+            Cmd.batch
+                -- We happen to know that examples 1 through 4
+                -- have no effects defined.
+                [ Cmd.map MainPage.init
+                ]
     in
-    ( model, Cmd.none )
+    ( model, effects )
 
 
 

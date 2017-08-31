@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import List exposing (..)
 import Model exposing (..)
+import Models.Models exposing (Item)
 import Update exposing (..)
 
 
@@ -36,33 +37,6 @@ split i list =
 
         listHead ->
             listHead :: split i (drop i list)
-
-
-
--- Items pager
-
-
-itemsPager : Int -> Int -> Html Msg
-itemsPager items_number perpage =
-    let
-        pages =
-            floor (toFloat items_number / toFloat perpage)
-    in
-    div
-        []
-        [ a [ onClick (GetItemsAtPage 0) ] [ text "First" ], pager 0 pages, a [ onClick (GetItemsAtPage pages) ] [ text "Last" ] ]
-
-
-pager : Int -> Int -> Html Msg
-pager page max_items =
-    let
-        items =
-            if page > max_items then
-                Html.text ""
-            else
-                span [] [ a [ onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ], pager (page + 1) max_items ]
-    in
-    div [] [ items ]
 
 
 

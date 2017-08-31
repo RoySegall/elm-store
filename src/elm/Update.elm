@@ -4,86 +4,8 @@ import Config exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
+import Models.Models exposing (Item)
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
-
-
--- UPDATE
-
-
-type alias Data =
-    { data : List Item
-    , items : Int
-    , perpage : Int
-    }
-
-
-type Msg
-    = GetItems (Result Http.Error Data)
-    | InitItems (List Item)
-    | GetItemsAtPage Int
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        GetItems (Ok backendData) ->
-            ( { model
-                | items = backendData.data
-                , itemsNumber = backendData.items
-                , perpage = backendData.perpage
-              }
-            , Cmd.none
-            )
-
-        GetItems (Err error) ->
-            Debug.log "error occured" (toString error)
-                |> always ( model, Cmd.none )
-
-        GetItemsAtPage page ->
-            ( model, getItemsAtPage page )
-
-        InitItems items ->
-            ( { model | cartItems = items }, Cmd.none )
-
-
-getItems : Cmd Msg
-getItems =
-    let
-        url =
-            backend_address ++ "/api/items"
-    in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
-
-
-getItemsAtPage : Int -> Cmd Msg
-getItemsAtPage page =
-    let
-        url =
-            backend_address ++ "/api/items?page=" ++ toString page
-    in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
-
-
-itemsDecoder : Decode.Decoder Data
-itemsDecoder =
-    Decode.map3 Data
-        (field "data" <| Decode.list <| memberDecoder)
-        (field "items" Decode.int)
-        (field "perpage" Decode.int)
-
-
-memberDecoder : Decode.Decoder Item
-memberDecoder =
-    Decode.map5 Item
-        (field "Id" Decode.string)
-        (field "Title" Decode.string)
-        (field "Description" Decode.string)
-        (field "Price" Decode.float)
-        (field "Image" Decode.string)
 
 
 removeItemFromCart : Item -> Model -> Model

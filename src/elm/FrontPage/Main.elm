@@ -1,64 +1,177 @@
 module FrontPage.Main exposing (..)
 
+--import Model exposing (Item, Model)
+
+import Config exposing (backend_address)
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
+import Http
+import Json.Decode as Decode exposing (..)
+import Models.Models exposing (Item)
 import RouteHash exposing (HashUpdate)
 import RouteUrl.Builder exposing (Builder, builder, path, replacePath)
 import String exposing (toInt)
 
 
--- MODEL
-
-
 type alias Model =
-    Int
+    { items : List Item
+    , hideCart : Bool
+    , text : String
+    , itemsNumber : Int
+    , perpage : Int
+    }
 
 
-{-| Added from Main.elm
--}
-init : Model
+init : ( Model, Cmd Msg )
 init =
-    0
+    let
+        model =
+            { items = []
+            , hideCart = True
+            , text = ""
+            , itemsNumber = 0
+            , perpage = 0
+            }
+    in
+    ( model
+    , getItems
+    )
 
 
 
 -- UPDATE
 
 
-{-| We add a Set action for the advanced example, so that we
-can restore a particular bookmarked state.
--}
-type Action
-    = Increment
-    | Decrement
-    | Set Int
+type alias Data =
+    { data : List Item
+    , items : Int
+    , perpage : Int
+    }
 
 
-update : Action -> Model -> Model
-update action model =
-    case action of
-        Increment ->
-            model + 1
+type Msg
+    = GetItems (Result Http.Error Data)
+      --    | InitItems (List Item)
+    | GetItemsAtPage Int
 
-        Decrement ->
-            model - 1
 
-        Set value ->
-            value
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        GetItems (Ok backendData) ->
+            ( { model
+                | items = backendData.data
+                , itemsNumber = backendData.items
+                , perpage = backendData.perpage
+              }
+            , Cmd.none
+            )
+
+        GetItems (Err error) ->
+            Debug.log "error occured" (toString error)
+                |> always ( model, Cmd.none )
+
+        GetItemsAtPage page ->
+            ( model, getItemsAtPage page )
+
+
+
+--
+--        InitItems items ->
+--            ( { model | cartItems = items }, Cmd.none )
+
+
+getItems : Cmd Msg
+getItems =
+    let
+        url =
+            backend_address ++ "/api/items"
+    in
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
+
+
+getItemsAtPage : Int -> Cmd Msg
+getItemsAtPage page =
+    let
+        url =
+            backend_address ++ "/api/items?page=" ++ toString page
+    in
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
+
+
+itemsDecoder : Decode.Decoder Data
+itemsDecoder =
+    Decode.map3 Data
+        (field "data" <| Decode.list <| memberDecoder)
+        (field "items" Decode.int)
+        (field "perpage" Decode.int)
+
+
+memberDecoder : Decode.Decoder Item
+memberDecoder =
+    Decode.map5 Item
+        (field "Id" Decode.string)
+        (field "Title" Decode.string)
+        (field "Description" Decode.string)
+        (field "Price" Decode.float)
+        (field "Image" Decode.string)
 
 
 
 -- VIEW
 
 
-view : Model -> Html Action
+view : Model -> Html Msg
 view model =
-    div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [ countStyle ] [ text (toString model) ]
-        , button [ onClick Increment ] [ text "+" ]
+    section [ class "features" ]
+        [ div []
+            [ div [ class "section-heading text-center" ]
+                [ h2 [] [ text "Browse our books" ]
+                , p [] [ text "We have a huge library. You probably find something!" ]
+                , i [ class "icon-screen-smartphone text-primary" ] []
+                ]
+            , div [ class "container main" ]
+                [ div [ class "row" ]
+                    [ {- div [ class "col-md-12" ] [ getAllItems model.items ]
+                         ,
+                      -}
+                      div [ class "col-md-12" ] [ itemsPager model.itemsNumber model.perpage ]
+                    ]
+                ]
+            ]
         ]
+
+
+
+-- Items pager
+
+
+itemsPager : Int -> Int -> Html Msg
+itemsPager items_number perpage =
+    let
+        pages =
+            floor (toFloat items_number / toFloat perpage)
+    in
+    div
+        []
+        [ a [ onClick (GetItemsAtPage 0) ] [ text "First" ], pager 0 pages, a [ onClick (GetItemsAtPage pages) ] [ text "Last" ] ]
+
+
+pager : Int -> Int -> Html Msg
+pager page max_items =
+    let
+        items =
+            if page > max_items then
+                Html.text ""
+            else
+                span [] [ a [ onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ], pager (page + 1) max_items ]
+    in
+    div [] [ items ]
 
 
 countStyle : Attribute any
@@ -108,10 +221,6 @@ location2action list =
                     -- If it wasn't an integer, then no action ... we could
                     -- show an error instead, of course.
                     []
-
-        _ ->
-            -- If nothing provided for this part of the URL, return empty list
-            []
 
 
 

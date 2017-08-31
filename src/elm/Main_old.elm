@@ -12,35 +12,6 @@ import Ports exposing (getItemsFromStorage)
 import Update exposing (..)
 
 
--- MODEL
-
-
-model : Model
-model =
-    { cartItems = []
-    , items = []
-    , hideCart = True
-    , text = ""
-    , itemsNumber = 0
-    , perpage = 0
-    }
-
-
-
--- APP
-
-
-main : Program Flags Model Msg
-main =
-    programWithFlags
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
-
-
-
 -- INIT
 
 
