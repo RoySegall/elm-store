@@ -1,12 +1,12 @@
 module Model exposing (..)
 
-import Example1.Counter as Example1
-import Example2.CounterPair as Example2
+import FrontPage.Main as MainPage
+import Login.Main as Login
 
 
 type Example
-    = Example1
-    | Example2
+    = MainPage
+    | Login
 
 
 type alias Item =
@@ -30,15 +30,15 @@ type alias Model =
     , text : String
     , itemsNumber : Int
     , perpage : Int
-    , example1 : Example1.Model
-    , example2 : Example2.Model
+    , mainpage : MainPage.Model
+    , login : Login.Model
     , currentExample : Example
     }
 
 
 type Action
-    = Example1Action Example1.Action
-    | Example2Action Example2.Action
+    = MainPageAction MainPage.Action
+    | LoginAction Login.Action
     | HideCart
     | ShowExample Example
     | NoOp

@@ -1,4 +1,4 @@
-module Example1.Counter exposing (..)
+module FrontPage.Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (style)

@@ -1,20 +1,10 @@
-module Example2.Counter
-    exposing
-        ( Action
-        , Model
-        , delta2fragment
-        , delta2update
-        , fragment2messages
-        , init
-        , location2action
-        , update
-        , view
-        )
+module Login.Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import RouteHash exposing (HashUpdate)
+import RouteUrl.Builder exposing (Builder, builder, path, replacePath)
 import String exposing (toInt)
 
 
@@ -25,9 +15,11 @@ type alias Model =
     Int
 
 
-init : Int -> Model
-init count =
-    count
+{-| Added from Main.elm
+-}
+init : Model
+init =
+    0
 
 
 
@@ -62,11 +54,7 @@ update action model =
 
 view : Model -> Html Action
 view model =
-    div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [ countStyle ] [ text (toString model) ]
-        , button [ onClick Increment ] [ text "+" ]
-        ]
+    div [] [ text "login" ]
 
 
 countStyle : Attribute any
@@ -80,11 +68,21 @@ countStyle =
         ]
 
 
+{-| We add a separate function to get a title, which the ExampleViewer uses to
+construct a table of contents. Sometimes, you might have a function of this
+kind return `Html` instead, depending on where it makes sense to do some of
+the construction.
+-}
+title : String
+title =
+    "Counter"
+
+
 
 -- Routing (Old API)
 
 
-{-| For delta2update, we provide our state as the value for the URL
+{-| For delta2update, we provide our state as the value for the URL.
 -}
 delta2update : Model -> Model -> Maybe HashUpdate
 delta2update previous current =
@@ -92,7 +90,7 @@ delta2update previous current =
         RouteHash.set [ toString current ]
 
 
-{-| For location2action, we generate an action that will restore our state
+{-| For location2action, we generate an action that will restore our state.
 -}
 location2action : List String -> List Action
 location2action list =
@@ -103,7 +101,8 @@ location2action list =
                     [ Set value ]
 
                 Err _ ->
-                    -- If it wasn't an integer, then no action
+                    -- If it wasn't an integer, then no action ... we could
+                    -- show an error instead, of course.
                     []
 
         _ ->
@@ -115,20 +114,26 @@ location2action list =
 -- Routing (New API)
 
 
-{-| We'll just send back a string
--}
-delta2fragment : Model -> Model -> String
-delta2fragment previous current =
-    toString current
+delta2builder : Model -> Model -> Maybe Builder
+delta2builder previous current =
+    builder
+        |> replacePath [ toString current ]
+        |> Just
 
 
-{-| We'll just take a string
--}
-fragment2messages : String -> List Action
-fragment2messages fragment =
-    case toInt fragment of
-        Ok value ->
-            [ Set value ]
+builder2messages : Builder -> List Action
+builder2messages builder =
+    case path builder of
+        first :: rest ->
+            case toInt first of
+                Ok value ->
+                    [ Set value ]
 
-        Err _ ->
+                Err _ ->
+                    -- If it wasn't an integer, then no action ... we could
+                    -- show an error instead, of course.
+                    []
+
+        _ ->
+            -- If nothing provided for this part of the URL, return empty list
             []

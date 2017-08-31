@@ -4,16 +4,15 @@ module ExampleViewer exposing (..)
 
 import Components.Items exposing (currentItems)
 import Components.User exposing (userBar)
-import Example1.Counter as Example1
-import Example2.CounterPair as Example2
+import FrontPage.Main as MainPage
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import List exposing (length)
+import Login.Main as Login
 import Model exposing (..)
 import Navigation exposing (..)
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
-import RouteHash exposing (HashUpdate)
 import RouteUrl exposing (UrlChange)
 import RouteUrl.Builder as Builder exposing (Builder)
 import Update exposing (removeItemFromCart)
@@ -28,9 +27,9 @@ init : Flags -> ( Model, Cmd Action )
 init flags =
     let
         model =
-            { example1 = Example1.init
-            , example2 = Example2.init
-            , currentExample = Example1
+            { mainpage = MainPage.init
+            , login = Login.init
+            , currentExample = MainPage
             , cartItems = flags.items
             , items = []
             , hideCart = True
@@ -71,13 +70,13 @@ update action model =
         HideCart ->
             ( { model | hideCart = True }, Cmd.none )
 
-        Example1Action subaction ->
-            ( { model | example1 = Example1.update subaction model.example1 }
+        MainPageAction subaction ->
+            ( { model | mainpage = MainPage.update subaction model.mainpage }
             , Cmd.none
             )
 
-        Example2Action subaction ->
-            ( { model | example2 = Example2.update subaction model.example2 }
+        LoginAction subaction ->
+            ( { model | login = Login.update subaction model.login }
             , Cmd.none
             )
 
@@ -126,11 +125,11 @@ view model =
     let
         viewExample =
             case model.currentExample of
-                Example1 ->
-                    Html.map Example1Action (Example1.view model.example1)
+                MainPage ->
+                    Html.map MainPageAction (MainPage.view model.mainpage)
 
-                Example2 ->
-                    Html.map Example2Action (Example2.view model.example2)
+                Login ->
+                    Html.map LoginAction (Login.view model.login)
     in
     div []
         [ nav [ class "navbar navbar-expand-lg navbar-light fixed-top", id "mainNav" ]
@@ -160,8 +159,8 @@ view model =
             ]
         , div []
             [ ul []
-                [ li [ onClick (ShowExample Example1) ] [ text "Count 1" ]
-                , li [ onClick (ShowExample Example2) ] [ text "counter 2" ]
+                [ li [ onClick (ShowExample MainPage) ] [ text "Count 1" ]
+                , li [ onClick (ShowExample Login) ] [ text "counter 2" ]
                 ]
             ]
         , div [] [ viewExample ]
@@ -207,14 +206,14 @@ a `Builder` if you don't want to ... it's just one way to construct a `UrlChange
 delta2builder : Model -> Model -> Maybe Builder
 delta2builder previous current =
     case current.currentExample of
-        Example1 ->
+        MainPage ->
             -- First, we ask the submodule for a `Maybe Builder`. Then, we use
             -- `map` to prepend something to the path.
-            Example1.delta2builder previous.example1 current.example1
+            MainPage.delta2builder previous.mainpage current.mainpage
                 |> Maybe.map (Builder.prependToPath [ "home" ])
 
-        Example2 ->
-            Example2.delta2builder previous.example2 current.example2
+        Login ->
+            Login.delta2builder previous.login current.login
                 |> Maybe.map (Builder.prependToPath [ "login" ])
 
 
@@ -258,20 +257,20 @@ builder2messages builder =
             in
             case first of
                 "home" ->
-                    -- We give the Example1 module a chance to interpret
+                    -- We give the MainPage module a chance to interpret
                     -- the rest of the location, and then we prepend an
                     -- action for the part we interpreted.
-                    ShowExample Example1 :: List.map Example1Action (Example1.builder2messages subBuilder)
+                    ShowExample MainPage :: List.map MainPageAction (MainPage.builder2messages subBuilder)
 
                 "login" ->
-                    ShowExample Example2 :: List.map Example2Action (Example2.builder2messages subBuilder)
+                    ShowExample Login :: List.map LoginAction (Login.builder2messages subBuilder)
 
                 _ ->
                     -- Normally, you'd want to show an error of some kind here.
-                    -- But, for the moment, I'll just default to example1
-                    [ ShowExample Example1 ]
+                    -- But, for the moment, I'll just default to MainPage
+                    [ ShowExample MainPage ]
 
         _ ->
             -- Normally, you'd want to show an error of some kind here.
-            -- But, for the moment, I'll just default to example1
-            [ ShowExample Example1 ]
+            -- But, for the moment, I'll just default to MainPage
+            [ ShowExample MainPage ]
