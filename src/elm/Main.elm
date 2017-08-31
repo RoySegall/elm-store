@@ -8,8 +8,10 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model exposing (..)
+import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
 import Update exposing (..)
+import UrlParser as Url exposing (int, parseHash, s, stringParam, top)
 
 
 type alias Flags =
@@ -29,6 +31,8 @@ model =
     , text = ""
     , itemsNumber = 0
     , perpage = 0
+    , history = []
+    , currentPage = ""
     }
 
 
@@ -38,7 +42,7 @@ model =
 
 main : Program Flags Model Msg
 main =
-    programWithFlags
+    Navigation.programWithFlags UrlChange
         { init = init
         , view = view
         , update = update
@@ -50,9 +54,13 @@ main =
 -- INIT
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
-    ( { model | cartItems = flags.items }, getItems )
+init : Flags -> Location -> ( Model, Cmd Msg )
+init flags location =
+    let
+        foo =
+            "a"
+    in
+    ( { model | cartItems = flags.items, history = [ location ], currentPage = foo }, getItems )
 
 
 
@@ -110,6 +118,9 @@ view model =
                         ]
                     ]
                 ]
+            , ul [] (List.map viewLink [ "bears", "cats", "dogs", "elephants", "fish" ])
+            , ul [] (List.map viewLocation model.history)
+            , div [] [ text model.currentPage ]
             ]
         , section [ class "contact bg-primary", onClick HideCart ]
             [ div [ class "container" ]
@@ -137,3 +148,13 @@ view model =
                 ]
             ]
         ]
+
+
+viewLocation : Navigation.Location -> Html msg
+viewLocation location =
+    li [] [ text (location.pathname ++ location.hash) ]
+
+
+viewLink : String -> Html msg
+viewLink name =
+    li [] [ a [ href ("#" ++ name) ] [ text name ] ]

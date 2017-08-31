@@ -4,6 +4,7 @@ import Config exposing (..)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
+import Navigation
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
 
 
@@ -26,6 +27,7 @@ type Msg
     | InitItems (List Item)
     | RemoveItemFromCart Item
     | GetItemsAtPage Int
+    | UrlChange Navigation.Location
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -71,6 +73,11 @@ update msg model =
 
         RemoveItemFromCart item ->
             ( removeItemFromCart item model, removeItemsFromCart item )
+
+        UrlChange location ->
+            ( { model | currentPage = location.hash }
+            , Cmd.none
+            )
 
 
 getItems : Cmd Msg
