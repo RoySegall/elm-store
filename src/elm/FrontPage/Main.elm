@@ -1,16 +1,16 @@
 module FrontPage.Main exposing (..)
 
---import Model exposing (Item, Model)
-
 import Config exposing (backend_address)
 import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (..)
+import Model exposing (Action)
 import Models.Models exposing (Item)
 import RouteHash exposing (HashUpdate)
 import RouteUrl.Builder exposing (Builder, builder, path, replacePath)
+import Set exposing (Set)
 import String exposing (toInt)
 
 

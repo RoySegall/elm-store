@@ -7,7 +7,6 @@ import Html.Events exposing (onClick)
 import List exposing (..)
 import Model exposing (..)
 import Models.Models exposing (Item)
-import Update exposing (..)
 
 
 -- Get al the items in the store.

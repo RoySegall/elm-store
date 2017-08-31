@@ -74,9 +74,6 @@ update action model =
             , Cmd.none
             )
 
-        HideCart ->
-            ( { model | hideCart = True }, Cmd.none )
-
         MainPageAction subaction ->
             ( { model | mainpage = MainPage.update subaction model.mainpage }
             , Cmd.none
@@ -150,7 +147,7 @@ view model =
                     ]
                 ]
             ]
-        , section [ class "download bg-primary text-center", id "download", onClick HideCart ]
+        , section [ class "download bg-primary text-center", id "download" ]
             [ div [ class "container" ]
                 [ div [ class "row" ]
                     [ div [ class "col-md-8 mx-auto" ]
@@ -172,7 +169,7 @@ view model =
             ]
         , div [] [ viewExample ]
         , footer []
-            [ div [ class "container", onClick HideCart ]
+            [ div [ class "container" ]
                 [ p [] [ text "Created by Roy Segall" ]
                 , ul [ class "list-inline" ]
                     [ li [ class "fa fa-github" ] []

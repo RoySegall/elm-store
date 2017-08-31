@@ -1,6 +1,5 @@
 port module Ports exposing (..)
 
-import Model exposing (..)
 import Models.Models exposing (Item)
 
 

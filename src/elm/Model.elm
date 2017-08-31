@@ -27,10 +27,13 @@ type alias Model =
 type Action
     = MainPageAction MainPage.Msg
     | LoginAction Login.Action
-    | HideCart
+      --    | HideCart
     | ShowExample Example
     | NoOp
-    | ToggleCart
-    | ClearCart Model
-    | AddItems Item
-    | RemoveItemFromCart Item
+
+
+
+--    | ToggleCart
+--    | ClearCart Model
+--    | AddItems Item
+--    | RemoveItemFromCart Item
