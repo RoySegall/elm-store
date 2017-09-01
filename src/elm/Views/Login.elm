@@ -10,7 +10,7 @@ import Update exposing (..)
 view : Model -> Html Msg
 view model =
     section [ class "content login" ]
-        [ Html.form [ onSubmit UserLogin, action "javascript:void(0);" ]
+        [ Html.form []
             [ h1 [] [ text "Login" ]
             , p [] [ span [] [ text "Forgot your password? Why not " ], a [ href "" ] [ text "reset" ], span [] [ text " your password?" ] ]
             , div [ class "input-group" ]
@@ -21,6 +21,6 @@ view model =
                 [ span [ class "input-group-addon", id "basic-addon1" ] [ i [ class "fa fa-key" ] [] ]
                 , input [ type_ "password", class "form-control", placeholder "", onInput UpdatePassword ] []
                 ]
-            , div [ class "actions" ] [ button [ class "btn btn-success" ] [ text "login" ] ]
+            , div [ class "actions" ] [ button [ class "btn btn-success", onClick (userLogin model) ] [ text "login" ] ]
             ]
         ]
