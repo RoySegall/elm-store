@@ -35,7 +35,7 @@ type Msg
     | ChangeLocation String
     | UpdateUsername String
     | UpdatePassword String
-    | UserLogin (Result Http.Error Data)
+    | UserLogin
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -112,14 +112,8 @@ update msg model =
             in
             ( { model | user = { username = username, password = password } }, Cmd.none )
 
-        UserLogin (Err error) ->
-            Debug.log "error occured" (toString error)
-                |> always ( model, Cmd.none )
-
-        UserLogin (Ok backendData) ->
-            ( model
-            , Cmd.none
-            )
+        UserLogin ->
+            ( model, userLogin model )
 
 
 userLogin : Model -> Cmd Msg
@@ -129,7 +123,7 @@ userLogin model =
             backend_address ++ "/api/user/login"
     in
     Http.send
-        UserLogin
+        GetItems
         (Http.get url itemsDecoder)
 
 
