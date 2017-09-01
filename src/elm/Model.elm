@@ -28,4 +28,6 @@ type alias Model =
     , history : List Navigation.Location
     , currentPage : Int
     , route : Route
+    , username : String
+    , password : String
     }

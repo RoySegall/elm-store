@@ -33,6 +33,9 @@ type Msg
     | GetItemsAtPage Int
     | OnLocationChange Navigation.Location
     | ChangeLocation String
+    | UpdateUsername String
+    | UpdatePassword String
+    | UserLogin
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -88,6 +91,15 @@ update msg model =
                     parseLocation location
             in
             ( { model | route = newRoute }, Cmd.none )
+
+        UpdateUsername username ->
+            ( { model | username = username }, Cmd.none )
+
+        UpdatePassword password ->
+            ( { model | password = password }, Cmd.none )
+
+        UserLogin ->
+            ( model, Cmd.none )
 
 
 getItems : Cmd Msg

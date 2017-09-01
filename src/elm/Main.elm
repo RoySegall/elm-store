@@ -37,6 +37,8 @@ initialModel route items =
     , perpage = 0
     , history = []
     , currentPage = 0
+    , username = ""
+    , password = ""
     }
 
 
