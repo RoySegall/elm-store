@@ -32,6 +32,6 @@ userBar : Html a
 userBar =
     div [ class "user-bar" ]
         [ span [ class "welcome-guest" ] [ text "Welcome Guest" ]
-        , a [ href "/user/login", class "login" ] [ text "Login" ]
-        , a [ href "/user/register", class "register" ] [ text "Register" ]
+        , a [ href "/login", class "login" ] [ text "Login" ]
+        , a [ href "/register", class "register" ] [ text "Register" ]
         ]

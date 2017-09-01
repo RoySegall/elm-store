@@ -6,6 +6,8 @@ import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
+import Routing exposing (..)
+import UrlParser
 
 
 -- UPDATE
@@ -27,7 +29,8 @@ type Msg
     | InitItems (List Item)
     | RemoveItemFromCart Item
     | GetItemsAtPage Int
-    | UrlChange Navigation.Location
+    | OnLocationChange Navigation.Location
+    | ChangeLocation String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -74,10 +77,15 @@ update msg model =
         RemoveItemFromCart item ->
             ( removeItemFromCart item model, removeItemsFromCart item )
 
-        UrlChange location ->
-            ( { model | currentPage = location.hash }
-            , Cmd.none
-            )
+        ChangeLocation path ->
+            ( model, Navigation.newUrl path )
+
+        OnLocationChange location ->
+            let
+                newRoute =
+                    parseLocation location
+            in
+            ( { model | route = newRoute }, Cmd.none )
 
 
 getItems : Cmd Msg

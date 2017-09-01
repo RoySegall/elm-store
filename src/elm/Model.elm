@@ -12,6 +12,12 @@ type alias Item =
     }
 
 
+type Route
+    = HomeRoute
+    | Login
+    | NotFoundRoute
+
+
 type alias Model =
     { cartItems : List Item
     , items : List Item
@@ -21,4 +27,5 @@ type alias Model =
     , perpage : Int
     , history : List Navigation.Location
     , currentPage : String
+    , route : Route
     }
