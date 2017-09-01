@@ -93,10 +93,24 @@ update msg model =
             ( { model | route = newRoute }, Cmd.none )
 
         UpdateUsername username ->
-            ( { model | username = username }, Cmd.none )
+            let
+                user =
+                    model.user
+
+                password =
+                    user.password
+            in
+            ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UpdatePassword password ->
-            ( { model | password = password }, Cmd.none )
+            let
+                user =
+                    model.user
+
+                username =
+                    user.username
+            in
+            ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UserLogin ->
             ( model, Cmd.none )

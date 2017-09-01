@@ -18,6 +18,12 @@ type Route
     | NotFoundRoute
 
 
+type alias User =
+    { username : String
+    , password : String
+    }
+
+
 type alias Model =
     { cartItems : List Item
     , items : List Item
@@ -28,6 +34,5 @@ type alias Model =
     , history : List Navigation.Location
     , currentPage : Int
     , route : Route
-    , username : String
-    , password : String
+    , user : User
     }

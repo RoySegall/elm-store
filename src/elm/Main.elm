@@ -26,6 +26,13 @@ type alias Flags =
 {-| initialModel will be called with the current matched route.
 We store this in the model so we can display the corrent view.
 -}
+userObject : User
+userObject =
+    { username = ""
+    , password = ""
+    }
+
+
 initialModel : Route -> List Item -> Model
 initialModel route items =
     { route = route
@@ -37,8 +44,7 @@ initialModel route items =
     , perpage = 0
     , history = []
     , currentPage = 0
-    , username = ""
-    , password = ""
+    , user = userObject
     }
 
 
