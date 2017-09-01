@@ -28,10 +28,10 @@ cart model =
 -- User bar
 
 
-userBar : Html a
+userBar : Html Msg
 userBar =
     div [ class "user-bar" ]
         [ span [ class "welcome-guest" ] [ text "Welcome Guest" ]
-        , a [ href "/login", class "login" ] [ text "Login" ]
-        , a [ href "/register", class "register" ] [ text "Register" ]
+        , a [ href "/login", onLinkClick (ChangeLocation "login"), class "login" ] [ text "Login" ]
+        , a [ href "/register", onLinkClick (ChangeLocation "register"), class "register" ] [ text "Register" ]
         ]

@@ -1,6 +1,8 @@
 module Update exposing (..)
 
 import Config exposing (..)
+import Html exposing (Attribute)
+import Html.Events exposing (onWithOptions)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
@@ -134,3 +136,17 @@ removeItemFromCart item model =
         | cartItems =
             List.filter (\i -> not (i.id == item.id)) model.cartItems
     }
+
+
+{-| When clicking a link we want to prevent the default browser behaviour which is to load a new page.
+So we use `onWithOptions` instead of `onClick`.
+-}
+onLinkClick : msg -> Attribute msg
+onLinkClick message =
+    let
+        options =
+            { stopPropagation = False
+            , preventDefault = True
+            }
+    in
+    onWithOptions "click" options (Decode.succeed message)
