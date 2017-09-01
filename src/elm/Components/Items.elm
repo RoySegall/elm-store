@@ -21,8 +21,11 @@ getAllItems itemList =
     div []
         (List.map
             (\items ->
-                div [ class "row items-wrapper" ]
-                    (List.map (\item -> div [ class "col-md-4" ] [ singleItem item True ]) items)
+                div []
+                    [ div [ class "row items-wrapper" ]
+                        (List.map (\item -> div [ class "col-md-4" ] [ singleItem item True ]) items)
+                    , div [ class "row" ] (List.map (\item -> div [ class "col-md-4 items-separator" ] []) items)
+                    ]
             )
             listOfItems
         )
@@ -42,17 +45,44 @@ split i list =
 -- Items pager
 
 
-pager : Int -> Int -> Html Msg
-pager itemsNumber perPage =
+pager : Model -> Html Msg
+pager model =
     let
         pages =
-            floor (toFloat itemsNumber / toFloat perPage)
+            floor (toFloat model.itemsNumber / toFloat model.perpage)
 
         items =
             List.range 0 pages
 
         pageLInks =
-            List.map (\page -> li [ class "", onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ]) items
+            List.map
+                (\page ->
+                    let
+                        className =
+                            if page == 0 then
+                                "first"
+                            else if page == pages then
+                                "last"
+                            else
+                                ""
+
+                        selected =
+                            if model.currentPage == page then
+                                "selected"
+                            else
+                                ""
+                    in
+                    li
+                        [ classList
+                            [ ( "item", True )
+                            , ( className, True )
+                            , ( selected, True )
+                            ]
+                        , onClick (GetItemsAtPage page)
+                        ]
+                        [ a [ href "", onLinkClick (ChangeLocation "") ] [ text (toString (page + 1)) ] ]
+                )
+                items
     in
     ul [ class "pagiation" ] pageLInks
 

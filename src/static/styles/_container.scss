@@ -1,0 +1,28 @@
+.container {
+  width: 75%;
+  max-width: 75%;
+
+  .items-wrapper {
+    min-height: 100px;
+
+    .item {
+
+      .second {
+
+        .title {
+          font-weight: bold;
+          font-size: 20px;
+          color: $brand-facebook;
+        }
+
+        .description, .price {
+          font-size: 14px;
+        }
+
+        .add-to-cart {
+          padding-top: 20px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+.navbar-nav.ml-auto {
+
+  li {
+    padding-right: 5px;
+
+    .arrow {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid #000000;
+
+      &:after, &:before {
+        bottom: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+
+      &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 20px;
+        margin-left: -20px;
+      }
+
+      &:before {
+        border-color: rgba(0, 0, 0, 0);
+        border-bottom-color: #000000;
+        border-width: 21px;
+        margin-left: -21px;
+      }
+
+    }
+
+    .user-bar {
+      color: white;
+      border-right: solid 1px white;
+      padding-right: 5px;
+
+      .welcome-guest {
+        margin-right: 5px;
+      }
+
+      .login {
+        margin-right: 5px;
+      }
+    }
+
+    &.cart-wrapper {
+      position: relative;
+
+      .shopping-cart {
+        color: $theme-primary;
+        margin-right: 5px;
+      }
+
+      .shopping-cart-counter {
+        color: $theme-primary;
+      }
+
+      .cart-component {
+
+        &> a {
+          cursor: pointer;
+
+          .fa-shopping-cart {
+            color: black;
+            font-size: 30px;
+          }
+
+          &:hover {
+            .fa-shopping-cart {
+              color: white;
+            }
+          }
+        }
+
+        .number-of-items {
+          position: absolute;
+          left: 25px;
+          background: red;
+          padding: 1px 5px;
+          border-radius: 10px;
+          top: -5px;
+          color: white;
+          font-weight: bold;
+        }
+      }
+
+      .cart-items {
+        background: white;
+        border: solid 1px #000;
+        position: absolute;
+        z-index: 100;
+        top: 55px;
+        right: -130px;
+        width: 400px;
+
+        .items-list {
+
+          overflow: scroll;
+          max-height: 500px;
+          overflow-x: hidden;
+
+          .item {
+            padding: 10px;
+
+            img {
+              height: 100px;
+            }
+
+            .btn {
+              font-size: 10px;
+              padding: 5px;
+            }
+          }
+        }
+
+        .no-items {
+          text-align: center;
+          font-weight: bold;
+          font-size: 20px;
+          padding: 20px;
+
+        }
+
+        .actions {
+          text-align: center;
+          padding-bottom: 5px;
+          padding-top: 5px;
+
+          span {
+            padding-right: 5px;
+          }
+
+          .btn {
+            font-size: 18px;
+            padding: 5px;
+            margin: 5px;
+          }
+        }
+      }
+    }
+  }
+}

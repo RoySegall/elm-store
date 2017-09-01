@@ -40,10 +40,49 @@ section.features {
 
     .main {
 
-      .item {
-        margin-bottom: 20px;
-        padding-bottom: 5px;
+      .items-separator {
         border-bottom: $brand-google-plus solid 1px;
+        margin-bottom: 15px;
+        margin-top: 15px;
+      }
+
+      .pagiation {
+        text-align: center;
+        padding: 10px 0 0;
+
+        li {
+          display: inline;
+          padding: 10px;
+          border: solid 1px $theme-secondary;
+
+          border-left: none;
+          border-right: none;
+
+          a {
+            color: black;
+          }
+
+          &.first {
+            border-left: solid 1px $theme-secondary;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+          }
+
+          &.last {
+            border-right: solid 1px $theme-secondary;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+          }
+
+          &.selected {
+            background: $theme-primary;
+            font-weight: bold;
+
+            a {
+              color: $brand-twitter;
+            }
+          }
+        }
       }
     }
 }

@@ -26,6 +26,6 @@ type alias Model =
     , itemsNumber : Int
     , perpage : Int
     , history : List Navigation.Location
-    , currentPage : String
+    , currentPage : Int
     , route : Route
     }

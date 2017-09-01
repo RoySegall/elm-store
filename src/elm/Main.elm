@@ -36,7 +36,7 @@ initialModel route items =
     , itemsNumber = 0
     , perpage = 0
     , history = []
-    , currentPage = ""
+    , currentPage = 0
     }
 
 

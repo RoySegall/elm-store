@@ -71,7 +71,7 @@ update msg model =
                 |> always ( model, Cmd.none )
 
         GetItemsAtPage page ->
-            ( model, getItemsAtPage page )
+            ( { model | currentPage = page }, getItemsAtPage page )
 
         InitItems items ->
             ( { model | cartItems = items }, Cmd.none )
