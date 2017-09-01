@@ -1,6 +1,6 @@
 module Views.Items exposing (..)
 
-import Components.Items exposing (getAllItems, itemsPager)
+import Components.Items exposing (getAllItems, pager)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -36,7 +36,7 @@ view model =
                 , div [ class "container main" ]
                     [ div [ class "row" ]
                         [ div [ class "col-md-12" ] [ getAllItems model.items ]
-                        , div [ class "col-md-12" ] [ itemsPager model.itemsNumber model.perpage ]
+                        , div [ class "col-md-12" ] [ pager model.itemsNumber model.perpage ]
                         ]
                     ]
                 ]

@@ -42,30 +42,19 @@ split i list =
 -- Items pager
 
 
-itemsPager : Int -> Int -> Html Msg
-itemsPager itemsNumber perPage =
+pager : Int -> Int -> Html Msg
+pager itemsNumber perPage =
     let
         pages =
             floor (toFloat itemsNumber / toFloat perPage)
-    in
-    ul
-        [ class "pagination" ]
-        [ li [ class "", onClick (GetItemsAtPage 0) ] [ text "First" ]
-        , pager 0 pages
-        , li [ class "", onClick (GetItemsAtPage pages) ] [ text "Last" ]
-        ]
 
-
-pager : Int -> Int -> Html Msg
-pager page maxItems =
-    let
         items =
-            List.range 0 maxItems
+            List.range 0 pages
 
-        itemsList =
+        pageLInks =
             List.map (\page -> li [ class "", onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ]) items
     in
-    div [] itemsList
+    ul [ class "pagiation" ] pageLInks
 
 
 

@@ -1,6 +1,5 @@
 module Views.Login exposing (..)
 
-import Components.Items exposing (getAllItems, itemsPager)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
