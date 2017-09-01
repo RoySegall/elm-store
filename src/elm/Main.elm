@@ -1,15 +1,17 @@
 module Main exposing (..)
 
--- component import example
-
-import Components.Items exposing (..)
 import Components.User exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model exposing (..)
+import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
+import Routing exposing (..)
 import Update exposing (..)
+import Views.Items
+import Views.Login
+import Views.NotFound
 
 
 type alias Flags =
@@ -21,14 +23,20 @@ type alias Flags =
 -- MODEL
 
 
-model : Model
-model =
-    { cartItems = []
+{-| initialModel will be called with the current matched route.
+We store this in the model so we can display the corrent view.
+-}
+initialModel : Route -> List Item -> Model
+initialModel route items =
+    { route = route
+    , cartItems = items
     , items = []
     , hideCart = True
     , text = ""
     , itemsNumber = 0
     , perpage = 0
+    , history = []
+    , currentPage = ""
     }
 
 
@@ -38,7 +46,7 @@ model =
 
 main : Program Flags Model Msg
 main =
-    programWithFlags
+    Navigation.programWithFlags OnLocationChange
         { init = init
         , view = view
         , update = update
@@ -50,9 +58,13 @@ main =
 -- INIT
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
-    ( { model | cartItems = flags.items }, getItems )
+init : Flags -> Location -> ( Model, Cmd Msg )
+init flags location =
+    let
+        currentRoute =
+            parseLocation location
+    in
+    ( initialModel currentRoute flags.items, getItems )
 
 
 
@@ -64,6 +76,19 @@ subscriptions model =
     getItemsFromStorage InitItems
 
 
+page : Model -> Html Msg
+page model =
+    case model.route of
+        HomeRoute ->
+            Views.Items.view model
+
+        Login ->
+            Views.Login.view model
+
+        NotFoundRoute ->
+            Views.NotFound.view model
+
+
 
 -- VIEW
 
@@ -73,7 +98,7 @@ view model =
     div []
         [ nav [ class "navbar navbar-expand-lg navbar-light fixed-top", id "mainNav" ]
             [ div [ class "container" ]
-                [ a [ class "navbar-brand js-scroll-trigger" ] [ text "Go store" ]
+                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/" ] [ a [ href "/", onLinkClick (ChangeLocation "/") ] [ text "Go store" ] ] ]
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
                         [ li [ class "nav-item" ] [ userBar ]
@@ -82,35 +107,7 @@ view model =
                     ]
                 ]
             ]
-        , section [ class "download bg-primary text-center", id "download", onClick HideCart ]
-            [ div [ class "container" ]
-                [ div [ class "row" ]
-                    [ div [ class "col-md-8 mx-auto" ]
-                        [ h2 [ class "section-heading" ] [ text "Discover what all the buzz is about!" ]
-                        , p [] [ text "Our app is available on any mobile device! Download now to get started!" ]
-                        , div [ class "badges" ]
-                            [ a [ class "badge-link" ] [ img [ src "static/img/google-play-badge.svg" ] [] ]
-                            , a [ class "badge-link" ] [ img [ src "static/img/app-store-badge.svg" ] [] ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        , section [ class "features", onClick HideCart ]
-            [ div []
-                [ div [ class "section-heading text-center" ]
-                    [ h2 [] [ text "Browse our books" ]
-                    , p [] [ text "We have a huge library. You probably find something!" ]
-                    , i [ class "icon-screen-smartphone text-primary" ] []
-                    ]
-                , div [ class "container main" ]
-                    [ div [ class "row" ]
-                        [ div [ class "col-md-12" ] [ getAllItems model.items ]
-                        , div [ class "col-md-12" ] [ itemsPager model.itemsNumber model.perpage ]
-                        ]
-                    ]
-                ]
-            ]
+        , page model
         , section [ class "contact bg-primary", onClick HideCart ]
             [ div [ class "container" ]
                 [ h2 []

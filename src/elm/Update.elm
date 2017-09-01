@@ -1,10 +1,15 @@
 module Update exposing (..)
 
 import Config exposing (..)
+import Html exposing (Attribute)
+import Html.Events exposing (onWithOptions)
 import Http
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
+import Navigation
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
+import Routing exposing (..)
+import UrlParser
 
 
 -- UPDATE
@@ -26,6 +31,8 @@ type Msg
     | InitItems (List Item)
     | RemoveItemFromCart Item
     | GetItemsAtPage Int
+    | OnLocationChange Navigation.Location
+    | ChangeLocation String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -71,6 +78,16 @@ update msg model =
 
         RemoveItemFromCart item ->
             ( removeItemFromCart item model, removeItemsFromCart item )
+
+        ChangeLocation path ->
+            ( model, Navigation.newUrl path )
+
+        OnLocationChange location ->
+            let
+                newRoute =
+                    parseLocation location
+            in
+            ( { model | route = newRoute }, Cmd.none )
 
 
 getItems : Cmd Msg
@@ -119,3 +136,17 @@ removeItemFromCart item model =
         | cartItems =
             List.filter (\i -> not (i.id == item.id)) model.cartItems
     }
+
+
+{-| When clicking a link we want to prevent the default browser behaviour which is to load a new page.
+So we use `onWithOptions` instead of `onClick`.
+-}
+onLinkClick : msg -> Attribute msg
+onLinkClick message =
+    let
+        options =
+            { stopPropagation = False
+            , preventDefault = True
+            }
+    in
+    onWithOptions "click" options (Decode.succeed message)

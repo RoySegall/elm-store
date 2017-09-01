@@ -18,14 +18,14 @@ getAllItems itemList =
         listOfItems =
             split 3 itemList
     in
-        div []
-            (List.map
-                (\items ->
-                    div [ class "row items-wrapper" ]
-                        (List.map (\item -> div [ class "col-md-4" ] [ singleItem item True ]) items)
-                )
-                listOfItems
+    div []
+        (List.map
+            (\items ->
+                div [ class "row items-wrapper" ]
+                    (List.map (\item -> div [ class "col-md-4" ] [ singleItem item True ]) items)
             )
+            listOfItems
+        )
 
 
 split : Int -> List a -> List (List a)
@@ -48,12 +48,12 @@ itemsPager itemsNumber perPage =
         pages =
             floor (toFloat itemsNumber / toFloat perPage)
     in
-        ul
-            [ class "pagination" ]
-            [ li [ class "", onClick (GetItemsAtPage 0) ] [ text "First" ]
-            , pager 0 pages
-            , li [ class "", onClick (GetItemsAtPage pages) ] [ text "Last" ]
-            ]
+    ul
+        [ class "pagination" ]
+        [ li [ class "", onClick (GetItemsAtPage 0) ] [ text "First" ]
+        , pager 0 pages
+        , li [ class "", onClick (GetItemsAtPage pages) ] [ text "Last" ]
+        ]
 
 
 pager : Int -> Int -> Html Msg
@@ -65,7 +65,7 @@ pager page maxItems =
         itemsList =
             List.map (\page -> li [ class "", onClick (GetItemsAtPage page) ] [ text (toString (page + 1)) ]) items
     in
-        div [] itemsList
+    div [] itemsList
 
 
 
@@ -96,19 +96,19 @@ singleItem item showAddToCart =
         imageAddress =
             backend_address ++ "/" ++ item.image
     in
-        div [ class "item" ]
-            [ div [ class "row" ]
-                [ div [ class "col-md-4 first" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
-                , div [ class "col-md-8 second" ]
-                    [ div []
-                        [ div [ class "title" ] [ text item.title ]
-                        , div [ class "description" ] [ text item.description ]
-                        , div [ class "price" ] [ text (toString item.price ++ " $") ]
-                        ]
-                    , div [ class "add-to-cart" ] [ addToCartButton ]
+    div [ class "item" ]
+        [ div [ class "row" ]
+            [ div [ class "col-md-4 first" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
+            , div [ class "col-md-8 second" ]
+                [ div []
+                    [ div [ class "title" ] [ text item.title ]
+                    , div [ class "description" ] [ text item.description ]
+                    , div [ class "price" ] [ text (toString item.price ++ " $") ]
                     ]
+                , div [ class "add-to-cart" ] [ addToCartButton ]
                 ]
             ]
+        ]
 
 
 
@@ -144,4 +144,4 @@ currentItems model =
                         ]
                     ]
     in
-        cart_items
+    cart_items
