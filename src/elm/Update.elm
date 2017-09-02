@@ -3,7 +3,8 @@ module Update exposing (..)
 import Config exposing (..)
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions)
-import Http
+import Http exposing (..)
+import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
@@ -36,6 +37,7 @@ type Msg
     | UpdateUsername String
     | UpdatePassword String
     | UserLogin
+    | UserLoginRequest (Result Http.Error Data)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -115,12 +117,35 @@ update msg model =
         UserLogin ->
             ( model, userLogin model )
 
+        UserLoginRequest (Err error) ->
+            Debug.log "error occured" (toString error)
+                |> always ( model, Cmd.none )
+
+        UserLoginRequest (Ok backendData) ->
+            ( { model
+                | text = "a"
+              }
+            , Cmd.none
+            )
+
 
 userLogin : Model -> Cmd Msg
 userLogin model =
     let
         url =
             backend_address ++ "/api/user/login"
+    in
+    HttpBuilder.post url
+        |> withExpect (Http.expectJson itemsDecoder)
+        |> withCredentials
+        |> HttpBuilder.send handleRequestComplete
+
+
+handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
+handleRequestComplete result =
+    let
+        url =
+            backend_address ++ "/api/items"
     in
     Http.send
         GetItems
