@@ -11,6 +11,7 @@ import Navigation
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
 import Routing exposing (..)
 import UrlParser
+import Json.Encode as Encode
 
 
 -- UPDATE
@@ -92,7 +93,7 @@ update msg model =
                 newRoute =
                     parseLocation location
             in
-            ( { model | route = newRoute }, Cmd.none )
+                ( { model | route = newRoute }, Cmd.none )
 
         UpdateUsername username ->
             let
@@ -102,7 +103,7 @@ update msg model =
                 password =
                     user.password
             in
-            ( { model | user = { username = username, password = password } }, Cmd.none )
+                ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UpdatePassword password ->
             let
@@ -112,7 +113,7 @@ update msg model =
                 username =
                     user.username
             in
-            ( { model | user = { username = username, password = password } }, Cmd.none )
+                ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UserLogin ->
             ( model, userLogin model )
@@ -129,16 +130,24 @@ update msg model =
             )
 
 
+userLoginEncoder : User -> Encode.Value
+userLoginEncoder user =
+    Encode.object
+        [ ( "username", Encode.string user.username )
+        , ( "password", Encode.string user.password )
+        ]
+
+
 userLogin : Model -> Cmd Msg
 userLogin model =
     let
         url =
             backend_address ++ "/api/user/login"
     in
-    HttpBuilder.post url
-        |> withExpect (Http.expectJson itemsDecoder)
-        |> withCredentials
-        |> HttpBuilder.send handleRequestComplete
+        HttpBuilder.post url
+            |> withExpect (Http.expectJson itemsDecoder)
+            |> withMultipartStringBody [ ( "username", "admin" ), ( "password", "admin" ) ]
+            |> HttpBuilder.send UserLoginRequest
 
 
 handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
@@ -147,9 +156,9 @@ handleRequestComplete result =
         url =
             backend_address ++ "/api/items"
     in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
+        Http.send
+            GetItems
+            (Http.get url itemsDecoder)
 
 
 getItems : Cmd Msg
@@ -158,9 +167,9 @@ getItems =
         url =
             backend_address ++ "/api/items"
     in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
+        Http.send
+            GetItems
+            (Http.get url itemsDecoder)
 
 
 getItemsAtPage : Int -> Cmd Msg
@@ -169,9 +178,9 @@ getItemsAtPage page =
         url =
             backend_address ++ "/api/items?page=" ++ toString page
     in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
+        Http.send
+            GetItems
+            (Http.get url itemsDecoder)
 
 
 itemsDecoder : Decode.Decoder Data
@@ -211,4 +220,4 @@ onLinkClick message =
             , preventDefault = True
             }
     in
-    onWithOptions "click" options (Decode.succeed message)
+        onWithOptions "click" options (Decode.succeed message)
