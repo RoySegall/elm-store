@@ -35,4 +35,5 @@ type alias Model =
     , currentPage : Int
     , route : Route
     , user : User
+    , error : String
     }

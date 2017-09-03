@@ -45,6 +45,7 @@ initialModel route items =
     , history = []
     , currentPage = 0
     , user = userObject
+    , error = ""
     }
 
 

@@ -6,12 +6,12 @@ import Html.Events exposing (onWithOptions)
 import Http exposing (..)
 import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
+import Json.Encode as Encode
 import Model exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
 import Routing exposing (..)
 import UrlParser
-import Json.Encode as Encode
 
 
 -- UPDATE
@@ -22,6 +22,10 @@ type alias Data =
     , items : Int
     , perpage : Int
     }
+
+
+type alias ErrorLogin =
+    { message : String }
 
 
 type Msg
@@ -93,7 +97,7 @@ update msg model =
                 newRoute =
                     parseLocation location
             in
-                ( { model | route = newRoute }, Cmd.none )
+            ( { model | route = newRoute }, Cmd.none )
 
         UpdateUsername username ->
             let
@@ -103,7 +107,7 @@ update msg model =
                 password =
                     user.password
             in
-                ( { model | user = { username = username, password = password } }, Cmd.none )
+            ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UpdatePassword password ->
             let
@@ -113,14 +117,27 @@ update msg model =
                 username =
                     user.username
             in
-                ( { model | user = { username = username, password = password } }, Cmd.none )
+            ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UserLogin ->
             ( model, userLogin model )
 
-        UserLoginRequest (Err error) ->
-            Debug.log "error occured" (toString error)
-                |> always ( model, Cmd.none )
+        UserLoginRequest (Err httpErr) ->
+            let
+                _ =
+                    Debug.log "" httpErr
+            in
+            case httpErr of
+                Http.BadStatus s ->
+                    case Decode.decodeString loginErrorDecoder s.body of
+                        Ok { message } ->
+                            ( { model | error = message }, Cmd.none )
+
+                        Err result ->
+                            model ! []
+
+                _ ->
+                    model ! []
 
         UserLoginRequest (Ok backendData) ->
             ( { model
@@ -128,6 +145,12 @@ update msg model =
               }
             , Cmd.none
             )
+
+
+loginErrorDecoder : Decode.Decoder ErrorLogin
+loginErrorDecoder =
+    Decode.map ErrorLogin
+        (field "message" Decode.string)
 
 
 userLoginEncoder : User -> Encode.Value
@@ -144,10 +167,13 @@ userLogin model =
         url =
             backend_address ++ "/api/user/login"
     in
-        HttpBuilder.post url
-            |> withExpect (Http.expectJson itemsDecoder)
-            |> withMultipartStringBody [ ( "username", "admin" ), ( "password", "admin" ) ]
-            |> HttpBuilder.send UserLoginRequest
+    HttpBuilder.post url
+        |> withExpect (Http.expectJson itemsDecoder)
+        |> withMultipartStringBody
+            [ ( "username", model.user.username )
+            , ( "password", model.user.password )
+            ]
+        |> HttpBuilder.send UserLoginRequest
 
 
 handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
@@ -156,9 +182,9 @@ handleRequestComplete result =
         url =
             backend_address ++ "/api/items"
     in
-        Http.send
-            GetItems
-            (Http.get url itemsDecoder)
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
 
 
 getItems : Cmd Msg
@@ -167,9 +193,9 @@ getItems =
         url =
             backend_address ++ "/api/items"
     in
-        Http.send
-            GetItems
-            (Http.get url itemsDecoder)
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
 
 
 getItemsAtPage : Int -> Cmd Msg
@@ -178,9 +204,9 @@ getItemsAtPage page =
         url =
             backend_address ++ "/api/items?page=" ++ toString page
     in
-        Http.send
-            GetItems
-            (Http.get url itemsDecoder)
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
 
 
 itemsDecoder : Decode.Decoder Data
@@ -220,4 +246,4 @@ onLinkClick message =
             , preventDefault = True
             }
     in
-        onWithOptions "click" options (Decode.succeed message)
+    onWithOptions "click" options (Decode.succeed message)
