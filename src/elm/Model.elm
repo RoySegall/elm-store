@@ -36,4 +36,5 @@ type alias Model =
     , route : Route
     , user : User
     , error : String
+    , success : String
     }

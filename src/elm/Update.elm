@@ -28,6 +28,34 @@ type alias ErrorLogin =
     { message : String }
 
 
+type alias SuccessLogin =
+    { id : String
+    , username : String
+    , password : String
+    , email : String
+    , image : String
+    , role : Role
+    , token : Token
+    }
+
+
+type alias Role =
+    { title : String
+    }
+
+
+type alias Token =
+    { token : String
+    , expire : Int
+    , refreshToken : String
+    }
+
+
+type alias Cart =
+    { items : List Item
+    }
+
+
 type Msg
     = AddItems Item
     | HideCart
@@ -97,7 +125,7 @@ update msg model =
                 newRoute =
                     parseLocation location
             in
-            ( { model | route = newRoute }, Cmd.none )
+                ( { model | route = newRoute }, Cmd.none )
 
         UpdateUsername username ->
             let
@@ -107,7 +135,7 @@ update msg model =
                 password =
                     user.password
             in
-            ( { model | user = { username = username, password = password } }, Cmd.none )
+                ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UpdatePassword password ->
             let
@@ -117,7 +145,7 @@ update msg model =
                 username =
                     user.username
             in
-            ( { model | user = { username = username, password = password } }, Cmd.none )
+                ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UserLogin ->
             ( model, userLogin model )
@@ -127,21 +155,21 @@ update msg model =
                 _ =
                     Debug.log "" httpErr
             in
-            case httpErr of
-                Http.BadStatus s ->
-                    case Decode.decodeString loginErrorDecoder s.body of
-                        Ok { message } ->
-                            ( { model | error = message }, Cmd.none )
+                case httpErr of
+                    Http.BadStatus s ->
+                        case Decode.decodeString loginErrorDecoder s.body of
+                            Ok { message } ->
+                                ( { model | error = message }, Cmd.none )
 
-                        Err result ->
-                            model ! []
+                            Err result ->
+                                model ! []
 
-                _ ->
-                    model ! []
+                    _ ->
+                        model ! []
 
         UserLoginRequest (Ok backendData) ->
             ( { model
-                | text = "a"
+                | success = "a"
               }
             , Cmd.none
             )
@@ -151,6 +179,23 @@ loginErrorDecoder : Decode.Decoder ErrorLogin
 loginErrorDecoder =
     Decode.map ErrorLogin
         (field "message" Decode.string)
+
+
+loginSuccessDecoder : Decode.Decoder (List SuccessLogin)
+loginSuccessDecoder =
+    Decode.at [ "data" ] <| Decode.list <| loginDecoder
+
+
+loginDecoder : Decode.Decoder SuccessLogin
+loginDecoder =
+    Decode.map7 SuccessLogin
+        (field "Id" Decode.string)
+        (field "Username" Decode.string)
+        (field "Password" Decode.string)
+        (field "Email" Decode.string)
+        (field "Image" Decode.string)
+        (field "Role" Decode.string)
+        (field "Cart" Decode.string)
 
 
 userLoginEncoder : User -> Encode.Value
@@ -167,13 +212,13 @@ userLogin model =
         url =
             backend_address ++ "/api/user/login"
     in
-    HttpBuilder.post url
-        |> withExpect (Http.expectJson itemsDecoder)
-        |> withMultipartStringBody
-            [ ( "username", model.user.username )
-            , ( "password", model.user.password )
-            ]
-        |> HttpBuilder.send UserLoginRequest
+        HttpBuilder.post url
+            |> withExpect (Http.expectJson loginSuccessDecoder)
+            |> withMultipartStringBody
+                [ ( "username", model.user.username )
+                , ( "password", model.user.password )
+                ]
+            |> HttpBuilder.send UserLoginRequest
 
 
 handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
@@ -182,9 +227,9 @@ handleRequestComplete result =
         url =
             backend_address ++ "/api/items"
     in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
+        Http.send
+            GetItems
+            (Http.get url itemsDecoder)
 
 
 getItems : Cmd Msg
@@ -193,9 +238,9 @@ getItems =
         url =
             backend_address ++ "/api/items"
     in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
+        Http.send
+            GetItems
+            (Http.get url itemsDecoder)
 
 
 getItemsAtPage : Int -> Cmd Msg
@@ -204,9 +249,9 @@ getItemsAtPage page =
         url =
             backend_address ++ "/api/items?page=" ++ toString page
     in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
+        Http.send
+            GetItems
+            (Http.get url itemsDecoder)
 
 
 itemsDecoder : Decode.Decoder Data
@@ -246,4 +291,4 @@ onLinkClick message =
             , preventDefault = True
             }
     in
-    onWithOptions "click" options (Decode.succeed message)
+        onWithOptions "click" options (Decode.succeed message)
