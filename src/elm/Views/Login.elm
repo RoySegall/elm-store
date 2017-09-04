@@ -20,22 +20,22 @@ view model =
             if model.success == "" then
                 Html.text ""
             else
-                div [] [ text model.success ]
+                div [ class "alert alert-success" ] [ text model.success ]
     in
-        section [ class "content login" ]
-            [ Html.form [ onSubmit UserLogin ]
-                [ h1 [] [ text "Login" ]
-                , p [] [ span [] [ text "Forgot your password? Why not " ], a [ href "" ] [ text "reset" ], span [] [ text " your password?" ] ]
-                , error
-                , success
-                , div [ class "input-group" ]
-                    [ span [ class "input-group-addon", id "basic-addon1" ] [ i [ class "fa fa-user" ] [] ]
-                    , input [ type_ "text", class "form-control", placeholder "Username", onInput UpdateUsername ] []
-                    ]
-                , div [ class "input-group" ]
-                    [ span [ class "input-group-addon", id "basic-addon1" ] [ i [ class "fa fa-key" ] [] ]
-                    , input [ type_ "password", class "form-control", placeholder "", onInput UpdatePassword ] []
-                    ]
-                , div [ class "actions" ] [ button [ class "btn btn-success" ] [ text "login" ] ]
+    section [ class "content login" ]
+        [ Html.form [ onSubmit UserLogin ]
+            [ h1 [] [ text "Login" ]
+            , p [] [ span [] [ text "Forgot your password? Why not " ], a [ href "" ] [ text "reset" ], span [] [ text " your password?" ] ]
+            , error
+            , success
+            , div [ class "input-group" ]
+                [ span [ class "input-group-addon", id "basic-addon1" ] [ i [ class "fa fa-user" ] [] ]
+                , input [ type_ "text", class "form-control", placeholder "Username", onInput UpdateUsername ] []
                 ]
+            , div [ class "input-group" ]
+                [ span [ class "input-group-addon", id "basic-addon1" ] [ i [ class "fa fa-key" ] [] ]
+                , input [ type_ "password", class "form-control", placeholder "", onInput UpdatePassword ] []
+                ]
+            , div [ class "actions" ] [ button [ class "btn btn-success" ] [ text "login" ] ]
             ]
+        ]

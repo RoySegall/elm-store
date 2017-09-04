@@ -38,3 +38,48 @@ type alias Model =
     , error : String
     , success : String
     }
+
+
+type alias Data =
+    { data : List Item
+    , items : Int
+    , perpage : Int
+    }
+
+
+type alias ErrorLogin =
+    { message : String }
+
+
+type alias ResultSuccessLogin =
+    { data : SuccessLogin
+    }
+
+
+type alias SuccessLogin =
+    { id : String
+    , username : String
+    , password : String
+    , email : String
+    , image : String
+    , role : Role
+    , token : Token
+    , cart : Cart
+    }
+
+
+type alias Role =
+    { title : String
+    }
+
+
+type alias Token =
+    { token : String
+    , expire : Int
+    , refreshToken : String
+    }
+
+
+type alias Cart =
+    { items : List Item
+    }

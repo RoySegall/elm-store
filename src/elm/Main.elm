@@ -74,7 +74,7 @@ init flags location =
         currentRoute =
             parseLocation location
     in
-        ( initialModel currentRoute flags.items, getItems )
+    ( initialModel currentRoute flags.items, getItems )
 
 
 
