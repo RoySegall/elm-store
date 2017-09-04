@@ -36,6 +36,7 @@ type alias SuccessLogin =
     , image : String
     , role : Role
     , token : Token
+    , cart : Cart
     }
 
 
@@ -181,9 +182,9 @@ loginErrorDecoder =
         (field "message" Decode.string)
 
 
-loginSuccessDecoder : Decode.Decoder (List SuccessLogin)
+loginSuccessDecoder : Decode.Decoder SuccessLogin
 loginSuccessDecoder =
-    Decode.at [ "data" ] <| Decode.list <| loginDecoder
+    Decode.at [ "data" ] <| loginDecoder
 
 
 loginDecoder : Decode.Decoder SuccessLogin
@@ -194,8 +195,29 @@ loginDecoder =
         (field "Password" Decode.string)
         (field "Email" Decode.string)
         (field "Image" Decode.string)
-        (field "Role" Decode.role)
-        (field "Cart" Decode.cart)
+        (field "Role" <| roleDecoder)
+        (field "Token" <| tokenDecoder)
+        (field "Cart" <| Decode.list <| memberDecoder)
+
+
+tokenDecoder : Decode.Decoder Token
+tokenDecoder =
+    Decode.map3 Role
+        (field "Token" Decode.string)
+        (field "Expire" Decode.int)
+        (field "RefreshToken" Decode.string)
+
+
+roleDecoder : Decode.Decoder Role
+roleDecoder =
+    Decode.map Role
+        (field "Title" Decode.string)
+
+
+cartDecoder : Decode.Decoder Cart
+cartDecoder =
+    Decode.map Cart
+        (field "Id" Decode.string)
 
 
 userLoginEncoder : User -> Encode.Value
