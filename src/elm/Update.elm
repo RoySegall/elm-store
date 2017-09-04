@@ -194,8 +194,8 @@ loginDecoder =
         (field "Password" Decode.string)
         (field "Email" Decode.string)
         (field "Image" Decode.string)
-        (field "Role" Decode.string)
-        (field "Cart" Decode.string)
+        (field "Role" Decode.role)
+        (field "Cart" Decode.cart)
 
 
 userLoginEncoder : User -> Encode.Value
