@@ -13,3 +13,6 @@ port removeItemsFromStorage : () -> Cmd msg
 
 
 port removeItemsFromCart : Item -> Cmd msg
+
+
+port setAccessToken : SuccessLogin -> Cmd msg

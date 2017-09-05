@@ -32,12 +32,6 @@ cart model =
 userBar : Model -> Html Msg
 userBar model =
     let
-        image =
-            if model.accessToken == "" then
-                Html.text ""
-            else
-                img [ src (Config.backend_address ++ "/" ++ model.loggedUser.image), class "img-responsive" ] []
-
         greeting =
             if model.accessToken == "" then
                 "Welcoem Guest"
@@ -57,7 +51,6 @@ userBar model =
                     ]
     in
     div [ class "user-bar" ]
-        [ image
-        , span [ class "welcome-text" ] [ text greeting ]
+        [ span [ class "welcome-text" ] [ text greeting ]
         , links
         ]

@@ -8,6 +8,7 @@ import Model exposing (..)
 import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
 import Routing exposing (..)
+import Task exposing (andThen)
 import Update exposing (..)
 import Views.Items
 import Views.Login
@@ -16,6 +17,8 @@ import Views.NotFound
 
 type alias Flags =
     { items : List Item
+    , accessToken : String
+    , loggedInUser : LoggedUser
     }
 
 
@@ -33,19 +36,12 @@ userObject =
     }
 
 
-loggedInUer : LoggedUser
-loggedInUer =
-    { id = ""
-    , username = ""
-    , image = ""
-    }
-
-
-initialModel : Route -> List Item -> Model
-initialModel route items =
+initialModel : Route -> List Item -> String -> LoggedUser -> Model
+initialModel route items accessToken loggedInUer =
     { route = route
     , cartItems = items
     , items = []
+    , accessToken = accessToken
     , hideCart = True
     , text = ""
     , itemsNumber = 0
@@ -55,7 +51,6 @@ initialModel route items =
     , user = userObject
     , error = ""
     , success = ""
-    , accessToken = ""
     , loggedUser = loggedInUer
     }
 
@@ -84,7 +79,7 @@ init flags location =
         currentRoute =
             parseLocation location
     in
-    ( initialModel currentRoute flags.items, getItems )
+    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, getItems )
 
 
 

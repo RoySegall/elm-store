@@ -10,7 +10,7 @@ import Json.Decode as Decode exposing (..)
 import Json.Encode as Encode
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
+import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
 
 
@@ -139,7 +139,7 @@ update msg model =
                 , accessToken = backendSuccessLogin.token.token
                 , loggedUser = loggedInUser
               }
-            , Cmd.none
+            , setAccessToken backendSuccessLogin
             )
 
 
