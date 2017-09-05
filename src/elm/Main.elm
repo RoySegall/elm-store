@@ -33,6 +33,14 @@ userObject =
     }
 
 
+loggedInUer : LoggedUser
+loggedInUer =
+    { id = ""
+    , username = ""
+    , image = ""
+    }
+
+
 initialModel : Route -> List Item -> Model
 initialModel route items =
     { route = route
@@ -47,6 +55,8 @@ initialModel route items =
     , user = userObject
     , error = ""
     , success = ""
+    , accessToken = ""
+    , loggedUser = loggedInUer
     }
 
 
@@ -111,7 +121,7 @@ view model =
                 [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/" ] [ a [ href "/", onLinkClick (ChangeLocation "/") ] [ text "Go store" ] ] ]
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
-                        [ li [ class "nav-item" ] [ userBar ]
+                        [ li [ class "nav-item" ] [ userBar model ]
                         , li [ class "nav-item cart-wrapper" ] [ cart model ]
                         ]
                     ]

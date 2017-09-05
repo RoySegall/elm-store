@@ -106,7 +106,7 @@ update msg model =
             ( { model | user = { username = username, password = password } }, Cmd.none )
 
         UserLogin ->
-            ( model, userLogin model )
+            ( { model | error = "", success = "" }, userLogin model )
 
         UserLoginRequest (Err httpErr) ->
             let
@@ -126,8 +126,18 @@ update msg model =
                     model ! []
 
         UserLoginRequest (Ok backendSuccessLogin) ->
+            let
+                loggedInUser : LoggedUser
+                loggedInUser =
+                    { id = backendSuccessLogin.id
+                    , username = backendSuccessLogin.username
+                    , image = backendSuccessLogin.image
+                    }
+            in
             ( { model
                 | success = "Welcome " ++ backendSuccessLogin.username
+                , accessToken = backendSuccessLogin.token.token
+                , loggedUser = loggedInUser
               }
             , Cmd.none
             )

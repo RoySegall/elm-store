@@ -1,6 +1,7 @@
 module Components.User exposing (..)
 
 import Components.Items exposing (currentItems)
+import Config
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -28,10 +29,35 @@ cart model =
 -- User bar
 
 
-userBar : Html Msg
-userBar =
+userBar : Model -> Html Msg
+userBar model =
+    let
+        image =
+            if model.accessToken == "" then
+                Html.text ""
+            else
+                img [ src (Config.backend_address ++ "/" ++ model.loggedUser.image), class "img-responsive" ] []
+
+        greeting =
+            if model.accessToken == "" then
+                "Welcoem Guest"
+            else
+                model.loggedUser.username
+
+        links =
+            if model.accessToken == "" then
+                div [ class "links" ]
+                    [ a [ href "/login", onLinkClick (ChangeLocation "login"), class "login" ] [ text "Login" ]
+                    , a [ href "/register", onLinkClick (ChangeLocation "register"), class "register" ] [ text "Register" ]
+                    ]
+            else
+                div [ class "links" ]
+                    [ a [ href "/profile", class "profile", onLinkClick (ChangeLocation "login") ] [ text "Profile" ]
+                    , a [ href "/", class "logout" ] [ text "Logout" ]
+                    ]
+    in
     div [ class "user-bar" ]
-        [ span [ class "welcome-guest" ] [ text "Welcome Guest" ]
-        , a [ href "/login", onLinkClick (ChangeLocation "login"), class "login" ] [ text "Login" ]
-        , a [ href "/register", onLinkClick (ChangeLocation "register"), class "register" ] [ text "Register" ]
+        [ image
+        , span [ class "welcome-text" ] [ text greeting ]
+        , links
         ]

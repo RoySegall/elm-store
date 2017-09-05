@@ -24,6 +24,13 @@ type alias User =
     }
 
 
+type alias LoggedUser =
+    { id : String
+    , username : String
+    , image : String
+    }
+
+
 type alias Model =
     { cartItems : List Item
     , items : List Item
@@ -37,6 +44,8 @@ type alias Model =
     , user : User
     , error : String
     , success : String
+    , accessToken : String
+    , loggedUser : LoggedUser
     }
 
 

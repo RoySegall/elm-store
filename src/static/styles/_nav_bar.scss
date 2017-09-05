@@ -40,11 +40,21 @@
       border-right: solid 1px white;
       padding-right: 5px;
 
-      .welcome-guest {
+      .welcome-text {
         margin-right: 5px;
       }
 
-      .login {
+      .links {
+        display: inline;
+      }
+
+      img {
+        max-height: 32px;
+        display: inline;
+        padding-right: 10px;
+      }
+
+      .login, .profile {
         margin-right: 5px;
       }
     }
