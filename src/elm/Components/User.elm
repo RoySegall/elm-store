@@ -5,7 +5,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import List exposing (length)
-import Model exposing (Model)
+import Model exposing (..)
+import ModelHelper exposing (onLinkClick)
 import Update exposing (..)
 
 

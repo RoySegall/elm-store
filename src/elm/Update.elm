@@ -7,52 +7,34 @@ import Html.Events exposing (onWithOptions)
 import Http exposing (..)
 import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
-import Json.Encode as Encode
 import Model exposing (..)
+import ModelHelper exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
-
-
-type Msg
-    = AddItems Item
-    | HideCart
-    | ClearCart Model
-    | ToggleCart
-    | GetItems (Result Http.Error Data)
-    | InitItems (List Item)
-    | RemoveItemFromCart Item
-    | GetItemsAtPage Int
-    | OnLocationChange Navigation.Location
-    | ChangeLocation String
-    | UpdateUsername String
-    | UpdatePassword String
-    | UserLogin
-    | UserLoginRequest (Result Http.Error SuccessLogin)
-    | Logout
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Logout ->
-            ( { model | accessToken = "" }, logOut () )
+            ( logout model, logOut () )
 
         AddItems item ->
-            ( { model
-                | cartItems = model.cartItems ++ [ item ]
-              }
-            , addItemToStorage item
-            )
+            ( addItems model item, addItemToStorage item )
 
         ClearCart model ->
-            ( { model | cartItems = [] }, removeItemsFromStorage () )
+            ( clearCart model, removeItemsFromStorage () )
 
         ToggleCart ->
-            if model.hideCart then
-                ( { model | hideCart = False }, Cmd.none )
-            else
-                ( { model | hideCart = True }, Cmd.none )
+            let
+                status =
+                    if model.hideCart then
+                        False
+                    else
+                        True
+            in
+            ( toggleCart model status, Cmd.none )
 
         HideCart ->
             ( { model | hideCart = True }, Cmd.none )
@@ -145,70 +127,3 @@ update msg model =
               }
             , setAccessToken backendSuccessLogin
             )
-
-
-userLogin : Model -> Cmd Msg
-userLogin model =
-    let
-        url =
-            backend_address ++ "/api/user/login"
-    in
-    HttpBuilder.post url
-        |> withExpect (Http.expectJson loginSuccessDecoder)
-        |> withMultipartStringBody
-            [ ( "username", model.user.username )
-            , ( "password", model.user.password )
-            ]
-        |> HttpBuilder.send UserLoginRequest
-
-
-handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
-handleRequestComplete result =
-    let
-        url =
-            backend_address ++ "/api/items"
-    in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
-
-
-getItems : Cmd Msg
-getItems =
-    let
-        url =
-            backend_address ++ "/api/items"
-    in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
-
-
-getItemsAtPage : Int -> Cmd Msg
-getItemsAtPage page =
-    let
-        url =
-            backend_address ++ "/api/items?page=" ++ toString page
-    in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
-
-
-removeItemFromCart : Item -> Model -> Model
-removeItemFromCart item model =
-    { model
-        | cartItems =
-            List.filter (\i -> not (i.id == item.id)) model.cartItems
-    }
-
-
-onLinkClick : msg -> Attribute msg
-onLinkClick message =
-    let
-        options =
-            { stopPropagation = False
-            , preventDefault = True
-            }
-    in
-    onWithOptions "click" options (Decode.succeed message)
