@@ -47,10 +47,10 @@ userBar model =
             else
                 div [ class "links" ]
                     [ a [ href "/profile", class "profile", onLinkClick (ChangeLocation "login") ] [ text "Profile" ]
-                    , a [ href "/", class "logout", onClick Logout, onLinkClick (ChangeLocation "/") ] [ text "Logout" ]
+                    , a [ href "#", class "logout", onClick Logout ] [ text "Logout" ]
                     ]
     in
-        div [ class "user-bar" ]
-            [ span [ class "welcome-text" ] [ text greeting ]
-            , links
-            ]
+    div [ class "user-bar" ]
+        [ span [ class "welcome-text" ] [ text greeting ]
+        , links
+        ]

@@ -16,3 +16,6 @@ port removeItemsFromCart : Item -> Cmd msg
 
 
 port setAccessToken : SuccessLogin -> Cmd msg
+
+
+port logOut : () -> Cmd msg

@@ -21,6 +21,13 @@ function getLoggedUserFromStorage() {
   return logged == "" || logged == null ? {'id': '', 'username': '', 'image': ''} : JSON.parse(logged);
 }
 
+app.ports.logOut.subscribe(function() {
+  console.log('a');
+  localStorage.removeItem('items');
+  localStorage.removeItem('logged_in_user');
+  localStorage.removeItem('access_token');
+});
+
 app.ports.addItemToStorage.subscribe(function(item) {
   var items = localStorage.getItem('items');
   var decoded_items = items == null || items == "" ? [] : JSON.parse(items);
