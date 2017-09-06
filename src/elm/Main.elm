@@ -8,19 +8,10 @@ import Model exposing (..)
 import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
 import Routing exposing (..)
-import Task exposing (andThen)
 import Update exposing (..)
 import Views.Items
 import Views.Login
 import Views.NotFound
-
-
-type alias Flags =
-    { items : List Item
-    , accessToken : String
-    , loggedInUser : LoggedUser
-    }
-
 
 
 -- MODEL

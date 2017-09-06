@@ -3,6 +3,13 @@ module Model exposing (..)
 import Navigation
 
 
+type alias Flags =
+    { items : List Item
+    , accessToken : String
+    , loggedInUser : LoggedUser
+    }
+
+
 type alias Item =
     { id : String
     , title : String

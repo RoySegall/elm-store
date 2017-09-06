@@ -1,7 +1,6 @@
 module Components.User exposing (..)
 
 import Components.Items exposing (currentItems)
-import Config
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
