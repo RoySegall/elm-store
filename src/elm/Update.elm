@@ -40,11 +40,7 @@ update msg model =
             ( { model | hideCart = True }, Cmd.none )
 
         GetItems (Ok backendData) ->
-            ( { model
-                | items = backendData.data
-                , itemsNumber = backendData.items
-                , perpage = backendData.perpage
-              }
+            ( processItemsFromBackend model backendData
             , Cmd.none
             )
 

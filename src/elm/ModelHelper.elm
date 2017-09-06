@@ -13,6 +13,20 @@ import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItem
 import Routing exposing (..)
 
 
+processItemsFromBackend : Model -> Data -> Model
+processItemsFromBackend model backendData =
+    { model
+        | items = backendData.data
+        , itemsNumber = backendData.items
+        , perpage = backendData.perpage
+    }
+
+
+hideCart : Model -> Model
+hideCart model =
+    { model | hideCart = True }
+
+
 toggleCart : Model -> Bool -> Model
 toggleCart model status =
     { model | hideCart = status }
