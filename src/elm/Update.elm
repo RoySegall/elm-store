@@ -1,25 +1,17 @@
 module Update exposing (..)
 
 import Config exposing (..)
+import Decoder exposing (itemsDecoder, loginErrorDecoder, loginSuccessDecoder)
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions)
-import Http
+import Http exposing (..)
+import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
+import Json.Encode as Encode
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, removeItemsFromCart, removeItemsFromStorage)
+import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
-import UrlParser
-
-
--- UPDATE
-
-
-type alias Data =
-    { data : List Item
-    , items : Int
-    , perpage : Int
-    }
 
 
 type Msg
@@ -33,11 +25,19 @@ type Msg
     | GetItemsAtPage Int
     | OnLocationChange Navigation.Location
     | ChangeLocation String
+    | UpdateUsername String
+    | UpdatePassword String
+    | UserLogin
+    | UserLoginRequest (Result Http.Error SuccessLogin)
+    | Logout
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Logout ->
+            ( { model | accessToken = "" }, logOut () )
+
         AddItems item ->
             ( { model
                 | cartItems = model.cartItems ++ [ item ]
@@ -89,6 +89,89 @@ update msg model =
             in
             ( { model | route = newRoute }, Cmd.none )
 
+        UpdateUsername username ->
+            let
+                user =
+                    model.user
+
+                password =
+                    user.password
+            in
+            ( { model | user = { username = username, password = password } }, Cmd.none )
+
+        UpdatePassword password ->
+            let
+                user =
+                    model.user
+
+                username =
+                    user.username
+            in
+            ( { model | user = { username = username, password = password } }, Cmd.none )
+
+        UserLogin ->
+            ( { model | error = "", success = "" }, userLogin model )
+
+        UserLoginRequest (Err httpErr) ->
+            let
+                _ =
+                    Debug.log "" httpErr
+            in
+            case httpErr of
+                Http.BadStatus s ->
+                    case Decode.decodeString loginErrorDecoder s.body of
+                        Ok { message } ->
+                            ( { model | error = message }, Cmd.none )
+
+                        Err result ->
+                            model ! []
+
+                _ ->
+                    model ! []
+
+        UserLoginRequest (Ok backendSuccessLogin) ->
+            let
+                loggedInUser : LoggedUser
+                loggedInUser =
+                    { id = backendSuccessLogin.id
+                    , username = backendSuccessLogin.username
+                    , image = backendSuccessLogin.image
+                    }
+            in
+            ( { model
+                | success = "Welcome " ++ backendSuccessLogin.username
+                , accessToken = backendSuccessLogin.token.token
+                , loggedUser = loggedInUser
+              }
+            , setAccessToken backendSuccessLogin
+            )
+
+
+userLogin : Model -> Cmd Msg
+userLogin model =
+    let
+        url =
+            backend_address ++ "/api/user/login"
+    in
+    HttpBuilder.post url
+        |> withExpect (Http.expectJson loginSuccessDecoder)
+        |> withMultipartStringBody
+            [ ( "username", model.user.username )
+            , ( "password", model.user.password )
+            ]
+        |> HttpBuilder.send UserLoginRequest
+
+
+handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
+handleRequestComplete result =
+    let
+        url =
+            backend_address ++ "/api/items"
+    in
+    Http.send
+        GetItems
+        (Http.get url itemsDecoder)
+
 
 getItems : Cmd Msg
 getItems =
@@ -112,24 +195,6 @@ getItemsAtPage page =
         (Http.get url itemsDecoder)
 
 
-itemsDecoder : Decode.Decoder Data
-itemsDecoder =
-    Decode.map3 Data
-        (field "data" <| Decode.list <| memberDecoder)
-        (field "items" Decode.int)
-        (field "perpage" Decode.int)
-
-
-memberDecoder : Decode.Decoder Item
-memberDecoder =
-    Decode.map5 Item
-        (field "Id" Decode.string)
-        (field "Title" Decode.string)
-        (field "Description" Decode.string)
-        (field "Price" Decode.float)
-        (field "Image" Decode.string)
-
-
 removeItemFromCart : Item -> Model -> Model
 removeItemFromCart item model =
     { model
@@ -138,9 +203,6 @@ removeItemFromCart item model =
     }
 
 
-{-| When clicking a link we want to prevent the default browser behaviour which is to load a new page.
-So we use `onWithOptions` instead of `onClick`.
--}
 onLinkClick : msg -> Attribute msg
 onLinkClick message =
     let

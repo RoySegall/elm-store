@@ -14,29 +14,35 @@ import Views.Login
 import Views.NotFound
 
 
-type alias Flags =
-    { items : List Item
-    }
-
-
-
 -- MODEL
 
 
 {-| initialModel will be called with the current matched route.
 We store this in the model so we can display the corrent view.
 -}
-initialModel : Route -> List Item -> Model
-initialModel route items =
+userObject : User
+userObject =
+    { username = ""
+    , password = ""
+    }
+
+
+initialModel : Route -> List Item -> String -> LoggedUser -> Model
+initialModel route items accessToken loggedInUer =
     { route = route
     , cartItems = items
     , items = []
+    , accessToken = accessToken
     , hideCart = True
     , text = ""
     , itemsNumber = 0
     , perpage = 0
     , history = []
     , currentPage = 0
+    , user = userObject
+    , error = ""
+    , success = ""
+    , loggedUser = loggedInUer
     }
 
 
@@ -64,7 +70,7 @@ init flags location =
         currentRoute =
             parseLocation location
     in
-    ( initialModel currentRoute flags.items, getItems )
+    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, getItems )
 
 
 
@@ -101,7 +107,7 @@ view model =
                 [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/" ] [ a [ href "/", onLinkClick (ChangeLocation "/") ] [ text "Go store" ] ] ]
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
-                        [ li [ class "nav-item" ] [ userBar ]
+                        [ li [ class "nav-item" ] [ userBar model ]
                         , li [ class "nav-item cart-wrapper" ] [ cart model ]
                         ]
                     ]
