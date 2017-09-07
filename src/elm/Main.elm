@@ -10,6 +10,7 @@ import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
 import Routing exposing (..)
 import Update exposing (..)
+import Views.Item
 import Views.Items
 import Views.Login
 import Views.NotFound
@@ -25,6 +26,16 @@ userObject : User
 userObject =
     { username = ""
     , password = ""
+    }
+
+
+emptyItem : Item
+emptyItem =
+    { title = ""
+    , image = ""
+    , description = ""
+    , id = ""
+    , price = 0
     }
 
 
@@ -44,6 +55,8 @@ initialModel route items accessToken loggedInUer =
     , error = ""
     , success = ""
     , loggedUser = loggedInUer
+    , selectedItem = emptyItem
+    , id = ""
     }
 
 
@@ -70,6 +83,9 @@ init flags location =
     let
         currentRoute =
             parseLocation location
+
+        currentPage =
+            0
     in
     ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, getItems )
 
@@ -92,6 +108,9 @@ page model =
         Login ->
             Views.Login.view model
 
+        ItemPage id ->
+            Views.Item.view model
+
         NotFoundRoute ->
             Views.NotFound.view model
 
@@ -105,7 +124,7 @@ view model =
     div []
         [ nav [ class "navbar navbar-expand-lg navbar-light fixed-top", id "mainNav" ]
             [ div [ class "container" ]
-                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/" ] [ a [ href "/", onLinkClick (ChangeLocation "/") ] [ text "Go store" ] ] ]
+                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/#", onLinkClick (ChangeLocation "/#") ] [ text "Go store" ] ]
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
                         [ li [ class "nav-item" ] [ userBar model ]

@@ -51,7 +51,7 @@ update msg model =
             ( model, Navigation.newUrl path )
 
         OnLocationChange location ->
-            ( onLocationChange model location, Cmd.none )
+            ( onLocationChange model location, changeSelectedItem model )
 
         UpdateUsername username ->
             ( updateUsername model username, Cmd.none )
@@ -67,3 +67,12 @@ update msg model =
 
         UserLoginRequest (Ok backendSuccessLogin) ->
             ( userLoginRequestSuccess model backendSuccessLogin, setAccessToken backendSuccessLogin )
+
+        ChangeSelectedItem (Err httpErr) ->
+            userLoginRequestError model httpErr
+
+        ChangeSelectedItem (Ok backendSuccessLogin) ->
+            ( model, Cmd.none )
+
+        ChangeCurrentPage string ->
+            ( { model | id = string }, Cmd.none )

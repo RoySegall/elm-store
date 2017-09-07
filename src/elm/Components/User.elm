@@ -41,12 +41,12 @@ userBar model =
         links =
             if model.accessToken == "" then
                 div [ class "links" ]
-                    [ a [ href "/login", onLinkClick (ChangeLocation "login"), class "login" ] [ text "Login" ]
-                    , a [ href "/register", onLinkClick (ChangeLocation "register"), class "register" ] [ text "Register" ]
+                    [ a [ href "/#login", onLinkClick (ChangeLocation "/#login"), class "login" ] [ text "Login" ]
+                    , a [ href "/#register", onLinkClick (ChangeLocation "/#register"), class "register" ] [ text "Register" ]
                     ]
             else
                 div [ class "links" ]
-                    [ a [ href "/profile", class "profile", onLinkClick (ChangeLocation "login") ] [ text "Profile" ]
+                    [ a [ href "/#profile", class "profile", onLinkClick (ChangeLocation "/#login") ] [ text "Profile" ]
                     , a [ href "#", class "logout", onClick Logout ] [ text "Logout" ]
                     ]
     in

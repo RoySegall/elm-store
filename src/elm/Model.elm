@@ -20,6 +20,8 @@ type Msg
     | UserLogin
     | UserLoginRequest (Result Http.Error SuccessLogin)
     | Logout
+    | ChangeSelectedItem (Result Http.Error Data)
+    | ChangeCurrentPage (Maybe String)
 
 
 type alias Flags =
@@ -41,6 +43,7 @@ type alias Item =
 type Route
     = HomeRoute
     | Login
+    | ItemPage String
     | NotFoundRoute
 
 
@@ -61,6 +64,7 @@ type alias Model =
     { cartItems : List Item
     , items : List Item
     , hideCart : Bool
+    , id : Maybe String
     , text : String
     , itemsNumber : Int
     , perpage : Int
@@ -72,6 +76,7 @@ type alias Model =
     , success : String
     , accessToken : String
     , loggedUser : LoggedUser
+    , selectedItem : Item
     }
 
 

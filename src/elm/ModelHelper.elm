@@ -7,10 +7,22 @@ import Html.Events exposing (onWithOptions)
 import Http exposing (..)
 import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
+import List.Extra exposing (last)
 import Model exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
+
+
+changeSelectedItem : Model -> Cmd Msg
+changeSelectedItem model =
+    let
+        url =
+            backend_address ++ "api/items/01a41044-2920-4a37-9a0c-6726945100ed"
+    in
+    HttpBuilder.get url
+        |> withExpect (Http.expectJson itemsDecoder)
+        |> HttpBuilder.send ChangeSelectedItem
 
 
 userLoginRequestSuccess : Model -> SuccessLogin -> Model
@@ -83,8 +95,16 @@ onLocationChange model location =
     let
         newRoute =
             parseLocation location
+
+        parsedPage =
+            getLastId location.hash
     in
-    { model | route = newRoute }
+    { model | route = newRoute, id = parsedPage }
+
+
+getLastId : String -> Maybe String
+getLastId hash =
+    last (String.split "/" hash)
 
 
 initItems : Model -> List Item -> Model
