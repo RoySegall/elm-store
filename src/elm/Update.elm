@@ -27,99 +27,43 @@ update msg model =
             ( clearCart model, removeItemsFromStorage () )
 
         ToggleCart ->
-            let
-                status =
-                    if model.hideCart then
-                        False
-                    else
-                        True
-            in
-            ( toggleCart model status, Cmd.none )
+            ( toggleCart model, Cmd.none )
 
         HideCart ->
-            ( { model | hideCart = True }, Cmd.none )
+            ( hideCart model, Cmd.none )
 
         GetItems (Ok backendData) ->
-            ( processItemsFromBackend model backendData
-            , Cmd.none
-            )
+            ( processItemsFromBackend model backendData, Cmd.none )
 
         GetItems (Err error) ->
-            Debug.log "error occured" (toString error)
-                |> always ( model, Cmd.none )
+            ( getItemsError model error, Cmd.none )
 
         GetItemsAtPage page ->
-            ( { model | currentPage = page }, getItemsAtPage page )
+            ( getItemsAtPageForUpdate model page, getItemsAtPage page )
 
         InitItems items ->
-            ( { model | cartItems = items }, Cmd.none )
+            ( initItems model items, Cmd.none )
 
         RemoveItemFromCart item ->
-            ( removeItemFromCart item model, removeItemsFromCart item )
+            ( removeItemFromCart model item, removeItemsFromCart item )
 
         ChangeLocation path ->
             ( model, Navigation.newUrl path )
 
         OnLocationChange location ->
-            let
-                newRoute =
-                    parseLocation location
-            in
-            ( { model | route = newRoute }, Cmd.none )
+            ( onLocationChange model location, Cmd.none )
 
         UpdateUsername username ->
-            let
-                user =
-                    model.user
-
-                password =
-                    user.password
-            in
-            ( { model | user = { username = username, password = password } }, Cmd.none )
+            ( updateUsername model username, Cmd.none )
 
         UpdatePassword password ->
-            let
-                user =
-                    model.user
-
-                username =
-                    user.username
-            in
-            ( { model | user = { username = username, password = password } }, Cmd.none )
+            ( updatePassword model password, Cmd.none )
 
         UserLogin ->
-            ( { model | error = "", success = "" }, userLogin model )
+            ( userLoginForUpdate model, userLogin model )
 
         UserLoginRequest (Err httpErr) ->
-            let
-                _ =
-                    Debug.log "" httpErr
-            in
-            case httpErr of
-                Http.BadStatus s ->
-                    case Decode.decodeString loginErrorDecoder s.body of
-                        Ok { message } ->
-                            ( { model | error = message }, Cmd.none )
-
-                        Err result ->
-                            model ! []
-
-                _ ->
-                    model ! []
+            userLoginRequestError model httpErr
 
         UserLoginRequest (Ok backendSuccessLogin) ->
-            let
-                loggedInUser : LoggedUser
-                loggedInUser =
-                    { id = backendSuccessLogin.id
-                    , username = backendSuccessLogin.username
-                    , image = backendSuccessLogin.image
-                    }
-            in
-            ( { model
-                | success = "Welcome " ++ backendSuccessLogin.username
-                , accessToken = backendSuccessLogin.token.token
-                , loggedUser = loggedInUser
-              }
-            , setAccessToken backendSuccessLogin
-            )
+            ( userLoginRequestSuccess model backendSuccessLogin, setAccessToken backendSuccessLogin )

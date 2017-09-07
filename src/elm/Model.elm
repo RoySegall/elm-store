@@ -4,6 +4,24 @@ import Http
 import Navigation
 
 
+type Msg
+    = AddItems Item
+    | HideCart
+    | ClearCart Model
+    | ToggleCart
+    | GetItems (Result Http.Error Data)
+    | InitItems (List Item)
+    | RemoveItemFromCart Item
+    | GetItemsAtPage Int
+    | OnLocationChange Navigation.Location
+    | ChangeLocation String
+    | UpdateUsername String
+    | UpdatePassword String
+    | UserLogin
+    | UserLoginRequest (Result Http.Error SuccessLogin)
+    | Logout
+
+
 type alias Flags =
     { items : List Item
     , accessToken : String
@@ -100,21 +118,3 @@ type alias Token =
 type alias Cart =
     { items : List Item
     }
-
-
-type Msg
-    = AddItems Item
-    | HideCart
-    | ClearCart Model
-    | ToggleCart
-    | GetItems (Result Http.Error Data)
-    | InitItems (List Item)
-    | RemoveItemFromCart Item
-    | GetItemsAtPage Int
-    | OnLocationChange Navigation.Location
-    | ChangeLocation String
-    | UpdateUsername String
-    | UpdatePassword String
-    | UserLogin
-    | UserLoginRequest (Result Http.Error SuccessLogin)
-    | Logout

@@ -13,6 +13,96 @@ import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItem
 import Routing exposing (..)
 
 
+userLoginRequestSuccess : Model -> SuccessLogin -> Model
+userLoginRequestSuccess model backendSuccessLogin =
+    let
+        loggedInUser : LoggedUser
+        loggedInUser =
+            { id = backendSuccessLogin.id
+            , username = backendSuccessLogin.username
+            , image = backendSuccessLogin.image
+            }
+    in
+    { model
+        | success = "Welcome " ++ backendSuccessLogin.username
+        , accessToken = backendSuccessLogin.token.token
+        , loggedUser = loggedInUser
+    }
+
+
+userLoginRequestError : Model -> Http.Error -> ( Model, Cmd Msg )
+userLoginRequestError model error =
+    let
+        _ =
+            Debug.log "" error
+    in
+    case error of
+        Http.BadStatus s ->
+            case Decode.decodeString loginErrorDecoder s.body of
+                Ok { message } ->
+                    ( { model | error = message }, Cmd.none )
+
+                Err result ->
+                    model ! []
+
+        _ ->
+            model ! []
+
+
+userLoginForUpdate : Model -> Model
+userLoginForUpdate model =
+    { model | error = "", success = "" }
+
+
+updateUsername : Model -> String -> Model
+updateUsername model username =
+    let
+        user =
+            model.user
+
+        password =
+            user.password
+    in
+    { model | user = { username = username, password = password } }
+
+
+updatePassword : Model -> String -> Model
+updatePassword model password =
+    let
+        user =
+            model.user
+
+        username =
+            user.username
+    in
+    { model | user = { username = username, password = password } }
+
+
+onLocationChange : Model -> Navigation.Location -> Model
+onLocationChange model location =
+    let
+        newRoute =
+            parseLocation location
+    in
+    { model | route = newRoute }
+
+
+initItems : Model -> List Item -> Model
+initItems model items =
+    { model | cartItems = items }
+
+
+getItemsAtPageForUpdate : Model -> Int -> Model
+getItemsAtPageForUpdate model page =
+    { model | currentPage = page }
+
+
+getItemsError : Model -> Http.Error -> Model
+getItemsError model error =
+    Debug.log "error occured" (toString error)
+        |> always model
+
+
 processItemsFromBackend : Model -> Data -> Model
 processItemsFromBackend model backendData =
     { model
@@ -27,8 +117,15 @@ hideCart model =
     { model | hideCart = True }
 
 
-toggleCart : Model -> Bool -> Model
-toggleCart model status =
+toggleCart : Model -> Model
+toggleCart model =
+    let
+        status =
+            if model.hideCart then
+                False
+            else
+                True
+    in
     { model | hideCart = status }
 
 
@@ -97,8 +194,8 @@ getItemsAtPage page =
         (Http.get url itemsDecoder)
 
 
-removeItemFromCart : Item -> Model -> Model
-removeItemFromCart item model =
+removeItemFromCart : Model -> Item -> Model
+removeItemFromCart model item =
     { model
         | cartItems =
             List.filter (\i -> not (i.id == item.id)) model.cartItems
