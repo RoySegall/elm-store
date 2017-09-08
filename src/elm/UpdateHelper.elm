@@ -13,6 +13,35 @@ import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItem
 import Routing exposing (..)
 
 
+loadStuffFromBackend : Model -> Navigation.Location -> Cmd Msg
+loadStuffFromBackend model location =
+    let
+        newRoute =
+            parseLocation location
+
+        url =
+            case newRoute of
+                HomeRoute ->
+                    ""
+
+                Login ->
+                    ""
+
+                ItemPage id ->
+                    backend_address ++ "/api/items/" ++ id
+
+                NotFoundRoute ->
+                    ""
+    in
+    HttpBuilder.get url
+        |> withExpect (Http.expectJson loginSuccessDecoder)
+        |> withMultipartStringBody
+            [ ( "username", model.user.username )
+            , ( "password", model.user.password )
+            ]
+        |> HttpBuilder.send UserLoginRequest
+
+
 userLoginRequestSuccess : Model -> SuccessLogin -> Model
 userLoginRequestSuccess model backendSuccessLogin =
     let
@@ -98,7 +127,7 @@ onLocationChange model location =
                 NotFoundRoute ->
                     ""
     in
-    { model | route = newRoute, id = parseId }
+    { model | id = parseId, route = newRoute }
 
 
 initItems : Model -> List Item -> Model

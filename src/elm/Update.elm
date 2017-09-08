@@ -51,7 +51,7 @@ update msg model =
             ( model, Navigation.newUrl path )
 
         OnLocationChange location ->
-            ( onLocationChange model location, Cmd.none )
+            ( onLocationChange model location, loadStuffFromBackend model location )
 
         UpdateUsername username ->
             ( updateUsername model username, Cmd.none )
