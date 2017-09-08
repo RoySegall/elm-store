@@ -20,6 +20,7 @@ type Msg
     | UserLogin
     | UserLoginRequest (Result Http.Error SuccessLogin)
     | Logout
+    | SingleItemDecoder (Result Http.Error Item)
 
 
 type alias Flags =
@@ -74,6 +75,7 @@ type alias Model =
     , accessToken : String
     , loggedUser : LoggedUser
     , id : String
+    , selectedItem : Item
     }
 
 

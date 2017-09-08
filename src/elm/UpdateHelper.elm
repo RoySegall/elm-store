@@ -1,7 +1,7 @@
 module UpdateHelper exposing (..)
 
 import Config exposing (..)
-import Decoder exposing (itemsDecoder, loginErrorDecoder, loginSuccessDecoder)
+import Decoder exposing (..)
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions)
 import Http exposing (..)
@@ -9,7 +9,7 @@ import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
+import Ports exposing (..)
 import Routing exposing (..)
 
 
@@ -52,8 +52,8 @@ loadStuffFromBackend model location =
 getItemFromBackend : String -> Cmd Msg
 getItemFromBackend url =
     HttpBuilder.get url
-        |> withExpect (Http.expectJson loginSuccessDecoder)
-        |> HttpBuilder.send UserLoginRequest
+        |> withExpect (Http.expectJson itemDecoder)
+        |> HttpBuilder.send SingleItemDecoder
 
 
 userLoginRequestSuccess : Model -> SuccessLogin -> Model

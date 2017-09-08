@@ -3,10 +3,10 @@ module Main exposing (..)
 import Components.User exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (..)
 import Model exposing (..)
 import Navigation exposing (..)
-import Ports exposing (getItemsFromStorage)
+import Ports exposing (..)
 import Routing exposing (..)
 import Update exposing (..)
 import UpdateHelper exposing (..)
@@ -27,6 +27,11 @@ userObject =
     { username = ""
     , password = ""
     }
+
+
+selectedItem : Item
+selectedItem =
+    { description = "", id = "", price = 0, image = "", title = "" }
 
 
 initialModel : Route -> List Item -> String -> LoggedUser -> Model
@@ -61,6 +66,7 @@ initialModel route items accessToken loggedInUer =
     , success = ""
     , loggedUser = loggedInUer
     , id = id
+    , selectedItem = selectedItem
     }
 
 
