@@ -41,6 +41,7 @@ type alias Item =
 type Route
     = HomeRoute
     | Login
+    | ItemPage String
     | NotFoundRoute
 
 

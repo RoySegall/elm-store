@@ -2,7 +2,7 @@ module Routing exposing (..)
 
 import Model exposing (..)
 import Navigation
-import UrlParser
+import UrlParser exposing (..)
 
 
 --- routing
@@ -13,6 +13,7 @@ matchers =
     UrlParser.oneOf
         [ UrlParser.map HomeRoute UrlParser.top
         , UrlParser.map Login (UrlParser.s "login")
+        , UrlParser.map ItemPage (UrlParser.s "item" </> string)
         ]
 
 
@@ -20,7 +21,7 @@ matchers =
 -}
 parseLocation : Navigation.Location -> Route
 parseLocation location =
-    case UrlParser.parsePath matchers location of
+    case UrlParser.parseHash matchers location of
         Just route ->
             route
 

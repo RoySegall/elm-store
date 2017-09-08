@@ -10,6 +10,7 @@ import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
 import Routing exposing (..)
 import Update exposing (..)
+import Views.ItemPage
 import Views.Items
 import Views.Login
 import Views.NotFound
@@ -92,6 +93,9 @@ page model =
         Login ->
             Views.Login.view model
 
+        ItemPage id ->
+            Views.ItemPage.view model
+
         NotFoundRoute ->
             Views.NotFound.view model
 
@@ -105,7 +109,7 @@ view model =
     div []
         [ nav [ class "navbar navbar-expand-lg navbar-light fixed-top", id "mainNav" ]
             [ div [ class "container" ]
-                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/" ] [ a [ href "/", onLinkClick (ChangeLocation "/") ] [ text "Go store" ] ] ]
+                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/#", onLinkClick (ChangeLocation "#") ] [ text "Go store" ] ]
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
                         [ li [ class "nav-item" ] [ userBar model ]
