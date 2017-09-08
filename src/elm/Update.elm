@@ -8,10 +8,10 @@ import Http exposing (..)
 import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
-import ModelHelper exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
+import UpdateHelper exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -51,7 +51,7 @@ update msg model =
             ( model, Navigation.newUrl path )
 
         OnLocationChange location ->
-            ( onLocationChange model location, Cmd.none )
+            ( onLocationChange model location, loadStuffFromBackend model location )
 
         UpdateUsername username ->
             ( updateUsername model username, Cmd.none )
@@ -67,3 +67,9 @@ update msg model =
 
         UserLoginRequest (Ok backendSuccessLogin) ->
             ( userLoginRequestSuccess model backendSuccessLogin, setAccessToken backendSuccessLogin )
+
+        SingleItemDecoder (Err httpErr) ->
+            userLoginRequestError model httpErr
+
+        SingleItemDecoder (Ok backendItem) ->
+            ( singleItemDecoder model backendItem, Cmd.none )

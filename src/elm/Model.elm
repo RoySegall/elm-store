@@ -20,6 +20,7 @@ type Msg
     | UserLogin
     | UserLoginRequest (Result Http.Error SuccessLogin)
     | Logout
+    | SingleItemDecoder (Result Http.Error Item)
 
 
 type alias Flags =
@@ -41,6 +42,7 @@ type alias Item =
 type Route
     = HomeRoute
     | Login
+    | ItemPage String
     | NotFoundRoute
 
 
@@ -72,6 +74,8 @@ type alias Model =
     , success : String
     , accessToken : String
     , loggedUser : LoggedUser
+    , id : String
+    , selectedItem : Item
     }
 
 

@@ -3,13 +3,14 @@ module Main exposing (..)
 import Components.User exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (..)
 import Model exposing (..)
-import ModelHelper exposing (..)
 import Navigation exposing (..)
-import Ports exposing (getItemsFromStorage)
+import Ports exposing (..)
 import Routing exposing (..)
 import Update exposing (..)
+import UpdateHelper exposing (..)
+import Views.Item
 import Views.Items
 import Views.Login
 import Views.NotFound
@@ -28,8 +29,28 @@ userObject =
     }
 
 
+selectedItem : Item
+selectedItem =
+    { description = "", id = "", price = 0, image = "", title = "" }
+
+
 initialModel : Route -> List Item -> String -> LoggedUser -> Model
 initialModel route items accessToken loggedInUer =
+    let
+        id =
+            case route of
+                HomeRoute ->
+                    ""
+
+                Login ->
+                    ""
+
+                ItemPage id ->
+                    id
+
+                NotFoundRoute ->
+                    ""
+    in
     { route = route
     , cartItems = items
     , items = []
@@ -44,6 +65,8 @@ initialModel route items accessToken loggedInUer =
     , error = ""
     , success = ""
     , loggedUser = loggedInUer
+    , id = id
+    , selectedItem = selectedItem
     }
 
 
@@ -70,8 +93,22 @@ init flags location =
     let
         currentRoute =
             parseLocation location
+
+        method =
+            case currentRoute of
+                HomeRoute ->
+                    getItems
+
+                Login ->
+                    Cmd.none
+
+                ItemPage id ->
+                    getItem id
+
+                NotFoundRoute ->
+                    Cmd.none
     in
-    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, getItems )
+    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, method )
 
 
 
@@ -92,6 +129,9 @@ page model =
         Login ->
             Views.Login.view model
 
+        ItemPage id ->
+            Views.Item.view model
+
         NotFoundRoute ->
             Views.NotFound.view model
 
@@ -105,7 +145,7 @@ view model =
     div []
         [ nav [ class "navbar navbar-expand-lg navbar-light fixed-top", id "mainNav" ]
             [ div [ class "container" ]
-                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/" ] [ a [ href "/", onLinkClick (ChangeLocation "/") ] [ text "Go store" ] ] ]
+                [ a [ class "navbar-brand js-scroll-trigger" ] [ a [ href "/#", onLinkClick (ChangeLocation "#") ] [ text "Go store" ] ]
                 , div [ class "collapse navbar-collapse", id "navbarResponsive" ]
                     [ ul [ class "navbar-nav ml-auto" ]
                         [ li [ class "nav-item" ] [ userBar model ]

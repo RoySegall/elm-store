@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import List exposing (..)
 import Model exposing (..)
-import ModelHelper exposing (onLinkClick)
+import UpdateHelper exposing (onLinkClick)
 
 
 -- Get al the items in the store.
@@ -120,7 +120,7 @@ singleItem item showAddToCart =
             [ div [ class "col-md-4 first" ] [ img [ src imageAddress, class "img-responsive" ] [] ]
             , div [ class "col-md-8 second" ]
                 [ div []
-                    [ div [ class "title" ] [ text item.title ]
+                    [ div [ class "title" ] [ a [ href ("/#item/" ++ item.id), onLinkClick (ChangeLocation ("#item/" ++ item.id)) ] [ text item.title ] ]
                     , div [ class "description" ] [ text item.description ]
                     , div [ class "price" ] [ text (toString item.price ++ " $") ]
                     ]

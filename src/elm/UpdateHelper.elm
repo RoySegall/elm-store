@@ -1,7 +1,7 @@
-module ModelHelper exposing (..)
+module UpdateHelper exposing (..)
 
 import Config exposing (..)
-import Decoder exposing (itemsDecoder, loginErrorDecoder, loginSuccessDecoder)
+import Decoder exposing (..)
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions)
 import Http exposing (..)
@@ -9,8 +9,62 @@ import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
+import Ports exposing (..)
 import Routing exposing (..)
+
+
+singleItemDecoder : Model -> Item -> Model
+singleItemDecoder model decodedItem =
+    let
+        itemFromBackend : Item
+        itemFromBackend =
+            { description = decodedItem.description
+            , id = decodedItem.id
+            , price = decodedItem.price
+            , image = decodedItem.image
+            , title = decodedItem.title
+            }
+    in
+    { model | selectedItem = itemFromBackend }
+
+
+getItem : String -> Cmd Msg
+getItem id =
+    getItemFromBackend id
+
+
+loadStuffFromBackend : Model -> Navigation.Location -> Cmd Msg
+loadStuffFromBackend model location =
+    let
+        newRoute =
+            parseLocation location
+
+        message =
+            case newRoute of
+                HomeRoute ->
+                    getItems
+
+                Login ->
+                    Cmd.none
+
+                ItemPage id ->
+                    getItemFromBackend id
+
+                NotFoundRoute ->
+                    Cmd.none
+    in
+    message
+
+
+getItemFromBackend : String -> Cmd Msg
+getItemFromBackend id =
+    let
+        url =
+            backend_address ++ "/api/items/" ++ id
+    in
+    HttpBuilder.get url
+        |> withExpect (Http.expectJson itemDecoder)
+        |> HttpBuilder.send SingleItemDecoder
 
 
 userLoginRequestSuccess : Model -> SuccessLogin -> Model
@@ -83,8 +137,22 @@ onLocationChange model location =
     let
         newRoute =
             parseLocation location
+
+        parseId =
+            case newRoute of
+                HomeRoute ->
+                    ""
+
+                Login ->
+                    ""
+
+                ItemPage id ->
+                    id
+
+                NotFoundRoute ->
+                    ""
     in
-    { model | route = newRoute }
+    { model | id = parseId, route = newRoute }
 
 
 initItems : Model -> List Item -> Model

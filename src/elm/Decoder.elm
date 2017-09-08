@@ -4,6 +4,11 @@ import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 
 
+itemDecoder : Decode.Decoder Item
+itemDecoder =
+    Decode.at [ "data" ] <| memberDecoder
+
+
 itemsDecoder : Decode.Decoder Data
 itemsDecoder =
     Decode.map3 Data
