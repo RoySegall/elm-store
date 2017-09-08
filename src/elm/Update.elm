@@ -8,10 +8,10 @@ import Http exposing (..)
 import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
-import ModelHelper exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
+import UpdateHelper exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

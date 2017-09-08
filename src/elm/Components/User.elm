@@ -6,8 +6,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import List exposing (length)
 import Model exposing (..)
-import ModelHelper exposing (onLinkClick)
 import Update exposing (..)
+import UpdateHelper exposing (onLinkClick)
 
 
 -- Cart component

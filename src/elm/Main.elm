@@ -5,11 +5,11 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model exposing (..)
-import ModelHelper exposing (..)
 import Navigation exposing (..)
 import Ports exposing (getItemsFromStorage)
 import Routing exposing (..)
 import Update exposing (..)
+import UpdateHelper exposing (..)
 import Views.ItemPage
 import Views.Items
 import Views.Login
@@ -31,6 +31,21 @@ userObject =
 
 initialModel : Route -> List Item -> String -> LoggedUser -> Model
 initialModel route items accessToken loggedInUer =
+    let
+        id =
+            case route of
+                HomeRoute ->
+                    ""
+
+                Login ->
+                    ""
+
+                ItemPage id ->
+                    id
+
+                NotFoundRoute ->
+                    ""
+    in
     { route = route
     , cartItems = items
     , items = []
@@ -45,6 +60,7 @@ initialModel route items accessToken loggedInUer =
     , error = ""
     , success = ""
     , loggedUser = loggedInUer
+    , id = id
     }
 
 

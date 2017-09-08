@@ -73,6 +73,7 @@ type alias Model =
     , success : String
     , accessToken : String
     , loggedUser : LoggedUser
+    , id : String
     }
 
 

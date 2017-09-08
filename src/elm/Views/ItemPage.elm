@@ -9,6 +9,13 @@ import Update exposing (..)
 
 view : Model -> Html Msg
 view model =
-    section [ class "content item" ]
-        [ div [] [ text "a" ]
+    div [ class "content items" ]
+        [ section [ onClick HideCart ]
+            [ div
+                [ class "container main" ]
+                [ div [ class "row" ]
+                    [ div [ class "col-md-12" ] [ text model.id ]
+                    ]
+                ]
+            ]
         ]

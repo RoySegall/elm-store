@@ -1,4 +1,4 @@
-module ModelHelper exposing (..)
+module UpdateHelper exposing (..)
 
 import Config exposing (..)
 import Decoder exposing (itemsDecoder, loginErrorDecoder, loginSuccessDecoder)
@@ -83,8 +83,22 @@ onLocationChange model location =
     let
         newRoute =
             parseLocation location
+
+        parseId =
+            case newRoute of
+                HomeRoute ->
+                    ""
+
+                Login ->
+                    ""
+
+                ItemPage id ->
+                    id
+
+                NotFoundRoute ->
+                    ""
     in
-    { model | route = newRoute }
+    { model | route = newRoute, id = parseId }
 
 
 initItems : Model -> List Item -> Model
