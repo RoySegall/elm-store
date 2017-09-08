@@ -13,32 +13,46 @@ import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItem
 import Routing exposing (..)
 
 
+getItem : String -> Cmd Msg
+getItem id =
+    let
+        url =
+            backend_address ++ "/api/items/" ++ id
+    in
+    getItemFromBackend url
+
+
 loadStuffFromBackend : Model -> Navigation.Location -> Cmd Msg
 loadStuffFromBackend model location =
     let
         newRoute =
             parseLocation location
 
-        url =
+        message =
             case newRoute of
                 HomeRoute ->
-                    ""
+                    getItems
 
                 Login ->
-                    ""
+                    Cmd.none
 
                 ItemPage id ->
-                    backend_address ++ "/api/items/" ++ id
+                    getItemFromBackend
+                        (backend_address
+                            ++ "/api/items/"
+                            ++ id
+                        )
 
                 NotFoundRoute ->
-                    ""
+                    Cmd.none
     in
+    message
+
+
+getItemFromBackend : String -> Cmd Msg
+getItemFromBackend url =
     HttpBuilder.get url
         |> withExpect (Http.expectJson loginSuccessDecoder)
-        |> withMultipartStringBody
-            [ ( "username", model.user.username )
-            , ( "password", model.user.password )
-            ]
         |> HttpBuilder.send UserLoginRequest
 
 

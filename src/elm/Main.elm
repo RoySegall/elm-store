@@ -87,8 +87,22 @@ init flags location =
     let
         currentRoute =
             parseLocation location
+
+        method =
+            case currentRoute of
+                HomeRoute ->
+                    getItems
+
+                Login ->
+                    Cmd.none
+
+                ItemPage id ->
+                    getItem id
+
+                NotFoundRoute ->
+                    Cmd.none
     in
-    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, getItems )
+    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, method )
 
 
 
