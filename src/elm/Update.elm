@@ -72,14 +72,4 @@ update msg model =
             userLoginRequestError model httpErr
 
         SingleItemDecoder (Ok backendItem) ->
-            let
-                itemFromBackend : Item
-                itemFromBackend =
-                    { description = backendItem.description
-                    , id = backendItem.id
-                    , price = backendItem.price
-                    , image = backendItem.image
-                    , title = backendItem.title
-                    }
-            in
-            ( { model | selectedItem = itemFromBackend }, Cmd.none )
+            ( singleItemDecoder model backendItem, Cmd.none )

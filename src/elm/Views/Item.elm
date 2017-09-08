@@ -1,4 +1,4 @@
-module Views.ItemPage exposing (..)
+module Views.Item exposing (..)
 
 import Components.Items exposing (singleItem)
 import Config exposing (backend_address)

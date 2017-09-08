@@ -13,13 +13,24 @@ import Ports exposing (..)
 import Routing exposing (..)
 
 
+singleItemDecoder : Model -> Item -> Model
+singleItemDecoder model decodedItem =
+    let
+        itemFromBackend : Item
+        itemFromBackend =
+            { description = decodedItem.description
+            , id = decodedItem.id
+            , price = decodedItem.price
+            , image = decodedItem.image
+            , title = decodedItem.title
+            }
+    in
+    { model | selectedItem = itemFromBackend }
+
+
 getItem : String -> Cmd Msg
 getItem id =
-    let
-        url =
-            backend_address ++ "/api/items/" ++ id
-    in
-    getItemFromBackend url
+    getItemFromBackend id
 
 
 loadStuffFromBackend : Model -> Navigation.Location -> Cmd Msg
@@ -37,11 +48,7 @@ loadStuffFromBackend model location =
                     Cmd.none
 
                 ItemPage id ->
-                    getItemFromBackend
-                        (backend_address
-                            ++ "/api/items/"
-                            ++ id
-                        )
+                    getItemFromBackend id
 
                 NotFoundRoute ->
                     Cmd.none
@@ -50,7 +57,11 @@ loadStuffFromBackend model location =
 
 
 getItemFromBackend : String -> Cmd Msg
-getItemFromBackend url =
+getItemFromBackend id =
+    let
+        url =
+            backend_address ++ "/api/items/" ++ id
+    in
     HttpBuilder.get url
         |> withExpect (Http.expectJson itemDecoder)
         |> HttpBuilder.send SingleItemDecoder

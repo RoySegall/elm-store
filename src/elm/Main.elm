@@ -10,7 +10,7 @@ import Ports exposing (..)
 import Routing exposing (..)
 import Update exposing (..)
 import UpdateHelper exposing (..)
-import Views.ItemPage
+import Views.Item
 import Views.Items
 import Views.Login
 import Views.NotFound
@@ -130,7 +130,7 @@ page model =
             Views.Login.view model
 
         ItemPage id ->
-            Views.ItemPage.view model
+            Views.Item.view model
 
         NotFoundRoute ->
             Views.NotFound.view model
