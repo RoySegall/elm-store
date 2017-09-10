@@ -21,7 +21,15 @@ update msg model =
             ( logout model, logOut () )
 
         AddItems item ->
-            ( addItems model item, addItemToStorage item )
+            let
+                action =
+                    if model.accessToken == "" then
+                        addItemToStorage item
+                    else
+                        addItemToStorage item
+                            |> addItemToStorageInBackend item
+            in
+            ( addItems model item, action )
 
         ClearCart model ->
             ( clearCart model, removeItemsFromStorage () )

@@ -13,6 +13,11 @@ import Ports exposing (..)
 import Routing exposing (..)
 
 
+addItemToStorageInBackend : Item -> Cmd Msg
+addItemToStorageInBackend item =
+    Cmd.none
+
+
 singleItemDecoder : Model -> Item -> Model
 singleItemDecoder model decodedItem =
     let
