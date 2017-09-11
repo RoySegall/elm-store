@@ -11,6 +11,7 @@ import Model exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
+import Task
 import UpdateHelper exposing (..)
 
 
@@ -22,12 +23,16 @@ update msg model =
 
         AddItems item ->
             let
+                msgs =
+                    Http.toTask
+                        |> Task.andThen (addItemToStorage item)
+                        |> Task.andThen (addItemToStorageInBackend item)
+
                 action =
                     if model.accessToken == "" then
                         addItemToStorage item
                     else
-                        addItemToStorage item
-                            |> addItemToStorageInBackend item
+                        Task.perform (addItemToStorage item) (addItemToStorageInBackend item)
             in
             ( addItems model item, action )
 
