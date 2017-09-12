@@ -11,7 +11,7 @@ import Model exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
 import Routing exposing (..)
-import Task
+import Update.Extra exposing (sequence)
 import UpdateHelper exposing (..)
 
 
@@ -21,20 +21,23 @@ update msg model =
         Logout ->
             ( logout model, logOut () )
 
+        AddItemToStorage item ->
+            ( model, addItemToStorage item )
+
+        AddItemToStorageInBackend item ->
+            ( model, Cmd.none )
+
         AddItems item ->
             let
                 msgs =
-                    Http.toTask
-                        |> Task.andThen (addItemToStorage item)
-                        |> Task.andThen (addItemToStorageInBackend item)
-
-                action =
                     if model.accessToken == "" then
-                        addItemToStorage item
+                        [ AddItemToStorage item ]
                     else
-                        Task.perform (addItemToStorage item) (addItemToStorageInBackend item)
+                        [ AddItemToStorage item, AddItemToStorageInBackend item ]
             in
-            ( addItems model item, action )
+            addItems model item
+                ! []
+                |> sequence update msgs
 
         ClearCart model ->
             ( clearCart model, removeItemsFromStorage () )
