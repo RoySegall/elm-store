@@ -1,16 +1,8 @@
 module Update exposing (..)
 
-import Config exposing (..)
-import Decoder exposing (itemsDecoder, loginErrorDecoder, loginSuccessDecoder)
-import Html exposing (Attribute)
-import Html.Events exposing (onWithOptions)
-import Http exposing (..)
-import HttpBuilder exposing (..)
-import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
 import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
-import Routing exposing (..)
 import Update.Extra exposing (sequence)
 import UpdateHelper exposing (..)
 
@@ -25,7 +17,7 @@ update msg model =
             ( model, addItemToStorage item )
 
         AddItemToStorageInBackend item ->
-            ( model, Cmd.none )
+            ( model, addItemToStorageInBackend model item )
 
         AddItems item ->
             let
@@ -88,4 +80,10 @@ update msg model =
             userLoginRequestError model httpErr
 
         SingleItemDecoder (Ok backendItem) ->
+            ( singleItemDecoder model backendItem, Cmd.none )
+
+        AddItemDecoder (Err httpErr) ->
+            userLoginRequestError model httpErr
+
+        AddItemDecoder (Ok backendItem) ->
             ( singleItemDecoder model backendItem, Cmd.none )
