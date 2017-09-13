@@ -13,6 +13,21 @@ import Ports exposing (..)
 import Routing exposing (..)
 
 
+removeItemsFromBackend : Model -> Item -> Cmd Msg
+removeItemsFromBackend model item =
+    let
+        url =
+            backend_address ++ "/api/cart/items"
+    in
+    HttpBuilder.delete url
+        |> withExpect (Http.expectJson itemDecoder)
+        |> withHeader "access-token" model.accessToken
+        |> withMultipartStringBody
+            [ ( "item_id", item.id )
+            ]
+        |> HttpBuilder.send AddItemDecoder
+
+
 addItemToStorageInBackend : Model -> Item -> Cmd Msg
 addItemToStorageInBackend model item =
     let

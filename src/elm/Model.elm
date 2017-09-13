@@ -12,6 +12,8 @@ type Msg
     | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item
+    | RemoveItemFromCartLocalStorage Item
+    | RemoveItemFromCartBackend Item
     | GetItemsAtPage Int
     | OnLocationChange Navigation.Location
     | ChangeLocation String

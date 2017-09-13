@@ -52,8 +52,23 @@ update msg model =
         InitItems items ->
             ( initItems model items, Cmd.none )
 
+        RemoveItemFromCartLocalStorage item ->
+            ( model, removeItemsFromCart item )
+
+        RemoveItemFromCartBackend item ->
+            ( model, removeItemsFromBackend model item )
+
         RemoveItemFromCart item ->
-            ( removeItemFromCart model item, removeItemsFromCart item )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ RemoveItemFromCartLocalStorage item ]
+                    else
+                        [ RemoveItemFromCartLocalStorage item, RemoveItemFromCartBackend item ]
+            in
+            removeItemFromCart model item
+                ! []
+                |> sequence update msgs
 
         ChangeLocation path ->
             ( model, Navigation.newUrl path )
