@@ -110,6 +110,7 @@ userLoginRequestSuccess model backendSuccessLogin =
     { model
         | success = "Welcome " ++ backendSuccessLogin.username
         , accessToken = backendSuccessLogin.token.token
+        , cartItems = backendSuccessLogin.cart.items
         , loggedUser = loggedInUser
     }
 
@@ -241,7 +242,7 @@ addItems model item =
 
 logout : Model -> Model
 logout model =
-    { model | accessToken = "" }
+    { model | accessToken = "", cartItems = [] }
 
 
 userLogin : Model -> Cmd Msg
