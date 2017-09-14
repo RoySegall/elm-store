@@ -26,6 +26,8 @@ type Msg
     | AddItemDecoder (Result Http.Error Item)
     | AddItemToStorage Item
     | AddItemToStorageInBackend Item
+    | SetAccessToken SuccessLogin
+    | SetItemInLocalStorage (List Item)
 
 
 type alias Flags =

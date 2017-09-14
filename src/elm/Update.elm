@@ -88,9 +88,23 @@ update msg model =
         UserLoginRequest (Err httpErr) ->
             userLoginRequestError model httpErr
 
+        SetAccessToken backendSuccessLogin ->
+            ( model, setAccessToken backendSuccessLogin )
+
+        SetItemInLocalStorage items ->
+            ( model, Cmd.none )
+
         UserLoginRequest (Ok backendSuccessLogin) ->
-            {- todo handle update the item on the local storage once completed -}
-            ( userLoginRequestSuccess model backendSuccessLogin, setAccessToken backendSuccessLogin )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ SetAccessToken backendSuccessLogin ]
+                    else
+                        [ SetAccessToken backendSuccessLogin, SetItemInLocalStorage backendSuccessLogin.cart.items ]
+            in
+            userLoginRequestSuccess model backendSuccessLogin
+                ! []
+                |> sequence update msgs
 
         SingleItemDecoder (Err httpErr) ->
             userLoginRequestError model httpErr
