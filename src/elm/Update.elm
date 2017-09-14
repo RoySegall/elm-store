@@ -2,7 +2,7 @@ module Update exposing (..)
 
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
+import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken, setItemInLocalStorage)
 import Update.Extra exposing (sequence)
 import UpdateHelper exposing (..)
 
@@ -32,6 +32,7 @@ update msg model =
                 |> sequence update msgs
 
         ClearCart model ->
+            {- todo clean the backend cart -}
             ( clearCart model, removeItemsFromStorage () )
 
         ToggleCart ->
@@ -92,7 +93,7 @@ update msg model =
             ( model, setAccessToken backendSuccessLogin )
 
         SetItemInLocalStorage items ->
-            ( model, Cmd.none )
+            ( model, setItemInLocalStorage items )
 
         UserLoginRequest (Ok backendSuccessLogin) ->
             let
