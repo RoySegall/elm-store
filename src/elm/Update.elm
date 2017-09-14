@@ -1,16 +1,9 @@
 module Update exposing (..)
 
-import Config exposing (..)
-import Decoder exposing (itemsDecoder, loginErrorDecoder, loginSuccessDecoder)
-import Html exposing (Attribute)
-import Html.Events exposing (onWithOptions)
-import Http exposing (..)
-import HttpBuilder exposing (..)
-import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken)
-import Routing exposing (..)
+import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken, setItemInLocalStorage)
+import Update.Extra exposing (sequence)
 import UpdateHelper exposing (..)
 
 
@@ -20,11 +13,41 @@ update msg model =
         Logout ->
             ( logout model, logOut () )
 
+        AddItemToStorage item ->
+            ( model, addItemToStorage item )
+
+        AddItemToStorageInBackend item ->
+            ( model, addItemToStorageInBackend model item )
+
         AddItems item ->
-            ( addItems model item, addItemToStorage item )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ AddItemToStorage item ]
+                    else
+                        [ AddItemToStorage item, AddItemToStorageInBackend item ]
+            in
+            addItems model item
+                ! []
+                |> sequence update msgs
+
+        RemoveItemsFromStorage ->
+            ( model, removeItemsFromStorage () )
+
+        RemoveItemsFromCartBackend ->
+            ( model, removeItemsFromCartBackend model )
 
         ClearCart model ->
-            ( clearCart model, removeItemsFromStorage () )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ RemoveItemsFromStorage ]
+                    else
+                        [ RemoveItemsFromStorage, RemoveItemsFromCartBackend ]
+            in
+            clearCart model
+                ! []
+                |> sequence update msgs
 
         ToggleCart ->
             ( toggleCart model, Cmd.none )
@@ -44,8 +67,23 @@ update msg model =
         InitItems items ->
             ( initItems model items, Cmd.none )
 
+        RemoveItemFromCartLocalStorage item ->
+            ( model, removeItemsFromCart item )
+
+        RemoveItemFromCartBackend item ->
+            ( model, removeItemsFromBackend model item )
+
         RemoveItemFromCart item ->
-            ( removeItemFromCart model item, removeItemsFromCart item )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ RemoveItemFromCartLocalStorage item ]
+                    else
+                        [ RemoveItemFromCartLocalStorage item, RemoveItemFromCartBackend item ]
+            in
+            removeItemFromCart model item
+                ! []
+                |> sequence update msgs
 
         ChangeLocation path ->
             ( model, Navigation.newUrl path )
@@ -65,11 +103,32 @@ update msg model =
         UserLoginRequest (Err httpErr) ->
             userLoginRequestError model httpErr
 
+        SetAccessToken backendSuccessLogin ->
+            ( model, setAccessToken backendSuccessLogin )
+
+        SetItemInLocalStorage items ->
+            ( model, setItemInLocalStorage items )
+
         UserLoginRequest (Ok backendSuccessLogin) ->
-            ( userLoginRequestSuccess model backendSuccessLogin, setAccessToken backendSuccessLogin )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ SetAccessToken backendSuccessLogin ]
+                    else
+                        [ SetAccessToken backendSuccessLogin, SetItemInLocalStorage backendSuccessLogin.cart.items ]
+            in
+            userLoginRequestSuccess model backendSuccessLogin
+                ! []
+                |> sequence update msgs
 
         SingleItemDecoder (Err httpErr) ->
             userLoginRequestError model httpErr
 
         SingleItemDecoder (Ok backendItem) ->
+            ( singleItemDecoder model backendItem, Cmd.none )
+
+        AddItemDecoder (Err httpErr) ->
+            userLoginRequestError model httpErr
+
+        AddItemDecoder (Ok backendItem) ->
             ( singleItemDecoder model backendItem, Cmd.none )

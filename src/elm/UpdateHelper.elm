@@ -9,8 +9,49 @@ import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
-import Ports exposing (..)
 import Routing exposing (..)
+
+
+removeItemsFromCartBackend : Model -> Cmd Msg
+removeItemsFromCartBackend model =
+    let
+        url =
+            backend_address ++ "/api/cart/items/remove"
+    in
+    HttpBuilder.delete url
+        |> withExpect (Http.expectJson itemDecoder)
+        |> withHeader "access-token" model.accessToken
+        |> HttpBuilder.send AddItemDecoder
+
+
+removeItemsFromBackend : Model -> Item -> Cmd Msg
+removeItemsFromBackend model item =
+    let
+        url =
+            backend_address ++ "/api/cart/items"
+    in
+    HttpBuilder.delete url
+        |> withExpect (Http.expectJson itemDecoder)
+        |> withHeader "access-token" model.accessToken
+        |> withMultipartStringBody
+            [ ( "item_id", item.id )
+            ]
+        |> HttpBuilder.send AddItemDecoder
+
+
+addItemToStorageInBackend : Model -> Item -> Cmd Msg
+addItemToStorageInBackend model item =
+    let
+        url =
+            backend_address ++ "/api/cart/items"
+    in
+    HttpBuilder.post url
+        |> withExpect (Http.expectJson itemDecoder)
+        |> withHeader "access-token" model.accessToken
+        |> withMultipartStringBody
+            [ ( "item_id", item.id )
+            ]
+        |> HttpBuilder.send AddItemDecoder
 
 
 singleItemDecoder : Model -> Item -> Model
@@ -80,6 +121,7 @@ userLoginRequestSuccess model backendSuccessLogin =
     { model
         | success = "Welcome " ++ backendSuccessLogin.username
         , accessToken = backendSuccessLogin.token.token
+        , cartItems = backendSuccessLogin.cart.items
         , loggedUser = loggedInUser
     }
 
@@ -211,7 +253,7 @@ addItems model item =
 
 logout : Model -> Model
 logout model =
-    { model | accessToken = "" }
+    { model | accessToken = "", cartItems = [] }
 
 
 userLogin : Model -> Cmd Msg

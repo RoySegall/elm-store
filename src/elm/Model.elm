@@ -7,11 +7,15 @@ import Navigation
 type Msg
     = AddItems Item
     | HideCart
+    | RemoveItemsFromStorage
+    | RemoveItemsFromCartBackend
     | ClearCart Model
     | ToggleCart
     | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item
+    | RemoveItemFromCartLocalStorage Item
+    | RemoveItemFromCartBackend Item
     | GetItemsAtPage Int
     | OnLocationChange Navigation.Location
     | ChangeLocation String
@@ -21,6 +25,11 @@ type Msg
     | UserLoginRequest (Result Http.Error SuccessLogin)
     | Logout
     | SingleItemDecoder (Result Http.Error Item)
+    | AddItemDecoder (Result Http.Error Item)
+    | AddItemToStorage Item
+    | AddItemToStorageInBackend Item
+    | SetAccessToken SuccessLogin
+    | SetItemInLocalStorage (List Item)
 
 
 type alias Flags =

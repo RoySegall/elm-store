@@ -12,6 +12,9 @@ port getItemsFromStorage : (List Item -> msg) -> Sub msg
 port removeItemsFromStorage : () -> Cmd msg
 
 
+port setItemInLocalStorage : List Item -> Cmd msg
+
+
 port removeItemsFromCart : Item -> Cmd msg
 
 

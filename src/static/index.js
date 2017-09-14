@@ -36,6 +36,11 @@ app.ports.addItemToStorage.subscribe(function(item) {
   localStorage.setItem('items', JSON.stringify(decoded_items))
 });
 
+
+app.ports.setItemInLocalStorage.subscribe(function(items) {
+  localStorage.setItem('items', JSON.stringify(items))
+});
+
 app.ports.removeItemsFromStorage.subscribe(function() {
   localStorage.setItem('items', "")
 });
