@@ -9,8 +9,19 @@ import HttpBuilder exposing (..)
 import Json.Decode as Decode exposing (..)
 import Model exposing (..)
 import Navigation
-import Ports exposing (..)
 import Routing exposing (..)
+
+
+removeItemsFromCartBackend : Model -> Cmd Msg
+removeItemsFromCartBackend model =
+    let
+        url =
+            backend_address ++ "/api/cart/items/remove"
+    in
+    HttpBuilder.delete url
+        |> withExpect (Http.expectJson itemDecoder)
+        |> withHeader "access-token" model.accessToken
+        |> HttpBuilder.send AddItemDecoder
 
 
 removeItemsFromBackend : Model -> Item -> Cmd Msg

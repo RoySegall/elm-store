@@ -7,6 +7,8 @@ import Navigation
 type Msg
     = AddItems Item
     | HideCart
+    | RemoveItemsFromStorage
+    | RemoveItemsFromCartBackend
     | ClearCart Model
     | ToggleCart
     | GetItems (Result Http.Error Data)

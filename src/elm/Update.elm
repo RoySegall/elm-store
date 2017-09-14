@@ -31,9 +31,23 @@ update msg model =
                 ! []
                 |> sequence update msgs
 
+        RemoveItemsFromStorage ->
+            ( model, removeItemsFromStorage () )
+
+        RemoveItemsFromCartBackend ->
+            ( model, removeItemsFromCartBackend model )
+
         ClearCart model ->
-            {- todo clean the backend cart -}
-            ( clearCart model, removeItemsFromStorage () )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ RemoveItemsFromStorage ]
+                    else
+                        [ RemoveItemsFromStorage, RemoveItemsFromCartBackend ]
+            in
+            clearCart model
+                ! []
+                |> sequence update msgs
 
         ToggleCart ->
             ( toggleCart model, Cmd.none )
