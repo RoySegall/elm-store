@@ -110,16 +110,12 @@ update msg model =
             ( model, setItemInLocalStorage items )
 
         UserLoginRequest (Ok backendSuccessLogin) ->
-            let
-                msgs =
-                    if model.accessToken == "" then
-                        [ SetAccessToken backendSuccessLogin ]
-                    else
-                        [ SetAccessToken backendSuccessLogin, SetItemInLocalStorage backendSuccessLogin.cart.items ]
-            in
             userLoginRequestSuccess model backendSuccessLogin
                 ! []
-                |> sequence update msgs
+                |> sequence update
+                    [ SetAccessToken backendSuccessLogin
+                    , SetItemInLocalStorage backendSuccessLogin.cart.items
+                    ]
 
         SingleItemDecoder (Err httpErr) ->
             userLoginRequestError model httpErr

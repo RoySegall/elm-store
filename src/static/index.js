@@ -7,9 +7,24 @@ require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' ); 
 var Elm = require( '../elm/Main' );
 var app = Elm.Main.fullscreen({
   'items': getItemsFromStorage(),
-  'accessToken':  localStorage.getItem('access_token') || '',
+  'accessToken':  getAccessToken(),
   'loggedInUser' : getLoggedUserFromStorage()
 });
+
+function getAccessToken() {
+  let
+    access_token = localStorage.getItem('access_token') || '',
+    expires = localStorage.getItem('expires') || '',
+    refresh_token = localStorage.getItem('refresh_token') || '';
+
+  let ts = Math.floor(Date.now() / 1000);
+
+  if (ts > expires) {
+    console.log('a');
+  }
+
+  return access_token;
+}
 
 function getItemsFromStorage() {
   var items = localStorage.getItem('items');
@@ -22,7 +37,6 @@ function getLoggedUserFromStorage() {
 }
 
 app.ports.logOut.subscribe(function() {
-  console.log('a');
   localStorage.removeItem('items');
   localStorage.removeItem('logged_in_user');
   localStorage.removeItem('access_token');
