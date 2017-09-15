@@ -36,6 +36,7 @@ type alias Flags =
     { items : List Item
     , accessToken : String
     , loggedInUser : LoggedUser
+    , backendAddress : String
     }
 
 
@@ -85,6 +86,7 @@ type alias Model =
     , loggedUser : LoggedUser
     , id : String
     , selectedItem : Item
+    , backendAddress : String
     }
 
 

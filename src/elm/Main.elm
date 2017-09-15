@@ -34,8 +34,8 @@ selectedItem =
     { description = "", id = "", price = 0, image = "", title = "" }
 
 
-initialModel : Route -> List Item -> String -> LoggedUser -> Model
-initialModel route items accessToken loggedInUer =
+initialModel : Route -> List Item -> String -> LoggedUser -> String -> Model
+initialModel route items accessToken loggedInUer backendAddress =
     let
         id =
             case route of
@@ -67,6 +67,7 @@ initialModel route items accessToken loggedInUer =
     , loggedUser = loggedInUer
     , id = id
     , selectedItem = selectedItem
+    , backendAddress = backendAddress
     }
 
 
@@ -97,18 +98,18 @@ init flags location =
         method =
             case currentRoute of
                 HomeRoute ->
-                    getItems
+                    getItems flags.backendAddress
 
                 Login ->
                     Cmd.none
 
                 ItemPage id ->
-                    getItem id
+                    getItem flags.backendAddress id
 
                 NotFoundRoute ->
                     Cmd.none
     in
-    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser, method )
+    ( initialModel currentRoute flags.items flags.accessToken flags.loggedInUser flags.backendAddress, method )
 
 
 

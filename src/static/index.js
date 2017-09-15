@@ -2,13 +2,15 @@
 require( './styles/main.scss' );
 var $ = jQuery = require( '../../node_modules/jquery/dist/jquery.js' );           // <--- remove if jQuery not needed
 require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' );   // <--- remove if Bootstrap's JS not needed
+config = require("../config/config.json");
 
 // inject bundled Elm app into div#main
 var Elm = require( '../elm/Main' );
 var app = Elm.Main.fullscreen({
   'items': getItemsFromStorage(),
   'accessToken':  getAccessToken(),
-  'loggedInUser' : getLoggedUserFromStorage()
+  'loggedInUser' : getLoggedUserFromStorage(),
+  'backendAddress' : config.backend_address
 });
 
 function getAccessToken() {
@@ -20,7 +22,14 @@ function getAccessToken() {
   let ts = Math.floor(Date.now() / 1000);
 
   if (ts > expires) {
-    console.log('a');
+    $.ajax({
+      url: "http://fiddle.jshell.net/favicon.png",
+    })
+      .done(function( data ) {
+        if ( console && console.log ) {
+          console.log( "Sample of data:", data.slice( 0, 100 ) );
+        }
+      });
   }
 
   return access_token;

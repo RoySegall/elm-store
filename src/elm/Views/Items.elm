@@ -34,7 +34,7 @@ view model =
                     ]
                 , div [ class "container main" ]
                     [ div [ class "row" ]
-                        [ div [ class "col-md-12" ] [ getAllItems model.items ]
+                        [ div [ class "col-md-12" ] [ getAllItems model ]
                         , div [ class "col-md-12" ] [ pager model ]
                         ]
                     ]

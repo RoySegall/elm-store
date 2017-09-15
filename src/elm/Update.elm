@@ -62,7 +62,7 @@ update msg model =
             ( getItemsError model error, Cmd.none )
 
         GetItemsAtPage page ->
-            ( getItemsAtPageForUpdate model page, getItemsAtPage page )
+            ( getItemsAtPageForUpdate model page, getItemsAtPage model page )
 
         InitItems items ->
             ( initItems model items, Cmd.none )
