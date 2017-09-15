@@ -22,7 +22,7 @@ function getAccessToken() {
   let ts = Math.floor(Date.now() / 1000);
 
   if (expires == '') {
-    // No expires so this is
+    // No expires so this is an anonymous user.
     return refresh_token;
   }
 
