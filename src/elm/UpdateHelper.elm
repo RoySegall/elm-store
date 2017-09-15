@@ -1,6 +1,5 @@
 module UpdateHelper exposing (..)
 
-import Config exposing (..)
 import Decoder exposing (..)
 import Html exposing (Attribute)
 import Html.Events exposing (onWithOptions)
@@ -16,7 +15,7 @@ removeItemsFromCartBackend : Model -> Cmd Msg
 removeItemsFromCartBackend model =
     let
         url =
-            backend_address ++ "/api/cart/items/remove"
+            model.backendAddress ++ "/api/cart/items/remove"
     in
     HttpBuilder.delete url
         |> withExpect (Http.expectJson itemDecoder)
@@ -28,7 +27,7 @@ removeItemsFromBackend : Model -> Item -> Cmd Msg
 removeItemsFromBackend model item =
     let
         url =
-            backend_address ++ "/api/cart/items"
+            model.backendAddress ++ "/api/cart/items"
     in
     HttpBuilder.delete url
         |> withExpect (Http.expectJson itemDecoder)
@@ -43,7 +42,7 @@ addItemToStorageInBackend : Model -> Item -> Cmd Msg
 addItemToStorageInBackend model item =
     let
         url =
-            backend_address ++ "/api/cart/items"
+            model.backendAddress ++ "/api/cart/items"
     in
     HttpBuilder.post url
         |> withExpect (Http.expectJson itemDecoder)
@@ -69,9 +68,9 @@ singleItemDecoder model decodedItem =
     { model | selectedItem = itemFromBackend }
 
 
-getItem : String -> Cmd Msg
-getItem id =
-    getItemFromBackend id
+getItem : String -> String -> Cmd Msg
+getItem address id =
+    getItemFromBackend address id
 
 
 loadStuffFromBackend : Model -> Navigation.Location -> Cmd Msg
@@ -83,13 +82,13 @@ loadStuffFromBackend model location =
         message =
             case newRoute of
                 HomeRoute ->
-                    getItems
+                    getItems model.backendAddress
 
                 Login ->
                     Cmd.none
 
                 ItemPage id ->
-                    getItemFromBackend id
+                    getItemFromBackend model.backendAddress id
 
                 NotFoundRoute ->
                     Cmd.none
@@ -97,11 +96,11 @@ loadStuffFromBackend model location =
     message
 
 
-getItemFromBackend : String -> Cmd Msg
-getItemFromBackend id =
+getItemFromBackend : String -> String -> Cmd Msg
+getItemFromBackend address id =
     let
         url =
-            backend_address ++ "/api/items/" ++ id
+            address ++ "/api/items/" ++ id
     in
     HttpBuilder.get url
         |> withExpect (Http.expectJson itemDecoder)
@@ -260,7 +259,7 @@ userLogin : Model -> Cmd Msg
 userLogin model =
     let
         url =
-            backend_address ++ "/api/user/login"
+            model.backendAddress ++ "/api/user/login"
     in
     HttpBuilder.post url
         |> withExpect (Http.expectJson loginSuccessDecoder)
@@ -271,33 +270,22 @@ userLogin model =
         |> HttpBuilder.send UserLoginRequest
 
 
-handleRequestComplete : Result Http.Error (List String) -> Cmd Msg
-handleRequestComplete result =
+getItems : String -> Cmd Msg
+getItems address =
     let
         url =
-            backend_address ++ "/api/items"
+            address ++ "/api/items"
     in
     Http.send
         GetItems
         (Http.get url itemsDecoder)
 
 
-getItems : Cmd Msg
-getItems =
+getItemsAtPage : Model -> Int -> Cmd Msg
+getItemsAtPage model page =
     let
         url =
-            backend_address ++ "/api/items"
-    in
-    Http.send
-        GetItems
-        (Http.get url itemsDecoder)
-
-
-getItemsAtPage : Int -> Cmd Msg
-getItemsAtPage page =
-    let
-        url =
-            backend_address ++ "/api/items?page=" ++ toString page
+            model.backendAddress ++ "/api/items?page=" ++ toString page
     in
     Http.send
         GetItems

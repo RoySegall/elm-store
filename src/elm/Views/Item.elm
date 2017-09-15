@@ -1,6 +1,5 @@
 module Views.Item exposing (..)
 
-import Config exposing (backend_address)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -14,7 +13,7 @@ view model =
             model.selectedItem
 
         imageAddress =
-            backend_address ++ "/" ++ item.image
+            model.backendAddress ++ "/" ++ item.image
 
         price =
             toString item.price

@@ -1,6 +1,5 @@
 module Components.Items exposing (..)
 
-import Config exposing (backend_address)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -12,18 +11,18 @@ import UpdateHelper exposing (onLinkClick)
 -- Get al the items in the store.
 
 
-getAllItems : List Item -> Html Msg
-getAllItems itemList =
+getAllItems : Model -> Html Msg
+getAllItems model =
     let
         listOfItems =
-            split 3 itemList
+            split 3 model.items
     in
     div []
         (List.map
             (\items ->
                 div []
                     [ div [ class "row items-wrapper" ]
-                        (List.map (\item -> div [ class "col-md-4" ] [ singleItem item True ]) items)
+                        (List.map (\item -> div [ class "col-md-4" ] [ singleItem model item True ]) items)
                     , div [ class "row" ] (List.map (\item -> div [ class "col-md-4 items-separator" ] []) items)
                     ]
             )
@@ -91,8 +90,8 @@ pager model =
 -- Single item display.
 
 
-singleItem : Item -> Bool -> Html Msg
-singleItem item showAddToCart =
+singleItem : Model -> Item -> Bool -> Html Msg
+singleItem model item showAddToCart =
     let
         addToCartButton =
             if showAddToCart == True then
@@ -113,7 +112,7 @@ singleItem item showAddToCart =
                     ]
 
         imageAddress =
-            backend_address ++ "/" ++ item.image
+            model.backendAddress ++ "/" ++ item.image
     in
     div [ class "item" ]
         [ div [ class "row" ]
@@ -150,7 +149,7 @@ currentItems model =
                 div
                     [ classList classes ]
                     [ div [ class "items-list" ]
-                        (List.map (\item -> div [] [ singleItem item False ]) model.cartItems)
+                        (List.map (\item -> div [] [ singleItem model item False ]) model.cartItems)
                     , div [ class "actions" ]
                         [ button [ class "btn btn-success" ]
                             [ span [ class "fa fa-sign-in" ] []
