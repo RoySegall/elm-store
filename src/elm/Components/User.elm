@@ -45,7 +45,7 @@ userBar model =
                     ]
             else
                 div [ class "links" ]
-                    [ a [ href "/#profile", class "profile", onLinkClick (ChangeLocation "login") ] [ text "Profile" ]
+                    [ a [ href "/#profile", class "profile", onLinkClick (ChangeLocation "/#profile") ] [ text "Profile" ]
                     , a [ href "/#", class "logout", onClick Logout ] [ text "Logout" ]
                     ]
     in

@@ -14,6 +14,7 @@ matchers =
         [ UrlParser.map HomeRoute UrlParser.top
         , UrlParser.map Login (UrlParser.s "login")
         , UrlParser.map ItemPage (UrlParser.s "item" </> string)
+        , UrlParser.map UserProfile (UrlParser.s "profile")
         ]
 
 
