@@ -2,7 +2,7 @@
 require( './styles/main.scss' );
 var $ = jQuery = require( '../../node_modules/jquery/dist/jquery.js' );           // <--- remove if jQuery not needed
 require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' );   // <--- remove if Bootstrap's JS not needed
-config = require("../config/config.json");
+var config = require("../config/config.json");
 
 // inject bundled Elm app into div#main
 var Elm = require( '../elm/Main' );
@@ -14,21 +14,35 @@ var app = Elm.Main.fullscreen({
 });
 
 function getAccessToken() {
-  let
+  var
     access_token = localStorage.getItem('access_token') || '',
-    expires = localStorage.getItem('expires') || '',
+    expires = localStorage.getItem('expire') || '',
     refresh_token = localStorage.getItem('refresh_token') || '';
 
   let ts = Math.floor(Date.now() / 1000);
 
+  if (expires == '') {
+    // No expires so this is
+    return refresh_token;
+  }
+
   if (ts > expires) {
     $.ajax({
-      url: "http://fiddle.jshell.net/favicon.png",
+      url: config.backend_address + "/api/user/token_refresh",
+      method: "POST",
+      data: {'refresh_token': refresh_token}
     })
-      .done(function( data ) {
-        if ( console && console.log ) {
-          console.log( "Sample of data:", data.slice( 0, 100 ) );
-        }
+      .fail(function(data) {
+        console.error("The backend thrown an error: " + data.responseJSON.message);
+      })
+      .done(function(data) {
+        var token = data.data.Token;
+
+        access_token = token.Token;
+
+        localStorage.setItem('access_token', token.Token);
+        localStorage.setItem('refresh_token', token.RefreshToken);
+        localStorage.setItem('expire', token.Expire);
       });
   }
 
