@@ -1,0 +1,44 @@
+.checkout {
+  width: 75%;
+  margin: 0 auto;
+
+  .checkout-items {
+
+    table {
+      tbody {
+        tr {
+          td {
+            &.image {
+              width: 5%;
+            }
+
+            &.button {
+              width: 1%;
+            }
+
+            &.title {
+              width: 25%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sum {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: $theme-tertiary solid 1px;
+
+    .sum-content {
+      background: #fafafa;
+      border: solid 1px $brand-twitter;
+      border-radius: 5px;
+      padding: 10px;
+
+      strong {
+        font-size: 25px;
+      }
+    }
+  }
+}

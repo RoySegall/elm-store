@@ -11,6 +11,7 @@ type Msg
     | RemoveItemsFromCartBackend
     | ClearCart Model
     | ToggleCart
+    | ChangeCheckoutStep Int
     | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item
@@ -54,6 +55,7 @@ type Route
     | Login
     | ItemPage String
     | UserProfile
+    | Checkout
     | NotFoundRoute
 
 
@@ -88,6 +90,7 @@ type alias Model =
     , id : String
     , selectedItem : Item
     , backendAddress : String
+    , checkoutStep : Int
     }
 
 

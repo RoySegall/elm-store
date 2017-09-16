@@ -13,6 +13,9 @@ update msg model =
         Logout ->
             ( logout model, logOut () )
 
+        ChangeCheckoutStep step ->
+            ( { model | checkoutStep = step }, Cmd.none )
+
         AddItemToStorage item ->
             ( model, addItemToStorage item )
 
