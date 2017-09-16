@@ -1,0 +1,10 @@
+.profile {
+  width: 50%;
+  margin: 0 auto;
+
+  .items-list {
+    overflow: scroll;
+    max-height: 450px;
+    overflow-x: hidden;
+  }
+}

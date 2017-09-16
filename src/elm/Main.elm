@@ -14,6 +14,7 @@ import Views.Item
 import Views.Items
 import Views.Login
 import Views.NotFound
+import Views.Profile
 
 
 -- MODEL
@@ -47,6 +48,9 @@ initialModel route items accessToken loggedInUer backendAddress =
 
                 ItemPage id ->
                     id
+
+                UserProfile ->
+                    ""
 
                 NotFoundRoute ->
                     ""
@@ -106,6 +110,9 @@ init flags location =
                 ItemPage id ->
                     getItem flags.backendAddress id
 
+                UserProfile ->
+                    Cmd.none
+
                 NotFoundRoute ->
                     Cmd.none
     in
@@ -132,6 +139,9 @@ page model =
 
         ItemPage id ->
             Views.Item.view model
+
+        UserProfile ->
+            Views.Profile.view model
 
         NotFoundRoute ->
             Views.NotFound.view model

@@ -53,6 +53,7 @@ type Route
     = HomeRoute
     | Login
     | ItemPage String
+    | UserProfile
     | NotFoundRoute
 
 

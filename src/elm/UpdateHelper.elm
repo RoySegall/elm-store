@@ -90,6 +90,9 @@ loadStuffFromBackend model location =
                 ItemPage id ->
                     getItemFromBackend model.backendAddress id
 
+                UserProfile ->
+                    Cmd.none
+
                 NotFoundRoute ->
                     Cmd.none
     in
@@ -189,6 +192,9 @@ onLocationChange model location =
 
                 ItemPage id ->
                     id
+
+                UserProfile ->
+                    ""
 
                 NotFoundRoute ->
                     ""
