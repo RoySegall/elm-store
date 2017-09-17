@@ -1,6 +1,7 @@
 .checkout {
   width: 75%;
   margin: 0 auto;
+  position: relative;
 
   .credit_card {
     display: none;
@@ -127,5 +128,40 @@
         font-size: 25px;
       }
     }
+  }
+
+  .done-message {
+    z-index: -1;
+    background: white;
+    border: solid 1px $theme-secondary;
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    text-align: center;
+    opacity: 0;
+    top: 38%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    span {
+      display: block;
+      font-size: 20px;
+      padding-bottom: 5px;
+    }
+
+    i {
+      font-size: 70px;
+      color: #0db133;
+    }
+  }
+
+  .floating {
+    z-index: 1;
+    position: absolute;
+    transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out; /** Chrome & Safari **/
+    -moz-transition: all 1s ease-in-out; /** Firefox **/
+    -o-transition: all 2s ease-in-out; /** Opera **/
+    opacity: 1;
   }
 }

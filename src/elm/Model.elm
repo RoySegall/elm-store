@@ -12,6 +12,7 @@ type Msg
     | ClearCart Model
     | ToggleCart
     | ChangeCheckoutStep Int
+    | CheckoutComplete
     | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item

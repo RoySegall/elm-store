@@ -11,7 +11,7 @@ import Model exposing (..)
 view : Model -> Html Msg
 view model =
     div [ class "content checkout" ]
-        [ checkoutItems model, creditCard model ]
+        [ checkoutItems model, creditCard model, doneEffect ]
 
 
 checkoutItems : Model -> Html Msg
@@ -79,7 +79,7 @@ creditCard model =
             ]
         , div [ class "actions row" ]
             [ div [ class "col-md-3 text-left" ] [ button [ class "btn btn-primary", onClick <| ChangeCheckoutStep 1 ] [ text "Return to items" ] ]
-            , div [ class "col-md-9 text-right" ] [ button [ class "btn btn-success", onClick <| ChangeCheckoutStep 1 ] [ text "I'm done!" ] ]
+            , div [ class "col-md-9 text-right" ] [ button [ class "btn btn-success", onClick CheckoutComplete ] [ text "I'm done!" ] ]
             ]
         ]
 
@@ -129,4 +129,13 @@ itemTr model item =
                 [ span [ class "fa fa-trash-o" ] []
                 ]
             ]
+        ]
+
+
+doneEffect : Html Msg
+doneEffect =
+    div [ class "done-message" ]
+        [ span [] [ text "Oh my god, you did it!" ]
+        , i [ class "fa fa-check-circle-o" ] []
+        , span [] [ text "You're order will be handled in the next couple of days" ]
         ]

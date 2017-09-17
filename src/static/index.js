@@ -137,3 +137,7 @@ app.ports.changeCheckoutStep.subscribe(function(step) {
   }, 300);
 
 });
+
+app.ports.showDoneMessage.subscribe(function() {
+  $(".done-message").addClass("floating");
+});
