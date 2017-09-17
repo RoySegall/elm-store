@@ -136,14 +136,4 @@ app.ports.changeCheckoutStep.subscribe(function(step) {
     $(hide_selector).removeClass("fadeOutLeft animated");
   }, 300);
 
-  // sleep(3, show_selector, hide_selector);
 });
-
-function sleep(ms, show_selector, hide_selector) {
-  setTimeout(sleepFunc, ms * 1000);
-  // $(show_selector);
-}
-
-function sleepFunc() {
-  console.log('foo');
-}
