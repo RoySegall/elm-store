@@ -2,7 +2,7 @@ module Update exposing (..)
 
 import Model exposing (..)
 import Navigation
-import Ports exposing (addItemToStorage, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken, setItemInLocalStorage)
+import Ports exposing (addItemToStorage, changeCheckoutStep, logOut, removeItemsFromCart, removeItemsFromStorage, setAccessToken, setItemInLocalStorage)
 import Update.Extra exposing (sequence)
 import UpdateHelper exposing (..)
 
@@ -14,7 +14,7 @@ update msg model =
             ( logout model, logOut () )
 
         ChangeCheckoutStep step ->
-            ( { model | checkoutStep = step }, Cmd.none )
+            ( { model | checkoutStep = step }, changeCheckoutStep step )
 
         AddItemToStorage item ->
             ( model, addItemToStorage item )

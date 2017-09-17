@@ -10,32 +10,33 @@ import Model exposing (..)
 
 view : Model -> Html Msg
 view model =
-    let
-        content =
-            case model.checkoutStep of
-                1 ->
-                    section [ onClick HideCart ]
-                        [ h1 [] [ text "Checkout" ]
-                        , p [] [ text "Let's have a quick look on your products. You can remove items you don't want." ]
-                        , div [ class "checkout-items" ] [ itemsTable model ]
-                        , div [ class "sum" ]
-                            [ div [ class "sum-content" ]
-                                [ div [ class "row" ]
-                                    [ div [ class "col-md-9" ] [ strong [] [ text ("Total: " ++ toString (totalToPay model)) ] ]
-                                    , div [ class "col-md-3 text-right" ] [ button [ class "btn btn-success", onClick <| ChangeCheckoutStep 2 ] [ text "Go to payment method" ] ]
-                                    ]
-                                ]
-                            ]
-                        ]
-
-                2 ->
-                    section [ onClick HideCart ]
-                        [ h1 [] [ text "Checkout" ]
-                        , p [] [ text "Now, let's select a way to pay for the products!" ]
-                        ]
-    in
     div [ class "content checkout" ]
-        [ content
+        [ checkoutItems model, creditCard model ]
+
+
+checkoutItems : Model -> Html Msg
+checkoutItems model =
+    section [ onClick HideCart, class "checkout_items" ]
+        [ h1 [] [ text "Checkout" ]
+        , p [] [ text "Let's have a quick look on your products. You can remove items you don't want." ]
+        , div [ class "checkout-items" ] [ itemsTable model ]
+        , div [ class "sum" ]
+            [ div [ class "sum-content" ]
+                [ div [ class "row" ]
+                    [ div [ class "col-md-9" ] [ strong [] [ text ("Total: " ++ toString (totalToPay model)) ] ]
+                    , div [ class "col-md-3 text-right" ] [ button [ class "btn btn-success", onClick <| ChangeCheckoutStep 2 ] [ text "Go to payment method" ] ]
+                    ]
+                ]
+            ]
+        ]
+
+
+creditCard : Model -> Html Msg
+creditCard model =
+    section [ onClick HideCart, class "credit_card" ]
+        [ h1 [] [ text "Checkout" ]
+        , p [] [ text "Now, let's select a way to pay for the products!" ]
+        , div [ class "col-md-3 text-left" ] [ button [ class "btn btn-info", onClick <| ChangeCheckoutStep 1 ] [ text "Return to items" ] ]
         ]
 
 

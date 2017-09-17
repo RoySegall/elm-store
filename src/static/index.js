@@ -1,7 +1,7 @@
 // pull in desired CSS/SASS files
 require( './styles/main.scss' );
-var $ = jQuery = require( '../../node_modules/jquery/dist/jquery.js' );           // <--- remove if jQuery not needed
-require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' );   // <--- remove if Bootstrap's JS not needed
+var $ = jQuery = require( '../../node_modules/jquery/dist/jquery.js' );
+require( '../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js' );
 var config = require("../config/config.json");
 
 // inject bundled Elm app into div#main
@@ -112,3 +112,38 @@ app.ports.setAccessToken.subscribe(function(successLogin) {
 
   localStorage.setItem('logged_in_user', JSON.stringify(loggedInUser));
 });
+
+app.ports.changeCheckoutStep.subscribe(function(step) {
+  var hide_selector, show_selector;
+
+  switch (step) {
+    case 1:
+      hide_selector = ".credit_card";
+      show_selector = ".checkout_items";
+      break;
+
+    case 2:
+      hide_selector = ".checkout_items";
+      show_selector = ".credit_card";
+      break;
+  }
+
+  $(hide_selector).addClass("fadeOutLeft animated");
+
+  setTimeout(function() {
+    $(hide_selector).css("display", "none");
+    $(show_selector).css("display", "block").addClass("fadeInLeft animated");
+    $(hide_selector).removeClass("fadeOutLeft animated");
+  }, 300);
+
+  // sleep(3, show_selector, hide_selector);
+});
+
+function sleep(ms, show_selector, hide_selector) {
+  setTimeout(sleepFunc, ms * 1000);
+  // $(show_selector);
+}
+
+function sleepFunc() {
+  console.log('foo');
+}
