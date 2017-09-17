@@ -132,7 +132,7 @@ app.ports.changeCheckoutStep.subscribe(function(step) {
 
   setTimeout(function() {
     $(hide_selector).css("display", "none");
-    $(show_selector).css("display", "block").addClass("fadeInLeft animated");
+    $(show_selector).css("display", "block").addClass("fadeInRight animated");
     $(hide_selector).removeClass("fadeOutLeft animated");
   }, 300);
 
