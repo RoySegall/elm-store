@@ -17,7 +17,19 @@ update msg model =
             ( { model | checkoutStep = step }, changeCheckoutStep step )
 
         CheckoutComplete ->
-            ( { model | cartItems = [] }, showDoneMessage () )
+            let
+                msgs =
+                    if model.accessToken == "" then
+                        [ ShowDoneMessage, RemoveItemsFromStorage ]
+                    else
+                        [ ShowDoneMessage, RemoveItemsFromStorage, RemoveItemsFromCartBackend ]
+            in
+                { model | cartItems = [] }
+                    ! []
+                    |> sequence update msgs
+
+        ShowDoneMessage ->
+            ( model, showDoneMessage () )
 
         AddItemToStorage item ->
             ( model, addItemToStorage item )
@@ -33,9 +45,9 @@ update msg model =
                     else
                         [ AddItemToStorage item, AddItemToStorageInBackend item ]
             in
-            addItems model item
-                ! []
-                |> sequence update msgs
+                addItems model item
+                    ! []
+                    |> sequence update msgs
 
         RemoveItemsFromStorage ->
             ( model, removeItemsFromStorage () )
@@ -51,9 +63,9 @@ update msg model =
                     else
                         [ RemoveItemsFromStorage, RemoveItemsFromCartBackend ]
             in
-            clearCart model
-                ! []
-                |> sequence update msgs
+                clearCart model
+                    ! []
+                    |> sequence update msgs
 
         ToggleCart ->
             ( toggleCart model, Cmd.none )
@@ -87,9 +99,9 @@ update msg model =
                     else
                         [ RemoveItemFromCartLocalStorage item, RemoveItemFromCartBackend item ]
             in
-            removeItemFromCart model item
-                ! []
-                |> sequence update msgs
+                removeItemFromCart model item
+                    ! []
+                    |> sequence update msgs
 
         ChangeLocation path ->
             ( model, Navigation.newUrl path )

@@ -13,6 +13,7 @@ type Msg
     | ToggleCart
     | ChangeCheckoutStep Int
     | CheckoutComplete
+    | ShowDoneMessage
     | GetItems (Result Http.Error Data)
     | InitItems (List Item)
     | RemoveItemFromCart Item

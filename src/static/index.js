@@ -140,4 +140,8 @@ app.ports.changeCheckoutStep.subscribe(function(step) {
 
 app.ports.showDoneMessage.subscribe(function() {
   $(".done-message").addClass("floating");
+
+  setTimeout(function() {
+    $(".done-message").removeClass("floating");
+  }, 10000);
 });
