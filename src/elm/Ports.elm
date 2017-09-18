@@ -22,3 +22,9 @@ port setAccessToken : SuccessLogin -> Cmd msg
 
 
 port logOut : () -> Cmd msg
+
+
+port changeCheckoutStep : Int -> Cmd msg
+
+
+port showDoneMessage : () -> Cmd msg

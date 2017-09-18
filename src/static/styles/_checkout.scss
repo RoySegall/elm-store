@@ -1,0 +1,167 @@
+.checkout {
+  width: 75%;
+  margin: 0 auto;
+  position: relative;
+
+  .credit_card {
+    display: none;
+
+    .element {
+      padding: 20px;
+      width: 50%;
+      border: solid 1px white;
+      border-radius: 10px;
+      color: white;
+      margin: 0 auto;
+      background-color: #449db7;
+
+      .title {
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+      }
+
+      input {
+        background: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.5);
+        border: none;
+        width: 45px;
+        border-radius: 2px;
+        padding: 5px 4px;
+        text-align: center;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      .inputs-upper {
+        display: inline-flex;
+        padding-top: 30px;
+        padding-bottom: 40px;
+
+        input {
+          width: 80px;
+          margin-right: 5px;
+          border: none;
+        }
+      }
+
+      .inputs-footer {
+
+        .name {
+
+          input {
+            width: 100px;
+          }
+
+          .first-name {
+            margin-right: 5px;
+          }
+        }
+
+        .exp {
+
+          select {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            border: none;
+            width: 50px;
+            height: 25px;
+            border-radius: 2px;
+            text-align: center;
+            margin: 5px;
+          }
+
+          .month {
+            margin-right: 5px;
+            width: 60px;
+          }
+
+          .year {
+            width: 70px;
+          }
+        }
+      }
+    }
+  }
+
+  .checkout-items {
+
+    table {
+      tbody {
+        tr {
+          td {
+            &.image {
+              width: 5%;
+            }
+
+            &.button {
+              width: 1%;
+            }
+
+            &.title {
+              width: 25%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 50px;
+  }
+
+  .sum {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: $theme-tertiary solid 1px;
+
+    .sum-content {
+      background: #fafafa;
+      border: solid 1px $brand-twitter;
+      border-radius: 5px;
+      padding: 10px 30px 10px 10px;
+
+      strong {
+        font-size: 25px;
+      }
+    }
+  }
+
+  .done-message {
+    z-index: -1;
+    background: white;
+    border: solid 1px $theme-secondary;
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    text-align: center;
+    opacity: 0;
+    top: 38%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    span {
+      display: block;
+      font-size: 20px;
+      padding-bottom: 5px;
+    }
+
+    i {
+      font-size: 70px;
+      color: #0db133;
+    }
+  }
+
+  .floating {
+    z-index: 1;
+    position: absolute;
+    transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out; /** Chrome & Safari **/
+    -moz-transition: all 1s ease-in-out; /** Firefox **/
+    -o-transition: all 2s ease-in-out; /** Opera **/
+    opacity: 1;
+  }
+}

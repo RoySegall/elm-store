@@ -10,6 +10,7 @@ import Ports exposing (..)
 import Routing exposing (..)
 import Update exposing (..)
 import UpdateHelper exposing (..)
+import Views.Checkout
 import Views.Item
 import Views.Items
 import Views.Login
@@ -52,6 +53,9 @@ initialModel route items accessToken loggedInUer backendAddress =
                 UserProfile ->
                     ""
 
+                Checkout ->
+                    ""
+
                 NotFoundRoute ->
                     ""
     in
@@ -72,6 +76,7 @@ initialModel route items accessToken loggedInUer backendAddress =
     , id = id
     , selectedItem = selectedItem
     , backendAddress = backendAddress
+    , checkoutStep = 1
     }
 
 
@@ -113,6 +118,9 @@ init flags location =
                 UserProfile ->
                     Cmd.none
 
+                Checkout ->
+                    Cmd.none
+
                 NotFoundRoute ->
                     Cmd.none
     in
@@ -142,6 +150,9 @@ page model =
 
         UserProfile ->
             Views.Profile.view model
+
+        Checkout ->
+            Views.Checkout.view model
 
         NotFoundRoute ->
             Views.NotFound.view model

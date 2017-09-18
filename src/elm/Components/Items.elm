@@ -153,7 +153,7 @@ currentItems model =
                     , div [ class "actions" ]
                         [ button [ class "btn btn-success" ]
                             [ span [ class "fa fa-sign-in" ] []
-                            , text "To checkout"
+                            , a [ href "/#checkout", onLinkClick (ChangeLocation "/#checkout"), class "checkout" ] [ text "To checkout" ]
                             ]
                         , button [ class "btn btn-danger", onClick (ClearCart model) ]
                             [ span [ class "fa fa-trash-o" ] []

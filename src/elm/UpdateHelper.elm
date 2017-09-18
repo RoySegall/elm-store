@@ -93,6 +93,9 @@ loadStuffFromBackend model location =
                 UserProfile ->
                     Cmd.none
 
+                Checkout ->
+                    Cmd.none
+
                 NotFoundRoute ->
                     Cmd.none
     in
@@ -194,6 +197,9 @@ onLocationChange model location =
                     id
 
                 UserProfile ->
+                    ""
+
+                Checkout ->
                     ""
 
                 NotFoundRoute ->
